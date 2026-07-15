@@ -1,0 +1,45 @@
+/*============================================================================================*/
+/* Your custom styles below */
+/*============================================================================================*/
+
+/* Hero video background */
+.hero-video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Room gallery carousel - consistent image sizing */
+.carousel_item_centered .item {
+    height: 400px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.carousel_item_centered .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+@media (max-width: 991px) {
+    .carousel_item_centered .item {
+        height: 300px;
+    }
+}
+@media (max-width: 575px) {
+    .carousel_item_centered .item {
+        height: 250px;
+    }
+}
+
+/* Smooth page transitions */
+main {
+    transition: opacity 0.2s ease;
+}
+main.page-transitioning {
+    opacity: 0;
+}
