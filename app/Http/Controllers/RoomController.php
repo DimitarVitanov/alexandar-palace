@@ -20,10 +20,17 @@ class RoomController extends Controller
         $request = request();
         $adults = (int) $request->get('adults', 0);
         $children = (int) $request->get('children', 0);
-        [$checkIn, $checkOut] = $this->parseDateRange($request->get('dates'));
+        
+        // Support both 'dates' range format and individual check_in/check_out params
+        $checkIn = $request->get('check_in');
+        $checkOut = $request->get('check_out');
+        if (!$checkIn || !$checkOut) {
+            [$checkIn, $checkOut] = $this->parseDateRange($request->get('dates'));
+        }
+        
         $totalGuests = $adults + $children;
         
-        $query = Room::active()->orderBy('sort_order')->with('media');
+        $query = Room::active()->orderBy('sort_order')->with(['media', 'units.availabilities']);
         
         if ($totalGuests > 0) {
             $query->where('max_guests', '>=', $totalGuests);
@@ -31,6 +38,7 @@ class RoomController extends Controller
         
         $rooms = $query->get();
         
+        // Filter by availability using the room units system
         if ($checkIn && $checkOut) {
             $rooms = $rooms->filter(fn (Room $room) => $room->isAvailable($checkIn, $checkOut))->values();
         }
@@ -48,7 +56,7 @@ class RoomController extends Controller
             'children' => $children,
             'check_in' => $checkIn,
             'check_out' => $checkOut,
-            'has_searched' => $totalGuests > 0,
+            'has_searched' => $totalGuests > 0 || ($checkIn && $checkOut),
             'total_results' => $rooms->count(),
             'total_rooms' => $allRooms->count(),
         ];

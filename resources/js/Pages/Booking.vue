@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
+import { computed, ref, watch } from 'vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import Layout from '@/Components/Frontend/Layout.vue';
 
 const props = defineProps({
@@ -10,7 +10,81 @@ const props = defineProps({
     seo: Object,
 });
 
+const page = usePage();
+const locale = computed(() => page.props.locale || 'en');
+
 const asset = (path) => `/assets/paradise/${path}`;
+
+// Translations
+const t = computed(() => locale.value === 'mk' ? {
+    hotelName: 'Александар Палас Хотел',
+    requestReservation: 'Барање за резервација',
+    heroSubtitle: 'Ќе го разгледаме вашето барање и ќе одговориме што е можно поскоро.',
+    yourStay: 'Вашиот престој',
+    fromPerNight: 'Од',
+    perNight: 'по ноќ',
+    nights: 'Ноќевања',
+    ratePerNight: 'Цена по ноќ',
+    estimatedTotal: 'Проценет вкупен износ',
+    reservationNote: 'Вашата резервација не е потврдена додека не добиете потврда по е-пошта од нашиот тим.',
+    reservationDetails: 'Детали за резервација',
+    planYourStay: 'Планирајте го вашиот престој',
+    roomOrSuite: 'Соба или апартман',
+    selectRoom: 'Изберете соба или апартман',
+    checkIn: 'Пријавување',
+    checkOut: 'Одјавување',
+    adults: 'Возрасни',
+    children: 'Деца',
+    firstName: 'Име',
+    lastName: 'Презиме',
+    email: 'Е-пошта',
+    phone: 'Телефон',
+    specialRequests: 'Посебни барања',
+    optional: 'опционално',
+    specialRequestsPlaceholder: 'Време на пристигнување, потреби за пристапност или други барања',
+    sendRequest: 'Испрати барање за резервација',
+    sendingRequest: 'Се испраќа барање...',
+    backToRooms: 'Назад кон соби',
+    requestOnItsWay: 'Вашето барање е на пат',
+    teamWillReview: 'Нашиот тим за резервации ќе ги разгледа деталите и ќе ве контактира што е можно поскоро.',
+    exploreRooms: 'Разгледајте соби и апартмани',
+    checkingAvailability: 'Проверка на достапност...',
+    notAvailable: 'Избраната соба не е достапна за овие датуми. Ве молиме изберете други датуми или друга соба.',
+} : {
+    hotelName: 'Alexandar Palace Hotel',
+    requestReservation: 'Request a Reservation',
+    heroSubtitle: 'We will review your request and reply as soon as possible.',
+    yourStay: 'Your stay',
+    fromPerNight: 'From',
+    perNight: 'per night',
+    nights: 'Nights',
+    ratePerNight: 'Rate per night',
+    estimatedTotal: 'Estimated total',
+    reservationNote: 'Your reservation is not confirmed until you receive a confirmation email from our team.',
+    reservationDetails: 'Reservation details',
+    planYourStay: 'Plan your stay',
+    roomOrSuite: 'Room or Suite',
+    selectRoom: 'Select a room or suite',
+    checkIn: 'Check-in',
+    checkOut: 'Check-out',
+    adults: 'Adults',
+    children: 'Children',
+    firstName: 'First name',
+    lastName: 'Last name',
+    email: 'Email address',
+    phone: 'Phone number',
+    specialRequests: 'Special requests',
+    optional: 'optional',
+    specialRequestsPlaceholder: 'Arrival time, accessibility requirements, or other requests',
+    sendRequest: 'Send Reservation Request',
+    sendingRequest: 'Sending request…',
+    backToRooms: 'Back to Rooms',
+    requestOnItsWay: 'Your request is on its way',
+    teamWillReview: 'Our reservations team will review the details and contact you as soon as possible.',
+    exploreRooms: 'Explore Rooms & Suites',
+    checkingAvailability: 'Checking availability...',
+    notAvailable: 'The selected room is not available for these dates. Please choose different dates or another room.',
+});
 
 const form = useForm({
     room_id: props.selectedRoomId || '',
@@ -26,6 +100,53 @@ const form = useForm({
 });
 
 const selectedRoom = computed(() => props.rooms.find((room) => room.id === Number(form.room_id)));
+
+const maxGuests = computed(() => selectedRoom.value?.max_guests || 10);
+
+const totalGuests = computed(() => (form.adults || 0) + (form.children || 0));
+
+const guestsExceedMax = computed(() => selectedRoom.value && totalGuests.value > maxGuests.value);
+
+// Availability checking
+const availabilityStatus = ref({ available: true, message: '', checking: false });
+
+const checkAvailability = async () => {
+    if (!form.room_id || !form.check_in || !form.check_out) {
+        availabilityStatus.value = { available: true, message: '', checking: false };
+        return;
+    }
+    
+    availabilityStatus.value.checking = true;
+    
+    const startTime = Date.now();
+    const minDisplayTime = 1000; // Show checking state for at least 1 second
+    
+    try {
+        const response = await fetch(`/api/rooms/${form.room_id}/availability?check_in=${form.check_in}&check_out=${form.check_out}`);
+        const data = await response.json();
+        
+        // Ensure minimum display time
+        const elapsed = Date.now() - startTime;
+        if (elapsed < minDisplayTime) {
+            await new Promise(resolve => setTimeout(resolve, minDisplayTime - elapsed));
+        }
+        
+        availabilityStatus.value = { ...data, checking: false };
+    } catch (error) {
+        const elapsed = Date.now() - startTime;
+        if (elapsed < minDisplayTime) {
+            await new Promise(resolve => setTimeout(resolve, minDisplayTime - elapsed));
+        }
+        availabilityStatus.value = { available: false, message: 'Error checking availability', checking: false };
+    }
+};
+
+// Watch for changes in room or dates
+watch([() => form.room_id, () => form.check_in, () => form.check_out], () => {
+    checkAvailability();
+}, { immediate: true });
+
+const roomNotAvailable = computed(() => !availabilityStatus.value.available && !availabilityStatus.value.checking);
 
 const nights = computed(() => {
     if (!form.check_in || !form.check_out) return 0;
@@ -60,12 +181,12 @@ const submit = () => {
         :alternateUrls="seo.alternateUrls"
     >
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset(selectedRoom?.featured_image || 'img/hero_home_1.jpg')" alt="Reservation">
+            <img class="jarallax-img" :src="asset(selectedRoom?.featured_image || 'img/about-us-modified.webp')" alt="Reservation">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.55)">
                 <div class="container">
-                    <small class="slide-animated one">Alexandar Palace Hotel</small>
-                    <h1 class="slide-animated two">Request a Reservation</h1>
-                    <p class="slide-animated three">We will review your request and reply as soon as possible.</p>
+                    <small class="slide-animated one">{{ t.hotelName }}</small>
+                    <h1 class="slide-animated two">{{ t.requestReservation }}</h1>
+                    <p class="slide-animated three">{{ t.heroSubtitle }}</p>
                 </div>
             </div>
         </div>
@@ -78,97 +199,118 @@ const submit = () => {
                         <span>A</span>
                     </div>
                 </div>
-                <small>Alexandar Palace Hotel</small>
-                <h2>Your request is on its way</h2>
+                <small>{{ t.hotelName }}</small>
+                <h2>{{ t.requestOnItsWay }}</h2>
                 <p>{{ $page.props.flash.success }}</p>
-                <p>Our reservations team will review the details and contact you as soon as possible.</p>
-                <Link href="/rooms" class="btn_1 outline mt-3">Explore Rooms & Suites</Link>
+                <p>{{ t.teamWillReview }}</p>
+                <Link href="/rooms" class="btn_1 outline mt-3">{{ t.exploreRooms }}</Link>
             </div>
             <div v-else class="row justify-content-between">
                 <div class="col-lg-4 order-lg-2 mb-5 mb-lg-0">
                     <div class="booking-summary">
-                        <h3>Your stay</h3>
+                        <h3>{{ t.yourStay }}</h3>
                         <div v-if="selectedRoom" class="selected-room">
                             <img :src="asset(selectedRoom.featured_image)" :alt="selectedRoom.name">
                             <h4>{{ selectedRoom.name }}</h4>
-                            <p>From €{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }} per night</p>
+                            <p>{{ t.fromPerNight }} €{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }} {{ t.perNight }}</p>
                         </div>
                         <div v-if="selectedRoom && nights > 0" class="price-breakdown">
-                            <div><span>Nights</span><strong>{{ nights }}</strong></div>
-                            <div><span>Rate per night</span><strong>€{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }}</strong></div>
-                            <div class="total"><span>Estimated total</span><strong>€{{ formatPrice(totalPrice) }}</strong></div>
+                            <div><span>{{ t.nights }}</span><strong>{{ nights }}</strong></div>
+                            <div><span>{{ t.ratePerNight }}</span><strong>€{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }}</strong></div>
+                            <div class="total"><span>{{ t.estimatedTotal }}</span><strong>€{{ formatPrice(totalPrice) }}</strong></div>
                         </div>
-                        <p class="mb-0">Your reservation is not confirmed until you receive a confirmation email from our team.</p>
+                        <p class="mb-0">{{ t.reservationNote }}</p>
                     </div>
                 </div>
 
                 <div class="col-lg-7">
                     <div class="title mb-4">
-                        <small>Reservation details</small>
-                        <h2>Plan your stay</h2>
+                        <small>{{ t.reservationDetails }}</small>
+                        <h2>{{ t.planYourStay }}</h2>
                     </div>
 
                     <form @submit.prevent="submit" novalidate>
                         <div class="row">
                             <div class="col-12 mb-4">
-                                <label for="room_id" class="form-label">Room or Suite</label>
+                                <label for="room_id" class="form-label">{{ t.roomOrSuite }}</label>
                                 <select id="room_id" v-model="form.room_id" class="form-select" required>
-                                    <option value="" disabled>Select a room or suite</option>
-                                    <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }} — from €{{ room.price_per_night }}/night</option>
+                                    <option value="" disabled>{{ t.selectRoom }}</option>
+                                    <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }} — {{ t.fromPerNight }} €{{ room.price_per_night }}/{{ locale === 'mk' ? 'ноќ' : 'night' }}</option>
                                 </select>
                                 <div v-if="form.errors.room_id" class="field-error">{{ form.errors.room_id }}</div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="check_in" class="form-label">Check-in</label>
+                                <label for="check_in" class="form-label">{{ t.checkIn }}</label>
                                 <input id="check_in" v-model="form.check_in" type="date" class="form-control" :min="new Date().toISOString().split('T')[0]" required>
                                 <div v-if="form.errors.check_in" class="field-error">{{ form.errors.check_in }}</div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="check_out" class="form-label">Check-out</label>
+                                <label for="check_out" class="form-label">{{ t.checkOut }}</label>
                                 <input id="check_out" v-model="form.check_out" type="date" class="form-control" :min="form.check_in || new Date().toISOString().split('T')[0]" required>
                                 <div v-if="form.errors.check_out" class="field-error">{{ form.errors.check_out }}</div>
                             </div>
+                            <!-- Availability Warning -->
+                            <div v-if="roomNotAvailable" class="col-12 mb-4">
+                                <div class="alert alert-danger">
+                                    <i class="bi bi-x-circle me-2"></i>
+                                    {{ t.notAvailable }}
+                                </div>
+                            </div>
+                            <div v-else-if="availabilityStatus.checking" class="col-12 mb-4">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-hourglass-split me-2"></i>
+                                    {{ t.checkingAvailability }}
+                                </div>
+                            </div>
                             <div class="col-md-6 mb-4">
-                                <label for="adults" class="form-label">Adults</label>
-                                <input id="adults" v-model.number="form.adults" type="number" min="1" max="10" class="form-control" required>
+                                <label for="adults" class="form-label">{{ t.adults }}</label>
+                                <input id="adults" v-model.number="form.adults" type="number" min="1" :max="maxGuests" class="form-control" :class="{ 'is-invalid': guestsExceedMax }" required>
                                 <div v-if="form.errors.adults" class="field-error">{{ form.errors.adults }}</div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="children" class="form-label">Children</label>
-                                <input id="children" v-model.number="form.children" type="number" min="0" max="10" class="form-control" required>
+                                <label for="children" class="form-label">{{ t.children }}</label>
+                                <input id="children" v-model.number="form.children" type="number" min="0" :max="maxGuests - 1" class="form-control" :class="{ 'is-invalid': guestsExceedMax }" required>
                                 <div v-if="form.errors.children" class="field-error">{{ form.errors.children }}</div>
                             </div>
+                            <div v-if="guestsExceedMax" class="col-12 mb-4">
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    {{ locale === 'mk' 
+                                        ? `Избраната соба може да прими максимум ${maxGuests} гости. Моментално имате избрано ${totalGuests} гости.`
+                                        : `The selected room can accommodate a maximum of ${maxGuests} guests. You have selected ${totalGuests} guests.` }}
+                                </div>
+                            </div>
                             <div class="col-md-6 mb-4">
-                                <label for="name" class="form-label">First name</label>
+                                <label for="name" class="form-label">{{ t.firstName }}</label>
                                 <input id="name" v-model="form.name" type="text" autocomplete="given-name" class="form-control" required>
                                 <div v-if="form.errors.name" class="field-error">{{ form.errors.name }}</div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="last_name" class="form-label">Last name</label>
+                                <label for="last_name" class="form-label">{{ t.lastName }}</label>
                                 <input id="last_name" v-model="form.last_name" type="text" autocomplete="family-name" class="form-control" required>
                                 <div v-if="form.errors.last_name" class="field-error">{{ form.errors.last_name }}</div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="email" class="form-label">Email address</label>
+                                <label for="email" class="form-label">{{ t.email }}</label>
                                 <input id="email" v-model="form.email" type="email" autocomplete="email" class="form-control" required>
                                 <div v-if="form.errors.email" class="field-error">{{ form.errors.email }}</div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label for="phone" class="form-label">Phone number</label>
+                                <label for="phone" class="form-label">{{ t.phone }}</label>
                                 <input id="phone" v-model="form.phone" type="tel" autocomplete="tel" class="form-control" required>
                                 <div v-if="form.errors.phone" class="field-error">{{ form.errors.phone }}</div>
                             </div>
                             <div class="col-12 mb-4">
-                                <label for="special_requests" class="form-label">Special requests <span class="text-muted">(optional)</span></label>
-                                <textarea id="special_requests" v-model="form.special_requests" class="form-control" rows="4" placeholder="Arrival time, accessibility requirements, or other requests"></textarea>
+                                <label for="special_requests" class="form-label">{{ t.specialRequests }} <span class="text-muted">({{ t.optional }})</span></label>
+                                <textarea id="special_requests" v-model="form.special_requests" class="form-control" rows="4" :placeholder="t.specialRequestsPlaceholder"></textarea>
                                 <div v-if="form.errors.special_requests" class="field-error">{{ form.errors.special_requests }}</div>
                             </div>
                         </div>
                         <div class="d-flex flex-column flex-sm-row gap-3 align-items-center">
-                            <button type="submit" class="btn_1" :disabled="form.processing">
-                                {{ form.processing ? 'Sending request…' : 'Send Reservation Request' }}
+                            <button type="submit" class="btn_1" :disabled="form.processing || guestsExceedMax || roomNotAvailable || availabilityStatus.checking">
+                                {{ form.processing ? t.sendingRequest : t.sendRequest }}
                             </button>
-                            <Link href="/rooms" class="animated_link"><strong>Back to Rooms</strong></Link>
+                            <Link href="/rooms" class="animated_link"><strong>{{ t.backToRooms }}</strong></Link>
                         </div>
                     </form>
                 </div>
@@ -204,4 +346,13 @@ textarea.form-control { min-height: auto; }
 @keyframes envelope-open { to { opacity: 0; transform: rotateX(-180deg); } }
 @keyframes letter-rise { to { transform: translateY(-38px); } }
 @media (prefers-reduced-motion: reduce) { .envelope-flap, .envelope-letter { animation: none; } }
+
+/* Disabled button styles */
+.btn_1:disabled,
+.btn_1[disabled] {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    background-color: #999 !important;
+}
 </style>

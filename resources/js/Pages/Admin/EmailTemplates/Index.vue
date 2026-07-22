@@ -60,7 +60,7 @@ defineProps({
             <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                 <h3 class="font-medium text-amber-800 mb-2">Available Variables</h3>
                 <p class="text-sm text-amber-700">
-                    Use <code class="bg-amber-100 px-1 rounded">{{ '{{variable_name}}' }}</code> syntax in your templates. 
+                    Use <code class="bg-amber-100 px-1 rounded">{<!-- -->{variable_name}<!-- -->}</code> syntax in your templates. 
                     Each template shows its available variables in the edit form.
                 </p>
             </div>

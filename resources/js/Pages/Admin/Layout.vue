@@ -19,6 +19,7 @@ const menuSections = [
             { label: 'Homepage', href: '/admin/homepage', icon: 'bi-house' },
             { label: 'Pages', href: '/admin/pages', icon: 'bi-file-text' },
             { label: 'Rooms', href: '/admin/rooms', icon: 'bi-door-open' },
+            { label: 'Room Units', href: '/admin/room-units', icon: 'bi-grid-3x3' },
             { label: 'News', href: '/admin/news', icon: 'bi-newspaper' },
             { label: 'Gallery', href: '/admin/gallery', icon: 'bi-images' },
             { label: 'Testimonials', href: '/admin/testimonials', icon: 'bi-chat-quote' },

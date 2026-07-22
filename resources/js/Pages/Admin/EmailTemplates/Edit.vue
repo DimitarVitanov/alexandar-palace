@@ -152,8 +152,7 @@ const loadPreview = async () => {
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-4">
                         <h3 class="font-medium text-slate-800 mb-3">Available Variables</h3>
                         <div class="space-y-1">
-                            <code v-for="variable in template.available_variables" :key="variable" class="block text-xs bg-slate-100 px-2 py-1 rounded">
-                                {{ '{{' + variable + '}}' }}
+                            <code v-for="variable in template.available_variables" :key="variable" class="block text-xs bg-slate-100 px-2 py-1 rounded" v-text="'{{' + variable + '}}'">
                             </code>
                         </div>
                     </div>

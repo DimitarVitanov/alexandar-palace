@@ -327,4 +327,10 @@ onMounted(() => {
 .call_section {
     min-height: 400px;
 }
+
+.call_section .title.white small,
+.call_section .title.white h2,
+.call_section .title.white p {
+    color: #fff !important;
+}
 </style>

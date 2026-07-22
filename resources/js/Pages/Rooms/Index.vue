@@ -20,6 +20,16 @@ const formatPrice = (price) => {
     return Number.isInteger(num) ? num.toString() : num.toFixed(2);
 };
 
+const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(locale === 'mk' ? 'mk-MK' : 'en-GB', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric' 
+    });
+};
+
 const availabilityQuery = () => {
     if (!props.searchParams?.has_searched) {
         return '';
@@ -126,15 +136,29 @@ const getShortDescription = (room) => {
 
             <!-- No Results Message -->
             <div v-if="searchParams?.has_searched && rooms.length === 0" class="no-results text-center py-5">
-                <i class="bi bi-search" style="font-size: 48px; color: #ccc;"></i>
+                <i class="bi bi-calendar-x" style="font-size: 48px; color: #ccc;"></i>
                 <h3 class="mt-3">{{ locale === 'mk' ? 'Нема достапни соби' : 'No Rooms Available' }}</h3>
-                <p class="text-muted">
-                    {{ locale === 'mk' ? 'Нема соби за' : 'No rooms available for' }} {{ searchParams.adults + searchParams.children }} {{ locale === 'mk' ? 'гости' : 'guests' }}.
-                    {{ locale === 'mk' ? 'Обидете се со помалку гости.' : 'Try with fewer guests.' }}
+                <p class="text-muted" v-if="searchParams.check_in && searchParams.check_out">
+                    {{ locale === 'mk' 
+                        ? `Нема достапни соби за периодот ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.`
+                        : `No rooms available for ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.` }}
                 </p>
-                <button @click="resetSearch" class="btn_1 mt-3">
-                    {{ locale === 'mk' ? 'Прикажи ги сите соби' : 'Show All Rooms' }}
-                </button>
+                <p class="text-muted" v-else>
+                    {{ locale === 'mk' ? 'Нема соби за' : 'No rooms available for' }} {{ searchParams.adults + searchParams.children }} {{ locale === 'mk' ? 'гости' : 'guests' }}.
+                </p>
+                <p class="text-muted mb-4">
+                    {{ locale === 'mk' 
+                        ? 'Ве молиме изберете други датуми или контактирајте нè директно.'
+                        : 'Please try different dates or contact us directly.' }}
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <button @click="resetSearch" class="btn_1">
+                        {{ locale === 'mk' ? 'Прикажи ги сите соби' : 'Show All Rooms' }}
+                    </button>
+                    <Link href="/contacts" class="btn_1 outline">
+                        {{ locale === 'mk' ? 'Контактирајте нè' : 'Contact Us' }}
+                    </Link>
+                </div>
             </div>
 
             <div 

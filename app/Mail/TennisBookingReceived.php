@@ -22,8 +22,8 @@ class TennisBookingReceived extends Mailable
     public function envelope(): Envelope
     {
         $subject = $this->mailLocale === 'mk' 
-            ? 'Нова резервација за тенис терен - ' . $this->booking->name
-            : 'New Tennis Court Booking - ' . $this->booking->name;
+            ? '[ADMIN] Нова резервација за тенис терен - ' . $this->booking->name
+            : '[ADMIN] New Tennis Court Booking - ' . $this->booking->name;
             
         return new Envelope(subject: $subject);
     }

@@ -1,7 +1,9 @@
 <script setup>
+import { ref, onMounted, nextTick } from 'vue';
 import { useForm, Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import BookingSection from '@/Components/Frontend/BookingSection.vue';
 
 const props = defineProps({
     page: Object,
@@ -40,7 +42,78 @@ const heroBooking = useForm({
     children: 0,
 });
 
+// Hero booking form state
+const heroAdults = ref(1);
+const heroChildren = ref(0);
+const heroCheckIn = ref('');
+const heroCheckOut = ref('');
+
+const submitHeroBooking = () => {
+    const params = new URLSearchParams();
+    if (heroCheckIn.value) params.set('check_in', heroCheckIn.value);
+    if (heroCheckOut.value) params.set('check_out', heroCheckOut.value);
+    params.set('adults', heroAdults.value);
+    params.set('children', heroChildren.value);
+    window.location.href = `/rooms?${params.toString()}`;
+};
+
+// Initialize hero date picker
+onMounted(() => {
+    nextTick(() => {
+        if (typeof window.easepick !== 'undefined') {
+            const element = document.getElementById('hero_dates');
+            if (element) {
+                new window.easepick.create({
+                    element: element,
+                    css: ['/assets/paradise/css/daterangepicker_v2.css'],
+                    format: 'DD/MM/YYYY',
+                    calendars: 2,
+                    grid: 2,
+                    zIndex: 9999,
+                    plugins: ['RangePlugin', 'LockPlugin'],
+                    RangePlugin: {
+                        tooltipNumber(num) {
+                            return num - 1;
+                        },
+                        locale: {
+                            one: 'night',
+                            other: 'nights',
+                        },
+                    },
+                    LockPlugin: {
+                        minDate: new Date(),
+                        minDays: 1,
+                    },
+                    setup(picker) {
+                        picker.on('select', (e) => {
+                            if (e.detail.start) {
+                                heroCheckIn.value = e.detail.start.format('YYYY-MM-DD');
+                            }
+                            if (e.detail.end) {
+                                heroCheckOut.value = e.detail.end.format('YYYY-MM-DD');
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+});
+
 const asset = (path) => `/assets/paradise/${path}`;
+
+const mobileVideo = ref(null);
+
+// Force play mobile video on mount
+onMounted(() => {
+    nextTick(() => {
+        if (mobileVideo.value && isMobile()) {
+            mobileVideo.value.play().catch(() => {
+                // Autoplay blocked, video will show poster
+            });
+        }
+    });
+});
 
 const formatPrice = (price) => {
     const num = Number(price);
@@ -83,27 +156,27 @@ const getRoomImage = (room) => {
                     <h3 class="slide-animated two" v-html="hero?.title || t('home.hero_title')"></h3>
                     <div class="row justify-content-center slide-animated three">
                         <div class="col-xl-12">
-                            <form class="row g-0 booking_form" method="GET" action="/rooms">
+                            <form class="row g-0 booking_form" @submit.prevent="submitHeroBooking">
                                 <div class="col-lg-5">
                                     <div class="form-group">
-                                        <input class="form-control" type="text" name="dates" id="dates" :placeholder="t('home.check_in_out')" readonly>
+                                        <input class="form-control" type="text" id="hero_dates" :placeholder="t('home.check_in_out')" readonly>
                                         <i class="bi bi-calendar2"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="qty-buttons">
                                         <label>{{ t('home.adults') }}</label>
-                                        <input type="button" value="+" class="qtyplus" name="adults">
-                                        <input type="text" name="adults" id="adults" value="1" class="qty form-control" readonly>
-                                        <input type="button" value="-" class="qtyminus" name="adults">
+                                        <input type="button" value="+" class="qtyplus" @click="heroAdults = Math.min(10, heroAdults + 1)">
+                                        <input type="text" :value="heroAdults" class="qty form-control" readonly>
+                                        <input type="button" value="-" class="qtyminus" @click="heroAdults = Math.max(1, heroAdults - 1)">
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="qty-buttons">
                                         <label>{{ t('home.children') }}</label>
-                                        <input type="button" value="+" class="qtyplus" name="children">
-                                        <input type="text" name="children" id="children" value="0" class="qty form-control" readonly>
-                                        <input type="button" value="-" class="qtyminus" name="children">
+                                        <input type="button" value="+" class="qtyplus" @click="heroChildren = Math.min(10, heroChildren + 1)">
+                                        <input type="text" :value="heroChildren" class="qty form-control" readonly>
+                                        <input type="button" value="-" class="qtyminus" @click="heroChildren = Math.max(0, heroChildren - 1)">
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
@@ -150,15 +223,15 @@ const getRoomImage = (room) => {
             <div class="pinned-image pinned-image--medium">
                 <div class="pinned-image__container" id="section_video">
                     <!-- Desktop video (hidden on mobile) -->
-                    <video loop muted playsinline id="video_home" class="d-none d-md-block">
+                    <video autoplay loop muted playsinline id="video_home" class="d-none d-md-block">
                         <source :src="asset('video/swimming_pool_2.mp4')" type="video/mp4">
                         <source :src="asset('video/swimming_pool_2.webm')" type="video/webm">
                         <source :src="asset('video/swimming_pool_2.ogv')" type="video/ogg">
                     </video>
                     <!-- Mobile video (smaller file, shown only on mobile) -->
-                    <video loop muted playsinline id="video_home_mobile" class="d-block d-md-none">
-                        <source :src="asset('video/swimming_pool_2.webm')" type="video/webm">
+                    <video ref="mobileVideo" autoplay loop muted playsinline webkit-playsinline id="video_home_mobile" class="d-block d-md-none" :poster="asset('video/edited1-scaled.jpg')" style="width: 100%; height: 100%; object-fit: cover;">
                         <source :src="asset('video/swimming_pool_2.mp4')" type="video/mp4">
+                        <source :src="asset('video/swimming_pool_2.webm')" type="video/webm">
                     </video>
                     <div class="pinned-image__container-overlay"></div>
                 </div>
@@ -221,7 +294,7 @@ const getRoomImage = (room) => {
                     <div class="col-lg-6">
                         <div class="pinned-image rounded_container pinned-image--small mb-4">
                             <div class="pinned-image__container">
-                                <img :src="asset('img/tennis-restaurant/5C8B3760-FC2B-4EAD-B731-9663CD55A9D9-2048x2048.webp')" :alt="t('restaurant.title')">
+                                <img :src="asset('img/restaurant/restaurant_hero.webp')" :alt="t('restaurant.title')">
                             </div>
                         </div>
                     </div>
@@ -273,7 +346,8 @@ const getRoomImage = (room) => {
             </div>
         </div>
 
-        <div class="parallax_section_1 jarallax" data-jarallax data-speed="0.2">
+        <!-- Testimonials Section - Hidden for now -->
+        <div v-if="false" class="parallax_section_1 jarallax" data-jarallax data-speed="0.2">
             <img class="jarallax-img kenburns-2" :src="`/assets/paradise/img/hero_home_1.jpg`" alt="">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
@@ -300,7 +374,7 @@ const getRoomImage = (room) => {
             </div>
         </div>
 
-        <div class="bg_white">
+        <div class="bg_white d-none">
             <div class="container margin_120_95">
                 <div class="title mb-3">
                     <small data-cue="slideInUp">{{ t('home.news_small') }}</small>
@@ -322,56 +396,7 @@ const getRoomImage = (room) => {
             </div>
         </div>
 
-        <div class="container margin_120_95" id="booking_section">
-            <div class="row justify-content-between">
-                <div class="col-xl-4">
-                    <div data-cue="slideInUp">
-                        <div class="title">
-                            <small>{{ booking?.subtitle || t('home.booking_small') }}</small>
-                            <h2>{{ booking?.title || t('home.booking_title') }}</h2>
-                        </div>
-                        <p v-if="booking?.content" v-html="booking.content"></p>
-                        <p v-else>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu.</p>
-                        <p class="phone_element no_borders"><a :href="`tel:${settings?.phone?.value || '+389 2 123 4567'}`"><i class="bi bi-telephone"></i><span><em>{{ t('home.booking_info') }}</em>{{ settings?.phone?.value || '+389 2 123 4567' }}</span></a></p>
-                    </div>
-                </div>
-                <div class="col-xl-7">
-                    <div data-cue="slideInUp" data-delay="200">
-                        <form @submit.prevent="bookingForm.post('/bookings')">
-                            <div class="booking_wrapper pb-4">
-                                <div class="col-12">
-                                    <input type="hidden" id="booking_dates" name="date_booking" v-model="bookingForm.date_booking">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="custom_select">
-                                            <select v-model="bookingForm.room_id" class="wide">
-                                                <option value="">Select Room</option>
-                                                <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="qty-buttons version_2">
-                                            <input type="text" v-model="bookingForm.adults" class="qty form-control" placeholder="Adults">
-                                            <input type="button" value="-" class="qtyminus" @click="bookingForm.adults > 1 ? bookingForm.adults-- : null">
-                                            <input type="button" value="+" class="qtyplus" @click="bookingForm.adults++">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="qty-buttons version_2">
-                                            <input type="text" v-model="bookingForm.children" class="qty form-control" placeholder="Childs">
-                                            <input type="button" value="-" class="qtyminus" @click="bookingForm.children > 0 ? bookingForm.children-- : null">
-                                            <input type="button" value="+" class="qtyplus" @click="bookingForm.children++">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-end mt-4"><button type="submit" class="btn_1 outline" :disabled="bookingForm.processing">Book Now</button></p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BookingSection :rooms="rooms" />
     </Layout>
 </template>
+

@@ -84,6 +84,74 @@ class Room extends Model
         return $this->morphMany(Media::class, 'model')->orderBy('sort_order');
     }
 
+    public function units(): HasMany
+    {
+        return $this->hasMany(RoomUnit::class);
+    }
+
+    public function activeUnits(): HasMany
+    {
+        return $this->hasMany(RoomUnit::class)->where('is_active', true);
+    }
+
+    /**
+     * Get available room units for a date range
+     */
+    public function getAvailableRoomUnits(string $checkIn, string $checkOut): \Illuminate\Support\Collection
+    {
+        return $this->activeUnits()
+            ->with(['availabilities', 'bookings' => function ($query) use ($checkIn, $checkOut) {
+                $query->whereIn('status', ['pending', 'confirmed'])
+                    ->where('check_in', '<', $checkOut)
+                    ->where('check_out', '>', $checkIn);
+            }])
+            ->get()
+            ->filter(function (RoomUnit $unit) use ($checkIn, $checkOut) {
+                return $unit->isAvailableFor($checkIn, $checkOut);
+            });
+    }
+
+    /**
+     * Check if any room unit is available for the date range
+     */
+    public function hasAvailableUnit(string $checkIn, string $checkOut): bool
+    {
+        return $this->getAvailableRoomUnits($checkIn, $checkOut)->isNotEmpty();
+    }
+
+    /**
+     * Get the best matching room unit for a booking.
+     * Prioritizes units with shorter availability windows to preserve longer ones for bigger bookings.
+     */
+    public function getBestAvailableUnit(string $checkIn, string $checkOut): ?RoomUnit
+    {
+        $availableUnits = $this->getAvailableRoomUnits($checkIn, $checkOut);
+        
+        if ($availableUnits->isEmpty()) {
+            return null;
+        }
+        
+        // Sort by availability window length (shortest first)
+        return $availableUnits->sortBy(function (RoomUnit $unit) use ($checkIn, $checkOut) {
+            // Find the availability period that covers this booking
+            $matchingAvailability = $unit->availabilities
+                ->where('status', 'available')
+                ->filter(function ($avail) use ($checkIn, $checkOut) {
+                    $from = $avail->available_from->format('Y-m-d');
+                    $to = $avail->available_to->format('Y-m-d');
+                    return $from <= $checkIn && $to >= $checkOut;
+                })
+                ->first();
+            
+            if (!$matchingAvailability) {
+                return PHP_INT_MAX;
+            }
+            
+            // Calculate the length of the availability window in days
+            return $matchingAvailability->available_from->diffInDays($matchingAvailability->available_to);
+        })->first();
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -150,10 +218,22 @@ class Room extends Model
 
     /**
      * Check if at least one unit is available for the entire date range.
+     * Rooms must have units configured to be bookable.
      */
     public function isAvailable($checkIn, $checkOut): bool
     {
-        return $this->getAvailableUnits($checkIn, $checkOut) > 0;
+        // Check if units are loaded or exist
+        $hasUnits = $this->relationLoaded('units') 
+            ? $this->units->where('is_active', true)->isNotEmpty()
+            : $this->activeUnits()->exists();
+            
+        // If no units configured, room is not available for booking
+        if (!$hasUnits) {
+            return false;
+        }
+        
+        // Check if any unit is available for the date range
+        return $this->getAvailableRoomUnits($checkIn, $checkOut)->isNotEmpty();
     }
     
     /**

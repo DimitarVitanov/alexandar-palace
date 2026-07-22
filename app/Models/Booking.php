@@ -14,6 +14,7 @@ class Booking extends Model
     protected $fillable = [
         'booking_reference',
         'room_id',
+        'room_unit_id',
         'name',
         'last_name',
         'locale',
@@ -70,6 +71,11 @@ class Booking extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function roomUnit(): BelongsTo
+    {
+        return $this->belongsTo(RoomUnit::class);
     }
 
     public function scopePending($query)

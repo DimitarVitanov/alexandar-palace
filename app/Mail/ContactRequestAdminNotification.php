@@ -20,7 +20,7 @@ class ContactRequestAdminNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '[New Contact] ' . ($this->contact->subject ?? 'Website Inquiry'),
+            subject: '[ADMIN] New Contact - ' . ($this->contact->subject ?? 'Website Inquiry'),
         );
     }
 

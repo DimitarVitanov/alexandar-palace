@@ -84,7 +84,7 @@ const equipment = [
     >
         <!-- Hero Section -->
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset('img/congress/Kongresnasala1-400x300.jpg')" alt="Congress Center">
+            <img class="jarallax-img" :src="asset('img/congress/kongres-sala-banner.webp')" alt="Congress Center">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.6)">
                 <div class="container">
                     <small class="slide-animated one">{{ t('congress.hero_subtitle') }}</small>
@@ -140,9 +140,9 @@ const equipment = [
                 
                 <div class="row justify-content-center">
                     <div class="col-lg-11">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
                             <!-- Cinema -->
-                            <div style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px;">
+                            <div class="room-setup-icon" style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px; display: flex; flex-direction: column; align-items: center;">
                                 <h6 style="color: #c9a227; font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; font-weight: 400;">{{ t('congress.cinema') }}</h6>
                                 <svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <!-- Screen at top -->
@@ -171,7 +171,7 @@ const equipment = [
                             </div>
                             
                             <!-- Banquette -->
-                            <div style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px;">
+                            <div class="room-setup-icon" style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px; display: flex; flex-direction: column; align-items: center;">
                                 <h6 style="color: #c9a227; font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; font-weight: 400;">{{ t('congress.banquette') }}</h6>
                                 <svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <!-- Center table -->
@@ -189,7 +189,7 @@ const equipment = [
                             </div>
                             
                             <!-- Classroom -->
-                            <div style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px;">
+                            <div class="room-setup-icon" style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px; display: flex; flex-direction: column; align-items: center;">
                                 <h6 style="color: #c9a227; font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; font-weight: 400;">{{ t('congress.classroom') }}</h6>
                                 <svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <!-- Row 1 tables -->
@@ -212,7 +212,7 @@ const equipment = [
                             </div>
                             
                             <!-- U Style -->
-                            <div style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px;">
+                            <div class="room-setup-icon" style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px; display: flex; flex-direction: column; align-items: center;">
                                 <h6 style="color: #c9a227; font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; font-weight: 400;">{{ t('congress.u_style') }}</h6>
                                 <svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <!-- U-shaped table -->
@@ -234,7 +234,7 @@ const equipment = [
                             </div>
                             
                             <!-- Reception -->
-                            <div style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px;">
+                            <div class="room-setup-icon" style="flex: 1; min-width: 160px; text-align: center; padding: 0 15px; display: flex; flex-direction: column; align-items: center;">
                                 <h6 style="color: #c9a227; font-size: 13px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px; font-weight: 400;">{{ t('congress.reception') }}</h6>
                                 <svg width="90" height="100" viewBox="0 0 45 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <!-- Cocktail glass -->
@@ -452,5 +452,12 @@ const equipment = [
     font-size: 2.5rem;
     color: #1a1a1a;
     margin-bottom: 20px;
+}
+
+/* Mobile spacing for room setup icons */
+@media (max-width: 768px) {
+    .room-setup-icon {
+        margin-bottom: 40px;
+    }
 }
 </style>

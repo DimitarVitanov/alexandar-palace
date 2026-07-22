@@ -35,6 +35,12 @@
             <span class="details-label">Room:</span>
             <span class="details-value">{{ $booking->room?->name['en'] ?? 'Not specified' }}</span>
         </div>
+        @if($booking->roomUnit)
+        <div class="details-row">
+            <span class="details-label">Room Number:</span>
+            <span class="details-value highlight">{{ $booking->roomUnit->unit_code }}</span>
+        </div>
+        @endif
         <div class="details-row">
             <span class="details-label">Check-in:</span>
             <span class="details-value">{{ $booking->check_in->format('l, F j, Y') }}</span>

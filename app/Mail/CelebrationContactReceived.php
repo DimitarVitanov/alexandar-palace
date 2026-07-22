@@ -20,7 +20,7 @@ class CelebrationContactReceived extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Celebration Inquiry: ' . ($this->contact->event_type ?? 'Event'),
+            subject: '[ADMIN] Celebration Inquiry - ' . ($this->contact->event_type ?? 'Event'),
         );
     }
 

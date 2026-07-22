@@ -1,6 +1,7 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 import Layout from '@/Components/Frontend/Layout.vue';
 
 const props = defineProps({
@@ -12,6 +13,8 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const page = usePage();
+const locale = computed(() => page.props.locale || 'en');
 
 const asset = (path) => `/assets/paradise/${path}`;
 
@@ -46,21 +49,47 @@ const amenitiesList = amenities?.data?.items || [
     },
 ];
 
-const facilitiesList = facilities?.data?.items || [
-    { icon: 'customicon-private-parking', title: 'Private Parking', description: 'Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.' },
-    { icon: 'customicon-wifi', title: 'High Speed Wifi', description: 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.' },
-    { icon: 'customicon-cocktail', title: 'Bar & Restaurant', description: 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.' },
-    { icon: 'customicon-swimming-pool', title: 'Swimming Pool', description: 'Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.' },
-];
+const facilitiesData = {
+    en: [
+        { icon: 'customicon-private-parking', title: 'Private Parking', description: 'Complimentary private parking is available for all hotel guests, ensuring a convenient and secure stay.' },
+        { icon: 'customicon-wifi', title: 'High Speed Wifi', description: 'Stay connected with complimentary high-speed WiFi available throughout the hotel and in all rooms.' },
+        { icon: 'customicon-cocktail', title: 'Bar & Restaurant', description: 'Enjoy exquisite dining at our restaurant and unwind at our bar with a selection of fine wines and cocktails.' },
+        { icon: 'customicon-swimming-pool', title: 'Swimming Pool', description: 'Relax and refresh in our indoor swimming pool, perfect for a rejuvenating swim any time of year.' },
+    ],
+    mk: [
+        { icon: 'customicon-private-parking', title: 'Приватен Паркинг', description: 'Бесплатен приватен паркинг е достапен за сите гости на хотелот.' },
+        { icon: 'customicon-wifi', title: 'Брз WiFi', description: 'Останете поврзани со бесплатен брз WiFi достапен низ целиот хотел.' },
+        { icon: 'customicon-cocktail', title: 'Бар и Ресторан', description: 'Уживајте во извонредна храна во нашиот ресторан и опуштете се во нашиот бар.' },
+        { icon: 'customicon-swimming-pool', title: 'Базен', description: 'Релаксирајте и освежете се во нашиот затворен базен.' },
+    ]
+};
+const facilitiesList = computed(() => facilities?.data?.items || facilitiesData[locale.value] || facilitiesData.en);
 
-const faqList = faq?.data?.items || [
-    { question: 'Cancellation', answer: 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.' },
-    { question: 'Payments', answer: 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.' },
-    { question: 'Check In / Out Rules', answer: 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.' },
-    { question: 'Disable Access', answer: 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.' },
-];
+const faqData = {
+    en: [
+        { question: 'Cancellation Policy', answer: 'Free cancellation is available up to 48 hours before check-in. Cancellations made within 48 hours of arrival may be subject to a charge equivalent to one night\'s stay. No-shows will be charged the full reservation amount.' },
+        { question: 'Payment Methods', answer: 'We accept all major credit cards (Visa, MasterCard, American Express), bank transfers, and cash payments. A valid credit card is required at check-in for incidentals. Full payment can be made upon arrival or departure.' },
+        { question: 'Check In / Out Times', answer: 'Check-in time is from 14:00 (2:00 PM). Check-out time is until 11:00 (11:00 AM). Early check-in and late check-out may be available upon request, subject to availability and additional charges.' },
+        { question: 'Accessibility', answer: 'Our hotel is fully accessible for guests with disabilities. We offer accessible rooms, ramps, elevators, and accessible parking spaces. Please contact us in advance to arrange any special requirements.' },
+    ],
+    mk: [
+        { question: 'Политика за Откажување', answer: 'Бесплатно откажување е достапно до 48 часа пред пријавување. Откажувањата направени во рок од 48 часа од пристигнувањето може да бидат наплатени еквивалентно на една ноќевање.' },
+        { question: 'Начини на Плаќање', answer: 'Прифаќаме сите главни кредитни картички (Visa, MasterCard, American Express), банкарски трансфери и готовински плаќања. Валидна кредитна картичка е потребна при пријавување.' },
+        { question: 'Време на Пријавување / Одјавување', answer: 'Времето за пријавување е од 14:00 часот. Времето за одјавување е до 11:00 часот. Рано пријавување и доцно одјавување може да бидат достапни на барање.' },
+        { question: 'Пристапност', answer: 'Нашиот хотел е целосно пристапен за гости со попреченост. Нудиме пристапни соби, рампи, лифтови и пристапни паркинг места. Контактирајте нè однапред за посебни барања.' },
+    ]
+};
+const faqList = computed(() => faq?.data?.items || faqData[locale.value] || faqData.en);
 
 const amenitiesImages = amenities?.data?.images || ['img/about/restaurants.webp', 'img/about/nature.webp', 'img/about/culture.webp'];
+
+// Vue-controlled accordion state
+import { ref } from 'vue';
+const openFaqIndex = ref(null);
+
+const toggleFaq = (index) => {
+    openFaqIndex.value = openFaqIndex.value === index ? null : index;
+};
 </script>
 
 <template>
@@ -75,7 +104,7 @@ const amenitiesImages = amenities?.data?.images || ['img/about/restaurants.webp'
     >
         <!-- Hero Section -->
         <div class="hero small-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img about-hero-img" :src="hero?.image ? asset(hero.image) : asset('img/about-us.webp')" alt="">
+            <img class="jarallax-img about-hero-img" :src="hero?.image ? asset(hero.image) : asset('img/about-us-modified.webp')" alt="">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
                     <small class="slide-animated one">{{ hero?.subtitle || 'Luxury Hotel Experience' }}</small>
@@ -147,8 +176,8 @@ const amenitiesImages = amenities?.data?.images || ['img/about/restaurants.webp'
             </div>
         </div>
 
-        <!-- Testimonials Section -->
-        <div class="parallax_section_1 jarallax" data-jarallax data-speed="0.2">
+        <!-- Testimonials Section (hidden) -->
+        <div class="parallax_section_1 jarallax d-none" data-jarallax data-speed="0.2">
             <img class="jarallax-img" :src="asset('img/hero_home_1.jpg')" alt="">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
@@ -225,28 +254,30 @@ const amenitiesImages = amenities?.data?.images || ['img/about/restaurants.webp'
             <div class="row justify-content-between margin_60_0">
                 <div class="col-lg-4">
                     <div class="title">
-                        <small>{{ faq?.subtitle || 'Alexandar Palace Hotel Faq' }}</small>
-                        <h3>{{ faq?.title || 'Frequently Questions' }}</h3>
+                        <small>{{ faq?.subtitle || (locale === 'mk' ? 'Александар Палас Хотел' : 'Alexandar Palace Hotel FAQ') }}</small>
+                        <h3>{{ faq?.title || (locale === 'mk' ? 'Често Поставувани Прашања' : 'Frequently Asked Questions') }}</h3>
                     </div>
                     <p v-if="faq?.content" v-html="faq.content"></p>
-                    <p v-else>Can't find your question in the list? Let us know your questions.</p>
-                    <p><Link href="/contacts" class="animated_link"><strong>Contact Us <i class="bi bi-arrow-right"></i></strong></Link></p>
+                    <p v-else>{{ locale === 'mk' ? 'Не го најдовте вашето прашање? Контактирајте нè.' : "Can't find your question in the list? Let us know your questions." }}</p>
+                    <p><Link href="/contacts" class="animated_link"><strong>{{ locale === 'mk' ? 'Контактирајте нè' : 'Contact Us' }} <i class="bi bi-arrow-right"></i></strong></Link></p>
                 </div>
                 <div class="col-lg-7">
-                    <div role="tablist" class="mb-5 accordion" id="faq">
+                    <div class="mb-5 accordion about-faq-accordion">
                         <div v-for="(item, index) in faqList" :key="index" class="card">
-                            <div class="card-header" role="tab">
+                            <div class="card-header">
                                 <h5 class="mb-0">
-                                    <a class="collapsed" data-bs-toggle="collapse" :href="`#collapse_${index}`" aria-expanded="false">
+                                    <a href="#" @click.prevent="toggleFaq(index)" :class="{ 'collapsed': openFaqIndex !== index }">
                                         <i class="indicator bi-plus-lg"></i>{{ item.question }}
                                     </a>
                                 </h5>
                             </div>
-                            <div :id="`collapse_${index}`" class="collapse" role="tabpanel" data-bs-parent="#faq">
-                                <div class="card-body">
-                                    <p v-html="item.answer"></p>
+                            <Transition name="faq-slide">
+                                <div v-show="openFaqIndex === index" class="faq-content">
+                                    <div class="card-body">
+                                        <p>{{ item.answer }}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Transition>
                         </div>
                     </div>
                 </div>
@@ -257,10 +288,86 @@ const amenitiesImages = amenities?.data?.images || ['img/about/restaurants.webp'
 
 <style scoped>
 .about-hero-img {
-    object-position: center bottom;
+    object-position: 80% 80% !important;
 }
 
 .history-img {
     max-width: 600px;
+}
+
+/* Fix mobile overflow */
+@media (max-width: 991px) {
+    :deep(.parallax_wrapper) {
+        overflow: hidden;
+    }
+    
+    :deep(.img_over) {
+        position: relative;
+        margin-top: -50px;
+    }
+}
+
+@media (max-width: 767px) {
+    :deep(.parallax_wrapper),
+    :deep(.parallax_wrapper.inverted) {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    :deep(.img_over) {
+        position: relative;
+        margin-top: 0;
+        padding: 15px;
+    }
+    
+    :deep(.img_over span) {
+        position: relative;
+        left: 0;
+        right: 0;
+    }
+    
+    .history-img {
+        max-width: 100%;
+    }
+}
+
+/* Vue-controlled FAQ accordion styles */
+.about-faq-accordion .card-body {
+    padding: 15px 20px;
+}
+
+.about-faq-accordion .card-body p {
+    margin: 0;
+    color: #555;
+    line-height: 1.7;
+}
+
+.about-faq-accordion .faq-content {
+    display: block;
+}
+
+.about-faq-accordion .card-header a:not(.collapsed) i.indicator {
+    transform: rotate(45deg);
+}
+
+/* FAQ slide transition */
+.faq-slide-enter-active,
+.faq-slide-leave-active {
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+
+.faq-slide-enter-from,
+.faq-slide-leave-to {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.faq-slide-enter-to,
+.faq-slide-leave-from {
+    opacity: 1;
+    max-height: 500px;
 }
 </style>

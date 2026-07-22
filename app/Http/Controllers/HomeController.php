@@ -51,7 +51,7 @@ class HomeController extends Controller
         return Inertia::render('Home', [
             'page' => $page,
             'sections' => $page->sections->keyBy('key'),
-            'rooms' => Room::active()->featured()->with('media')->orderBy('sort_order')->orderBy('id')->limit(6)->get(),
+            'rooms' => Room::active()->with('media')->orderBy('sort_order')->orderBy('id')->get(),
             'news' => News::published()->latest()->limit(3)->get(),
             'testimonials' => Testimonial::active()->latest()->limit(6)->get(),
             'settings' => $settings,

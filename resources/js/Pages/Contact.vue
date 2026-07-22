@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import BookingSection from '@/Components/Frontend/BookingSection.vue';
 
 const props = defineProps({
     page: Object,
@@ -63,7 +64,7 @@ const asset = (path) => `/assets/paradise/${path}`;
     >
         <!-- Hero Section -->
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset('img/contact_hero.webp')" alt="Hotel Aleksandar Palace">
+            <img class="jarallax-img contact-hero-img" :src="asset('img/about-us-modified.webp')" alt="Hotel Aleksandar Palace">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
                     <small class="slide-animated one">{{ hero?.subtitle || t('contact.hero_subtitle') }}</small>
@@ -253,68 +254,12 @@ const asset = (path) => `/assets/paradise/${path}`;
             </div>
         </div>
 
-        <!-- Booking Section -->
-        <div class="container margin_120_95" id="booking_section">
-            <div class="row justify-content-between">
-                <div class="col-xl-4">
-                    <div data-cue="slideInUp">
-                        <div class="title">
-                            <small>{{ booking?.subtitle || 'Alexandar Palace Hotel' }}</small>
-                            <h2>{{ booking?.title || 'Check Availability' }}</h2>
-                        </div>
-                        <p v-if="booking?.content" v-html="booking.content"></p>
-                        <p v-else>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no.</p>
-                        <p class="phone_element no_borders">
-                            <a :href="`tel:${settings?.phone?.value || '+389 2 3092 392'}`">
-                                <i class="bi bi-telephone"></i>
-                                <span><em>Info and bookings</em>{{ settings?.phone?.value || '+389 2 3092 392' }}</span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-xl-7">
-                    <div data-cue="slideInUp" data-delay="200">
-                        <form @submit.prevent="bookingForm.post('/bookings')">
-                            <div class="booking_wrapper pb-4">
-                                <div class="col-12">
-                                    <input type="hidden" id="contact_booking_dates" name="date_booking" v-model="bookingForm.date_booking">
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="custom_select">
-                                            <select v-model="bookingForm.room_id" class="wide">
-                                                <option value="">Select Room</option>
-                                                <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="qty-buttons version_2">
-                                                    <input type="button" value="+" class="qtyplus" @click="bookingForm.adults++">
-                                                    <input type="text" v-model="bookingForm.adults" class="qty form-control" placeholder="Adults">
-                                                    <input type="button" value="-" class="qtyminus" @click="bookingForm.adults > 1 ? bookingForm.adults-- : null">
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="qty-buttons version_2">
-                                                    <input type="button" value="+" class="qtyplus" @click="bookingForm.children++">
-                                                    <input type="text" v-model="bookingForm.children" class="qty form-control" placeholder="Childs">
-                                                    <input type="button" value="-" class="qtyminus" @click="bookingForm.children > 0 ? bookingForm.children-- : null">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-end mt-4">
-                                <button type="submit" class="btn_1 outline" :disabled="bookingForm.processing">Book Now</button>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BookingSection :rooms="rooms" />
     </Layout>
 </template>
+
+<style scoped>
+.contact-hero-img {
+    object-position: 80% 80% !important;
+}
+</style>

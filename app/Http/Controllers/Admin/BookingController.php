@@ -15,7 +15,7 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Booking::with('room');
+        $query = Booking::with(['room', 'roomUnit']);
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -103,7 +103,7 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         return Inertia::render('Admin/Bookings/Show', [
-            'booking' => $booking->load('room'),
+            'booking' => $booking->load(['room', 'roomUnit']),
             'rooms' => Room::active()->get(),
         ]);
     }
@@ -135,7 +135,21 @@ class BookingController extends Controller
 
     public function confirm(Booking $booking)
     {
+        // Auto-assign the best available room unit if not already assigned
+        if (!$booking->room_unit_id && $booking->room) {
+            $booking->room->load(['units.availabilities']);
+            $bestUnit = $booking->room->getBestAvailableUnit($booking->check_in, $booking->check_out);
+            
+            if ($bestUnit) {
+                $booking->room_unit_id = $bestUnit->id;
+                $booking->save();
+            }
+        }
+        
         $booking->confirm();
+        
+        // Load relationships for email
+        $booking->load(['room', 'roomUnit']);
         
         // Send confirmation email to guest
         NotificationService::notifyGuest($booking->email, new BookingConfirmed($booking, $booking->locale ?? 'en'));
@@ -176,7 +190,7 @@ class BookingController extends Controller
 
     public function calendar()
     {
-        $bookings = Booking::with('room')
+        $bookings = Booking::with(['room', 'roomUnit'])
             ->whereIn('status', ['pending', 'confirmed', 'checked_in'])
             ->orderBy('check_in')
             ->get()
@@ -186,6 +200,7 @@ class BookingController extends Controller
                     'name' => $booking->name,
                     'room_id' => $booking->room_id,
                     'room' => $booking->room,
+                    'room_unit' => $booking->roomUnit,
                     'check_in' => $booking->check_in->format('Y-m-d'),
                     'check_out' => $booking->check_out->format('Y-m-d'),
                     'status' => $booking->status,

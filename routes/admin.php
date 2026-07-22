@@ -33,6 +33,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', AdminMiddleware::cla
 
     Route::resource('pages', PageController::class)->except(['show']);
     Route::resource('rooms', RoomController::class);
+    
+    // Room Units Management
+    Route::get('room-units', [App\Http\Controllers\Admin\RoomUnitController::class, 'index'])->name('room-units.index');
+    Route::get('rooms/{room:id}/units/create', [App\Http\Controllers\Admin\RoomUnitController::class, 'create'])->name('room-units.create');
+    Route::post('rooms/{room:id}/units', [App\Http\Controllers\Admin\RoomUnitController::class, 'store'])->name('room-units.store');
+    Route::get('room-units/{roomUnit}/edit', [App\Http\Controllers\Admin\RoomUnitController::class, 'edit'])->name('room-units.edit');
+    Route::put('room-units/{roomUnit}', [App\Http\Controllers\Admin\RoomUnitController::class, 'update'])->name('room-units.update');
+    Route::delete('room-units/{roomUnit}', [App\Http\Controllers\Admin\RoomUnitController::class, 'destroy'])->name('room-units.destroy');
+    Route::get('room-units/{roomUnit}/availability', [App\Http\Controllers\Admin\RoomUnitController::class, 'availability'])->name('room-units.availability');
+    Route::post('room-units/{roomUnit}/availability', [App\Http\Controllers\Admin\RoomUnitController::class, 'storeAvailability'])->name('room-units.availability.store');
+    Route::put('room-unit-availability/{availability}', [App\Http\Controllers\Admin\RoomUnitController::class, 'updateAvailability'])->name('room-units.availability.update');
+    Route::delete('room-unit-availability/{availability}', [App\Http\Controllers\Admin\RoomUnitController::class, 'destroyAvailability'])->name('room-units.availability.destroy');
+    
     Route::resource('news', NewsController::class);
     Route::resource('testimonials', TestimonialController::class);
     Route::resource('gallery', GalleryController::class);

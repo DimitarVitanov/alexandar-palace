@@ -22,6 +22,12 @@
             <span class="details-label">{{ $isMk ? 'Соба:' : 'Room Type:' }}</span>
             <span class="details-value">{{ $booking->room?->getTranslation('name', $bookingLocale) ?? ($isMk ? 'Стандардна соба' : 'Standard Room') }}</span>
         </div>
+        @if($booking->roomUnit)
+        <div class="details-row">
+            <span class="details-label">{{ $isMk ? 'Број на соба:' : 'Room Number:' }}</span>
+            <span class="details-value highlight">{{ $booking->roomUnit->unit_code }}</span>
+        </div>
+        @endif
         <div class="details-row">
             <span class="details-label">{{ $isMk ? 'Пријавување:' : 'Check-in:' }}</span>
             <span class="details-value">{{ $booking->check_in->format('l, F j, Y') }} ({{ $isMk ? 'од 14:00' : 'from 14:00' }})</span>

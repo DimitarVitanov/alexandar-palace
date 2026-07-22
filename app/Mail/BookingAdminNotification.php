@@ -20,7 +20,7 @@ class BookingAdminNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '[New Booking] ' . $this->booking->booking_reference . ' - ' . $this->booking->name,
+            subject: '[ADMIN] New Booking Request - ' . $this->booking->booking_reference . ' - ' . $this->booking->name,
         );
     }
 

@@ -642,12 +642,14 @@ const successMessage = computed(() => page.props.flash?.success);
     text-transform: uppercase;
     letter-spacing: 4px;
     margin-bottom: 15px;
+    color: #fff;
 }
 
 .hero-content p {
     font-size: 1rem;
     opacity: 0.8;
     letter-spacing: 1px;
+    color: #fff;
 }
 
 .hero-center-title {

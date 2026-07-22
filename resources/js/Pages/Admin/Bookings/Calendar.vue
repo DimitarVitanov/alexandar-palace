@@ -202,7 +202,10 @@ const getRoomName = (room) => {
                         <span :class="['w-2 h-8 rounded-full', statusColors[booking.status] || 'bg-slate-300']"></span>
                         <div>
                             <div class="font-medium text-slate-800">{{ booking.name }}</div>
-                            <div class="text-sm text-slate-500">{{ getRoomName(booking.room) }}</div>
+                            <div class="text-sm text-slate-500">
+                                {{ getRoomName(booking.room) }}
+                                <span v-if="booking.room_unit" class="text-amber-600 font-medium ml-1">({{ booking.room_unit.unit_code }})</span>
+                            </div>
                         </div>
                     </div>
                     <div class="text-right text-sm">

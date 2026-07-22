@@ -20,7 +20,7 @@ class CongressContactReceived extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Congress Center Inquiry: ' . $this->contact->subject,
+            subject: '[ADMIN] Congress Center Inquiry - ' . $this->contact->subject,
         );
     }
 

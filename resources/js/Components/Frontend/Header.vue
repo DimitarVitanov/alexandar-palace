@@ -70,7 +70,7 @@ const navItems = computed(() => [
                 <div class="col-6">
                     <nav>
                         <ul>
-                            <li><a href="#booking_section" class="btn_1">{{ t('nav.book_now') }}</a></li>
+                            <li><Link href="/booking" class="btn_1">{{ t('nav.book_now') }}</Link></li>
                             <li>
                                 <a href="#0" class="menu_open" @click.prevent="toggleMenu">
                                     <div class="hamburger hamburger--spin" :class="{ 'is-active': menuOpen }">
@@ -111,7 +111,7 @@ const navItems = computed(() => [
                                 <div class="row justify-content-between">
                                     <div class="col-lg-6 mb-lg-0 mb-4">
                                         <h5>Address</h5>
-                                        <p>Baker Street 567<br>London UK</p>
+                                        <p>Blvd. 8th September No. 15<br>Skopje, Macedonia</p>
                                         <div class="styled-select lang-selector">
                                             <select :value="locale" @change="setLocale($event.target.value)">
                                                 <option value="en">English</option>
@@ -123,16 +123,18 @@ const navItems = computed(() => [
                                         <h5>Contacts</h5>
                                         <div class="contacts">
                                             <ul>
-                                                <li><a href="tel://61280932400">+ 61 23 8093 3400</a></li>
-                                                <li><a href="mailto:info@alexandarpalace.com">info@alexandarpalace.com</a></li>
+                                                <li><a href="tel://38923092392">+389 (2) 3092 392</a></li>
+                                                <li><a href="mailto:info@aleksandarpalace.com.mk">info@aleksandarpalace.com.mk</a></li>
+                                                <li><a href="mailto:sales@aleksandarpalace.com.mk">sales@aleksandarpalace.com.mk</a></li>
+                                                <li><a href="mailto:spa@aleksandarpalace.com.mk">spa@aleksandarpalace.com.mk</a></li>
                                             </ul>
                                         </div>
                                         <div class="social">
                                             <ul>
-                                                <li><a href="#0"><i class="bi bi-instagram"></i></a></li>
-                                                <li><a href="#0"><i class="bi bi-whatsapp"></i></a></li>
-                                                <li><a href="#0"><i class="bi bi-facebook"></i></a></li>
-                                                <li><a href="#0"><i class="bi bi-twitter-x"></i></a></li>
+                                                <li><a href="https://www.instagram.com/hotelaleksandarpalace/"><i class="bi bi-instagram"></i></a></li>
+                                                <li class="d-none"><a href="#0"><i class="bi bi-whatsapp"></i></a></li>
+                                                <li><a href="https://www.facebook.com/hotelaleksandarpalace"><i class="bi bi-facebook"></i></a></li>
+                                                <li class="d-none"><a href="#0"><i class="bi bi-twitter-x"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
