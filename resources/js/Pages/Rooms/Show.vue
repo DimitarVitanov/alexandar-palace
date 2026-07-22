@@ -1,11 +1,41 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
 
 const { t } = useI18n();
 const page = usePage();
+
+onMounted(() => {
+    // Wait for DOM to be fully ready then initialize carousel
+    setTimeout(() => {
+        if (typeof $ !== 'undefined' && typeof $.fn.owlCarousel !== 'undefined') {
+            const $carousel = $('.carousel_item_centered');
+            // Destroy any existing instance
+            if ($carousel.hasClass('owl-loaded')) {
+                $carousel.trigger('destroy.owl.carousel');
+                $carousel.removeClass('owl-loaded owl-drag');
+                $carousel.find('.owl-stage-outer').children().unwrap();
+                $carousel.find('.owl-stage').children().unwrap();
+            }
+            // Initialize fresh
+            $carousel.owlCarousel({    
+                loop:true,
+                margin:5,
+                nav:true,
+                dots:false,
+                center:true,
+                navText: ["<i class='bi bi-arrow-left-short'></i>","<i class='bi bi-arrow-right-short'></i>"],
+                responsive:{
+                    0:{ items:1 },
+                    600:{ items:2 },
+                    1000:{ items:2 }
+                }
+            });
+        }
+    }, 500);
+});
 
 const props = defineProps({
     room: Object,
@@ -89,6 +119,7 @@ onMounted(() => {
         :canonical="seo.canonical"
         :schema="seo.schema"
         :alternateUrls="seo.alternateUrls"
+        :hideBookingSection="true"
     >
         <!-- Hero Section -->
         <div class="hero full-height jarallax" data-jarallax data-speed="0.2">

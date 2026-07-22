@@ -69,7 +69,10 @@ trait Translatable
         }
 
         // Admin edit forms need the raw translation arrays to populate inputs.
-        return ! $request->routeIs('admin.*.edit');
+        // Check for any admin route that needs raw arrays
+        return ! ($request->routeIs('admin.*.edit') || 
+                  $request->routeIs('admin.homepage.*') ||
+                  $request->routeIs('admin.menu.*'));
     }
 
     protected function localizeArrayValue(mixed $value): mixed

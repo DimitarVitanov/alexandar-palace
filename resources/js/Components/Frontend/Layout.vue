@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
+import BookingSection from './BookingSection.vue';
 import { initParadise } from '@/init-paradise';
 
 const props = defineProps({
@@ -21,6 +22,7 @@ const props = defineProps({
     modifiedTime: { type: String, default: '' },
     section: { type: String, default: '' },
     tags: { type: Array, default: () => [] },
+    hideBookingSection: { type: Boolean, default: false },
 });
 
 const page = usePage();
@@ -129,6 +131,8 @@ onUnmounted(() => {
     <main>
         <slot />
     </main>
+
+    <BookingSection v-if="!hideBookingSection" :rooms="$page.props.rooms || []" />
 
     <Footer />
 </template>

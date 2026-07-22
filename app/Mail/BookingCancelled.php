@@ -13,14 +13,14 @@ class BookingCancelled extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Booking $booking)
+    public function __construct(public Booking $booking, public string $bookingLocale = 'en')
     {
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reservation Update - ' . $this->booking->booking_reference,
+            subject: ($this->bookingLocale === 'mk' ? 'Известување за резервацијата - ' : 'Reservation Update - ') . $this->booking->booking_reference,
         );
     }
 

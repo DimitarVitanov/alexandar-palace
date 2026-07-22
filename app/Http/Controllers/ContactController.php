@@ -86,9 +86,9 @@ class ContactController extends Controller
         // Send confirmation email to guest
         NotificationService::notifyGuest($contact->email, new ContactRequestReceived($contact));
         
-        // Send notification to admins
-        NotificationService::notifyAdmins(new ContactRequestAdminNotification($contact));
+        // Send notification to admins (using contact_admin_notification template recipients)
+        NotificationService::notifyAdmins(new ContactRequestAdminNotification($contact), 'contact_admin_notification');
 
-        return back()->with('success', __('Thank you for your message. We will get back to you soon.'));
+        return back()->with('success', __('Thank you for your message. We will get back to you as soon as possible.'));
     }
 }

@@ -13,28 +13,7 @@
     z-index: -1;
 }
 
-/* Room gallery carousel - consistent image sizing */
-.carousel_item_centered .item {
-    height: 400px;
-    overflow: hidden;
-    border-radius: 10px;
-}
-.carousel_item_centered .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-@media (max-width: 991px) {
-    .carousel_item_centered .item {
-        height: 300px;
-    }
-}
-@media (max-width: 575px) {
-    .carousel_item_centered .item {
-        height: 250px;
-    }
-}
+/* Room gallery carousel - let original template handle sizing */
 
 /* Smooth page transitions */
 main {
@@ -43,3 +22,53 @@ main {
 main.page-transitioning {
     opacity: 0;
 }
+
+/* Restaurant tabs fix - force collapse to show on desktop */
+@media (min-width: 768px) {
+  .tabs_menu .tab-content .card {
+    border: none;
+  }
+  .tabs_menu .tab-content .card .card-header {
+    display: none;
+  }
+  .tabs_menu .tab-content .card .collapse {
+    display: block !important;
+  }
+}
+
+/* Debug - force visibility */
+.tabs_menu .tab-content .card-body {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.tabs_menu .tab-pane.active .card-body {
+    display: block !important;
+}
+
+.menu_item {
+    display: block !important;
+    visibility: visible !important;
+}
+
+
+/* Newsletter input white placeholder */
+#newsletter .newsletter-input {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+}
+#newsletter .newsletter-input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+#newsletter .newsletter-input::-webkit-input-placeholder {
+    color: rgba(255,255,255,0.7);
+}
+#newsletter .newsletter-input::-moz-placeholder {
+    color: rgba(255,255,255,0.7);
+}
+#newsletter .newsletter-input:-ms-input-placeholder {
+    color: rgba(255,255,255,0.7);
+}
+

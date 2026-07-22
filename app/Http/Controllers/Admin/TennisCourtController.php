@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TennisCourt;
 use App\Models\TennisAvailability;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class TennisCourtController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         return Inertia::render('Admin/Tennis/Courts/Index', [
@@ -63,8 +65,13 @@ class TennisCourtController extends Controller
 
     public function edit(TennisCourt $court)
     {
+        $courtData = $this->prepareBilingualData(
+            $court->load('availability'),
+            ['name', 'description']
+        );
+        
         return Inertia::render('Admin/Tennis/Courts/Edit', [
-            'court' => $court->load('availability'),
+            'court' => $courtData,
         ]);
     }
 

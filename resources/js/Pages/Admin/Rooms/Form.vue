@@ -44,13 +44,15 @@ const form = useForm({
     short_description: props.room?.short_description || { en: '', mk: '' },
     price_per_night: props.room?.price_per_night || 0,
     discounted_price: props.room?.discounted_price || null,
+    quantity: props.room?.quantity || 1,
     max_guests: props.room?.max_guests || 2,
     bedrooms: props.room?.bedrooms || 1,
     bathrooms: props.room?.bathrooms || 1,
     square_meters: props.room?.square_meters || null,
     bed_type: props.room?.bed_type || 'king',
+    view_type: props.room?.view_type || '',
     featured_image: props.room?.featured_image || '',
-    gallery: props.room?.gallery || [],
+    gallery_images: props.room?.gallery_images || [],
     amenities: props.room?.amenities || [],
     is_active: props.room?.is_active ?? true,
     is_featured: props.room?.is_featured ?? false,
@@ -78,16 +80,16 @@ const toggleAmenity = (key) => {
 };
 
 const addGalleryImage = () => {
-    form.gallery.push('');
+    form.gallery_images.push('');
 };
 
 const removeGalleryImage = (index) => {
-    form.gallery.splice(index, 1);
+    form.gallery_images.splice(index, 1);
 };
 
 const submit = () => {
     if (isEdit) {
-        form.put(`/admin/rooms/${props.room.id}`);
+        form.put(`/admin/rooms/${props.room.slug}`);
     } else {
         form.post('/admin/rooms');
     }
@@ -171,7 +173,18 @@ const bedTypes = [
                         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                             <h3 class="text-lg font-semibold text-slate-800 mb-4">Room Details</h3>
                             
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Quantity *</label>
+                                    <input 
+                                        type="number" 
+                                        v-model="form.quantity" 
+                                        min="1"
+                                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500" 
+                                        required
+                                    >
+                                    <p class="text-xs text-slate-500 mt-1">Total rooms available</p>
+                                </div>
                                 <div>
                                     <label class="block text-sm font-medium text-slate-700 mb-1">Max Guests *</label>
                                     <input 
@@ -370,14 +383,14 @@ const bedTypes = [
                                 </button>
                             </div>
                             
-                            <div v-if="!form.gallery.length" class="text-center py-8 text-slate-500">
+                            <div v-if="!form.gallery_images.length" class="text-center py-8 text-slate-500">
                                 <i class="bi bi-images text-4xl mb-2 block text-slate-300"></i>
                                 <p>No gallery images added yet</p>
                             </div>
 
                             <div v-else class="space-y-3">
                                 <div 
-                                    v-for="(image, index) in form.gallery" 
+                                    v-for="(image, index) in form.gallery_images" 
                                     :key="index"
                                     class="flex items-center gap-3"
                                 >
@@ -391,7 +404,7 @@ const bedTypes = [
                                     </div>
                                     <input 
                                         type="text" 
-                                        v-model="form.gallery[index]" 
+                                        v-model="form.gallery_images[index]" 
                                         class="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                                         placeholder="img/rooms/gallery_1.jpg"
                                     >

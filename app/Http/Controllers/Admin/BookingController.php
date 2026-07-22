@@ -138,7 +138,7 @@ class BookingController extends Controller
         $booking->confirm();
         
         // Send confirmation email to guest
-        NotificationService::notifyGuest($booking->email, new BookingConfirmed($booking));
+        NotificationService::notifyGuest($booking->email, new BookingConfirmed($booking, $booking->locale ?? 'en'));
 
         return back()->with('success', __('Booking confirmed successfully.'));
     }
@@ -147,7 +147,7 @@ class BookingController extends Controller
     {
         $booking->cancel($request->cancellation_reason);
         $booking->load('room');
-        NotificationService::notifyGuest($booking->email, new BookingCancelled($booking));
+        NotificationService::notifyGuest($booking->email, new BookingCancelled($booking, $booking->locale ?? 'en'));
 
         return back()->with('success', __('Booking cancelled successfully.'));
     }
@@ -178,25 +178,18 @@ class BookingController extends Controller
     {
         $bookings = Booking::with('room')
             ->whereIn('status', ['pending', 'confirmed', 'checked_in'])
+            ->orderBy('check_in')
             ->get()
             ->map(function ($booking) {
                 return [
                     'id' => $booking->id,
-                    'title' => $booking->name . ' - ' . ($booking->room?->name['en'] ?? 'No Room'),
-                    'start' => $booking->check_in->format('Y-m-d'),
-                    'end' => $booking->check_out->format('Y-m-d'),
-                    'color' => match($booking->status) {
-                        'pending' => '#ffc107',
-                        'confirmed' => '#28a745',
-                        'checked_in' => '#17a2b8',
-                        default => '#6c757d',
-                    },
-                    'extendedProps' => [
-                        'booking_reference' => $booking->booking_reference,
-                        'status' => $booking->status,
-                        'room' => $booking->room?->name['en'] ?? 'No Room',
-                        'guests' => $booking->adults + $booking->children,
-                    ],
+                    'name' => $booking->name,
+                    'room_id' => $booking->room_id,
+                    'room' => $booking->room,
+                    'check_in' => $booking->check_in->format('Y-m-d'),
+                    'check_out' => $booking->check_out->format('Y-m-d'),
+                    'status' => $booking->status,
+                    'booking_reference' => $booking->booking_reference,
                 ];
             });
 

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\PageSection;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class HomepageController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         $homepage = Page::where('slug', 'home')->first();
@@ -24,10 +26,30 @@ class HomepageController extends Controller
         }
 
         $sections = $homepage->sections()->orderBy('sort_order')->get()->keyBy('key');
+        
+        // Convert each section's bilingual fields - get raw attributes to avoid Translatable trait localization
+        $preparedSections = [];
+        foreach ($sections as $key => $section) {
+            $sectionData = $section->getAttributes();
+            $sectionData['id'] = $section->id;
+            
+            // Decode JSON fields
+            foreach (['title', 'subtitle', 'content', 'data'] as $field) {
+                if (isset($sectionData[$field]) && is_string($sectionData[$field])) {
+                    $decoded = json_decode($sectionData[$field], true);
+                    $sectionData[$field] = $decoded;
+                }
+            }
+            
+            $preparedSections[$key] = $this->prepareBilingualData(
+                $sectionData,
+                ['title', 'subtitle', 'content']
+            );
+        }
 
         return Inertia::render('Admin/Homepage/Index', [
             'homepage' => $homepage,
-            'sections' => $sections,
+            'sections' => $preparedSections,
             'sectionTypes' => $this->getSectionTypes(),
         ]);
     }

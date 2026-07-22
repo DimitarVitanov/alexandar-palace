@@ -50,6 +50,8 @@ class BookingController extends Controller
             'special_requests' => 'nullable|string|max:5000',
         ]);
 
+        $validated['locale'] = app()->getLocale();
+
         $room = Room::findOrFail($validated['room_id']);
         $totalGuests = $validated['adults'] + $validated['children'];
 
@@ -71,10 +73,10 @@ class BookingController extends Controller
         $booking->load('room');
 
         // Send confirmation email to guest
-        NotificationService::notifyGuest($booking->email, new BookingRequestReceived($booking));
+        NotificationService::notifyGuest($booking->email, new BookingRequestReceived($booking, $booking->locale));
         
-        // Send notification to admins
-        NotificationService::notifyAdmins(new BookingAdminNotification($booking));
+        // Send notification to admins (using booking_admin_notification template recipients)
+        NotificationService::notifyAdmins(new BookingAdminNotification($booking), 'booking_admin_notification');
 
         return back()->with('success', __('Thank you for your booking request. We will confirm shortly.'));
     }

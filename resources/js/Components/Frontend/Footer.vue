@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 
@@ -8,10 +9,16 @@ const form = useForm({
     email: '',
 });
 
+const subscribed = ref(false);
+
 const submitNewsletter = () => {
-    form.post('/contacts', {
+    form.post('/newsletter/subscribe', {
         preserveScroll: true,
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+            form.reset();
+            subscribed.value = true;
+            setTimeout(() => { subscribed.value = false; }, 5000);
+        },
     });
 };
 </script>
@@ -27,16 +34,15 @@ const submitNewsletter = () => {
                 <div class="col-lg-4 col-md-12">
                     <h5>{{ t('footer.contacts') }}</h5>
                     <ul>
-                        <li>Baker Street 567, Los Angeles 11023<br>California - US<br><br></li>
-                        <li><strong><a href="mailto:info@alexandarpalace.com">info@alexandarpalace.com</a></strong></li>
-                        <li><strong><a href="tel://43443242232">+434 43242232</a></strong></li>
+                        <li>Blvd. 8th September No. 15<br>Skopje, Macedonia<br><br></li>
+                        <li><strong><a href="mailto:info@aleksandarpalace.com.mk">info@aleksandarpalace.com.mk</a></strong></li>
+                        <li><strong><a href="mailto:sales@aleksandarpalace.com.mk">sales@aleksandarpalace.com.mk</a></strong></li>
+                        <li><strong><a href="tel:+38923092392">+389 (2) 3092 392</a></strong></li>
                     </ul>
                     <div class="social">
                         <ul>
-                            <li><a href="#0"><i class="bi bi-instagram"></i></a></li>
-                            <li><a href="#0"><i class="bi bi-whatsapp"></i></a></li>
-                            <li><a href="#0"><i class="bi bi-facebook"></i></a></li>
-                            <li><a href="#0"><i class="bi bi-twitter-x"></i></a></li>
+                            <li><a href="https://www.facebook.com/hotelaleksandarpalace" target="_blank" rel="noopener"><i class="bi bi-facebook"></i></a></li>
+                            <li><a href="https://www.instagram.com/hotelaleksandarpalace/" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -47,6 +53,7 @@ const submitNewsletter = () => {
                             <li><Link href="/">{{ t('nav.home') }}</Link></li>
                             <li><Link href="/about">{{ t('nav.about') }}</Link></li>
                             <li><Link href="/rooms">{{ t('nav.rooms') }}</Link></li>
+                            <li><Link href="/restaurant">{{ t('nav.restaurant') }}</Link></li>
                             <li><Link href="/news">{{ t('nav.news') }}</Link></li>
                             <li><Link href="/contacts">{{ t('nav.contact') }}</Link></li>
                         </ul>
@@ -55,9 +62,12 @@ const submitNewsletter = () => {
                 <div class="col-lg-3 col-md-6">
                     <div id="newsletter">
                         <h5>{{ t('footer.newsletter') }}</h5>
-                        <form @submit.prevent="submitNewsletter">
+                        <div v-if="subscribed" class="alert" style="background: rgba(40,167,69,0.2); border: 1px solid rgba(40,167,69,0.5); color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+                            <i class="bi bi-check-circle me-2"></i>{{ $page.props.locale === 'mk' ? 'Успешно се претплативте!' : 'Successfully subscribed!' }}
+                        </div>
+                        <form v-else @submit.prevent="submitNewsletter">
                             <div class="form-group">
-                                <input type="email" v-model="form.email" class="form-control" :placeholder="t('footer.newsletter_placeholder')" required>
+                                <input type="email" v-model="form.email" class="form-control newsletter-input" :placeholder="t('footer.newsletter_placeholder')" required>
                                 <button type="submit" :disabled="form.processing"><i class="bi bi-send"></i></button>
                             </div>
                         </form>

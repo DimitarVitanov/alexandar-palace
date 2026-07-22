@@ -58,8 +58,8 @@ class PageSeeder extends Seeder
                 'type' => 'local_amenities',
                 'title' => ['en' => 'Local Amenities', 'mk' => 'Локални удобности'],
                 'data' => [
-                    ['title' => ['en' => 'Restaurants', 'mk' => 'Ресторани'], 'image' => 'img/local_amenities_1.jpg', 'description' => ['en' => 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.', 'mk' => 'Сед ут перспициатис унде омнис исте натус еррор сит волуптатем акцусантиум долоремкуе лаудантиум.']],
-                    ['title' => ['en' => 'Art & Culture', 'mk' => 'Уметност и култура'], 'image' => 'img/local_amenities_3.jpg', 'description' => ['en' => 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.', 'mk' => 'Сед ут перспициатис унде омнис исте натус еррор сит волуптатем акцусантиум долоремкуе лаудантиум.']],
+                    ['title' => ['en' => 'Restaurant', 'mk' => 'Ресторан'], 'image' => 'img/restaurant/restaurant_hero.webp', 'link' => '/restaurant', 'description' => ['en' => 'Experience culinary excellence at our award-winning restaurant. Our talented chefs craft each dish with passion, using locally sourced ingredients and traditional Macedonian recipes.', 'mk' => 'Доживејте кулинарска извонредност во нашиот награден ресторан. Нашите талентирани готвачи го подготвуваат секое јадење со страст, користејќи локално набавени состојки и традиционални македонски рецепти.']],
+                    ['title' => ['en' => 'Art & Culture', 'mk' => 'Уметност и култура'], 'image' => 'img/local_amenities_3.jpg', 'link' => '/about', 'description' => ['en' => 'Discover the rich cultural heritage of Skopje. From ancient fortresses to modern art galleries, experience the vibrant arts scene and historical landmarks just minutes from our hotel.', 'mk' => 'Откријте го богатото културно наследство на Скопје. Од древни тврдини до модерни уметнички галерии, доживејте ја живописната уметничка сцена и историските знаменитости на само неколку минути од нашиот хотел.']],
                 ],
             ],
             [

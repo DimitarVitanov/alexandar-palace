@@ -71,7 +71,20 @@ const submit = () => {
         </div>
 
         <div class="container margin_120_95">
-            <div class="row justify-content-between">
+            <div v-if="$page.props.flash?.success" class="booking-success">
+                <div class="success-envelope" aria-hidden="true">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-letter">
+                        <span>A</span>
+                    </div>
+                </div>
+                <small>Alexandar Palace Hotel</small>
+                <h2>Your request is on its way</h2>
+                <p>{{ $page.props.flash.success }}</p>
+                <p>Our reservations team will review the details and contact you as soon as possible.</p>
+                <Link href="/rooms" class="btn_1 outline mt-3">Explore Rooms & Suites</Link>
+            </div>
+            <div v-else class="row justify-content-between">
                 <div class="col-lg-4 order-lg-2 mb-5 mb-lg-0">
                     <div class="booking-summary">
                         <h3>Your stay</h3>
@@ -80,7 +93,7 @@ const submit = () => {
                             <h4>{{ selectedRoom.name }}</h4>
                             <p>From €{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }} per night</p>
                         </div>
-                        <div v-if="nights > 0" class="price-breakdown">
+                        <div v-if="selectedRoom && nights > 0" class="price-breakdown">
                             <div><span>Nights</span><strong>{{ nights }}</strong></div>
                             <div><span>Rate per night</span><strong>€{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }}</strong></div>
                             <div class="total"><span>Estimated total</span><strong>€{{ formatPrice(totalPrice) }}</strong></div>
@@ -93,10 +106,6 @@ const submit = () => {
                     <div class="title mb-4">
                         <small>Reservation details</small>
                         <h2>Plan your stay</h2>
-                    </div>
-
-                    <div v-if="$page.props.flash?.success" class="alert alert-success mb-4">
-                        {{ $page.props.flash.success }}
                     </div>
 
                     <form @submit.prevent="submit" novalidate>
@@ -155,10 +164,12 @@ const submit = () => {
                                 <div v-if="form.errors.special_requests" class="field-error">{{ form.errors.special_requests }}</div>
                             </div>
                         </div>
-                        <button type="submit" class="btn_1" :disabled="form.processing">
-                            {{ form.processing ? 'Sending request…' : 'Send Reservation Request' }}
-                        </button>
-                        <Link href="/rooms" class="ms-3 animated_link"><strong>Back to Rooms</strong></Link>
+                        <div class="d-flex flex-column flex-sm-row gap-3 align-items-center">
+                            <button type="submit" class="btn_1" :disabled="form.processing">
+                                {{ form.processing ? 'Sending request…' : 'Send Reservation Request' }}
+                            </button>
+                            <Link href="/rooms" class="animated_link"><strong>Back to Rooms</strong></Link>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -180,4 +191,17 @@ const submit = () => {
 .form-control, .form-select { border: 1px solid #dedede; border-radius: 0; min-height: 52px; }
 textarea.form-control { min-height: auto; }
 .field-error { color: #b42318; font-size: .875rem; margin-top: 6px; }
+.booking-success { margin: 0 auto; max-width: 620px; padding: 40px 20px; text-align: center; }
+.booking-success small { color: #626262; font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.booking-success h2 { font-size: clamp(2rem, 5vw, 3.25rem); margin: 18px 0; }
+.booking-success p { color: #5c5c5c; font-size: 1.05rem; margin: 0 auto 10px; max-width: 520px; }
+.success-envelope { height: 160px; margin: 0 auto 34px; perspective: 800px; position: relative; width: 230px; }
+.success-envelope::before { background: #393939; bottom: 0; content: ''; height: 120px; left: 0; position: absolute; right: 0; }
+.success-envelope::after { border-color: transparent transparent #555; border-style: solid; border-width: 0 115px 70px; bottom: 0; content: ''; height: 0; left: 0; position: absolute; width: 0; }
+.envelope-flap { border-color: #454545 transparent transparent; border-style: solid; border-width: 72px 115px 0; height: 0; left: 0; position: absolute; top: 40px; transform-origin: top; transform: rotateX(0); width: 0; z-index: 3; animation: envelope-open .8s cubic-bezier(.2,.8,.2,1) .2s both; }
+.envelope-letter { align-items: center; background: #fff; box-shadow: 0 10px 20px rgba(0,0,0,.12); display: flex; height: 120px; justify-content: center; left: 15px; position: absolute; top: 28px; transform: translateY(0); width: 200px; z-index: 2; animation: letter-rise .9s cubic-bezier(.2,.8,.2,1) .5s both; }
+.envelope-letter span { border: 1px solid #424242; border-radius: 50%; color: #424242; font-family: Georgia, serif; font-size: 2rem; height: 54px; line-height: 52px; width: 54px; }
+@keyframes envelope-open { to { opacity: 0; transform: rotateX(-180deg); } }
+@keyframes letter-rise { to { transform: translateY(-38px); } }
+@media (prefers-reduced-motion: reduce) { .envelope-flap, .envelope-letter { animation: none; } }
 </style>

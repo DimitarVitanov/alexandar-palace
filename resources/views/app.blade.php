@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="shortcut icon" href="{{ asset('assets/paradise/img/favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/paradise/img/favicon.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('assets/paradise/img/apple-touch-icon-57x57-precomposed.png') }}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('assets/paradise/img/apple-touch-icon-72x72-precomposed.png') }}">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('assets/paradise/img/apple-touch-icon-114x114-precomposed.png') }}">
@@ -63,5 +63,6 @@
         })();
     </script>
     <script src="{{ asset('assets/paradise/js/common_scripts.js') }}" defer></script>
+    <script src="{{ asset('assets/paradise/js/easepick.js') }}" defer></script>
 </body>
 </html>

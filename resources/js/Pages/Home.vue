@@ -49,6 +49,13 @@ const formatPrice = (price) => {
 
 const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
+const getHeroVideo = () => {
+    if (isMobile()) {
+        return 'video/hero_video_mobile.mp4';
+    }
+    return hero?.video || 'video/hero_video.mp4';
+};
+
 const getRoomImage = (room) => {
     if (isMobile()) {
         if (room.slug === 'single-room') return 'img/rooms/single-two-mobile.webp';
@@ -67,22 +74,23 @@ const getRoomImage = (room) => {
         :canonical="seo.canonical"
         :schema="seo.schema"
         :alternateUrls="seo.alternateUrls"
+        :hideBookingSection="true"
     >
-        <div class="hero home-search full-height jarallax" :data-jarallax-video="`mp4:/assets/paradise/${hero?.video || 'video/hero_video.mp4'}`" data-speed="0.2">
+        <div class="hero home-search full-height jarallax" :data-jarallax-video="`mp4:/assets/paradise/${getHeroVideo()}`" data-speed="0.2">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
                     <small class="slide-animated one">{{ hero?.subtitle || t('home.hero_small') }}</small>
                     <h3 class="slide-animated two" v-html="hero?.title || t('home.hero_title')"></h3>
                     <div class="row justify-content-center slide-animated three">
-                        <div class="col-xl-10">
+                        <div class="col-xl-12">
                             <form class="row g-0 booking_form" method="GET" action="/rooms">
-                                <div class="col-lg-4">
+                                <div class="col-lg-5">
                                     <div class="form-group">
                                         <input class="form-control" type="text" name="dates" id="dates" :placeholder="t('home.check_in_out')" readonly>
                                         <i class="bi bi-calendar2"></i>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6 pe-lg-0 pe-sm-1">
+                                <div class="col-lg-3">
                                     <div class="qty-buttons">
                                         <label>{{ t('home.adults') }}</label>
                                         <input type="button" value="+" class="qtyplus" name="adults">
@@ -90,7 +98,7 @@ const getRoomImage = (room) => {
                                         <input type="button" value="-" class="qtyminus" name="adults">
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6 ps-lg-0 ps-sm-1">
+                                <div class="col-lg-2">
                                     <div class="qty-buttons">
                                         <label>{{ t('home.children') }}</label>
                                         <input type="button" value="+" class="qtyplus" name="children">
@@ -205,22 +213,60 @@ const getRoomImage = (room) => {
             </div>
         </div>
 
+        <!-- Restaurant & Activities Section -->
         <div class="bg_white">
             <div class="container margin_120_95">
-                <div v-for="(amenity, index) in localAmenities?.data || []" :key="index" class="row justify-content-between d-flex align-items-center" :class="{ 'add_bottom_90': index === 0 }">
-                    <div class="col-lg-6" :class="{ 'order-lg-2': index % 2 === 1 }">
+                <!-- Restaurant -->
+                <div class="row justify-content-between d-flex align-items-center add_bottom_90">
+                    <div class="col-lg-6">
                         <div class="pinned-image rounded_container pinned-image--small mb-4">
                             <div class="pinned-image__container">
-                                <img :src="asset(amenity.image)" :alt="amenity.title">
+                                <img :src="asset('img/tennis-restaurant/5C8B3760-FC2B-4EAD-B731-9663CD55A9D9-2048x2048.webp')" :alt="t('restaurant.title')">
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5" :class="{ 'order-lg-1': index % 2 === 1 }">
+                    <div class="col-lg-5">
                         <div class="title">
-                            <small>{{ localAmenities?.subtitle }}</small>
-                            <h3>{{ amenity.title }}</h3>
-                            <p>{{ amenity.description }}</p>
-                            <p><Link href="/about" class="btn_1 mt-1 outline">Read more</Link></p>
+                            <small>{{ t('home.facilities_small') }}</small>
+                            <h3>{{ t('restaurant.title') }}</h3>
+                            <p>{{ t('restaurant.description') }}</p>
+                            <p><Link href="/tennis-restaurant" class="btn_1 mt-1 outline">{{ t('home.read_more') }}</Link></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sport -->
+                <div class="row justify-content-between d-flex align-items-center add_bottom_90">
+                    <div class="col-lg-6 order-lg-2">
+                        <div class="pinned-image rounded_container pinned-image--small mb-4">
+                            <div class="pinned-image__container">
+                                <img :src="asset('img/activities/teniski-teren-scaled.webp')" :alt="t('home.activities_sport')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 order-lg-1">
+                        <div class="title">
+                            <small>{{ t('home.activities_subtitle') }}</small>
+                            <h3>{{ t('home.activities_sport') }}</h3>
+                            <p>{{ t('home.activities_sport_desc') }}</p>
+                            <p><Link href="/activities" class="btn_1 mt-1 outline">{{ t('home.read_more') }}</Link></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- SPA -->
+                <div class="row justify-content-between d-flex align-items-center">
+                    <div class="col-lg-6">
+                        <div class="pinned-image rounded_container pinned-image--small mb-4">
+                            <div class="pinned-image__container">
+                                <img :src="asset('img/spa/DSC_4700-scaled.webp')" :alt="t('home.activities_spa')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="title">
+                            <small>{{ t('home.activities_subtitle') }}</small>
+                            <h3>{{ t('home.activities_spa') }}</h3>
+                            <p>{{ t('home.activities_spa_desc') }}</p>
+                            <p><Link href="/activities" class="btn_1 mt-1 outline">{{ t('home.read_more') }}</Link></p>
                         </div>
                     </div>
                 </div>

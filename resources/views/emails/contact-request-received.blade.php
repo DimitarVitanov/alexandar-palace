@@ -4,7 +4,7 @@
     <h2 class="greeting">Dear {{ $contact->name }},</h2>
     
     <p class="message">
-        Thank you for reaching out to <span class="highlight">Alexandar Palace Hotel</span>. 
+        Thank you for reaching out to <span class="highlight">Aleksandar Palace</span>. 
         We have received your message and our dedicated team will review it promptly.
     </p>
 

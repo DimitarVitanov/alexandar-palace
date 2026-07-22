@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Room;
+use App\Models\Translation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -37,9 +39,9 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'locale' => fn () => app()->getLocale(),
-            'translations' => fn () => [
-                'en' => __('messages.en'),
-                'mk' => __('messages.mk'),
+            'dbTranslations' => fn () => [
+                'en' => Translation::getAll('en'),
+                'mk' => Translation::getAll('mk'),
             ],
             'flash' => fn () => [
                 'success' => $request->session()->get('success'),
@@ -60,6 +62,9 @@ class HandleInertiaRequests extends Middleware
                     'is_admin' => $request->user()->is_admin ?? false,
                 ] : null,
             ],
+            'rooms' => fn () => Room::where('is_active', true)
+                ->orderBy('sort_order')
+                ->get(['id', 'name', 'slug']),
         ];
     }
 }

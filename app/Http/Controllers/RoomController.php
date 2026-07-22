@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use App\Models\Room;
 use App\Models\Setting;
 use App\Services\SeoService;
@@ -57,9 +58,13 @@ class RoomController extends Controller
             ['name' => 'Rooms & Suites'],
         ];
 
+        // Get the rooms page for featured image
+        $page = Page::where('slug', 'rooms')->first();
+
         return Inertia::render('Rooms/Index', [
             'rooms' => $rooms,
             'searchParams' => $searchParams,
+            'featuredImage' => $page?->featured_image,
             'seo' => [
                 'title' => __('Rooms & Suites') . ' | ' . $siteName,
                 'description' => __('Discover our luxury rooms and suites at :hotel. Experience comfort and elegance with world-class amenities.', ['hotel' => $siteName]),

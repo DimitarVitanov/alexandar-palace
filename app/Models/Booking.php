@@ -16,6 +16,7 @@ class Booking extends Model
         'room_id',
         'name',
         'last_name',
+        'locale',
         'email',
         'phone',
         'check_in',

@@ -22,6 +22,7 @@ const menuSections = [
             { label: 'News', href: '/admin/news', icon: 'bi-newspaper' },
             { label: 'Gallery', href: '/admin/gallery', icon: 'bi-images' },
             { label: 'Testimonials', href: '/admin/testimonials', icon: 'bi-chat-quote' },
+            { label: 'Restaurant Menu', href: '/admin/menu', icon: 'bi-cup-hot' },
         ]
     },
     {
@@ -29,7 +30,7 @@ const menuSections = [
         items: [
             { label: 'Room Bookings', href: '/admin/bookings', icon: 'bi-calendar-check' },
             { label: 'Spa Bookings', href: '/admin/spa/bookings', icon: 'bi-flower1' },
-            { label: 'Tennis Bookings', href: '/admin/tennis/bookings', icon: 'bi-dribbble' },
+            { label: 'Tennis Bookings', href: '/admin/tennis-court-bookings', icon: 'bi-dribbble' },
         ]
     },
     {
@@ -43,12 +44,17 @@ const menuSections = [
         title: 'Management',
         items: [
             { label: 'Contacts', href: '/admin/contacts', icon: 'bi-envelope' },
+            { label: 'Congress Inquiries', href: '/admin/congress-contacts', icon: 'bi-building' },
+            { label: 'Celebration Inquiries', href: '/admin/celebration-contacts', icon: 'bi-balloon-heart' },
+            { label: 'Newsletter', href: '/admin/newsletter', icon: 'bi-send' },
         ]
     },
     {
         title: 'System',
         items: [
             { label: 'Settings', href: '/admin/settings', icon: 'bi-gear' },
+            { label: 'Translations', href: '/admin/translations', icon: 'bi-translate' },
+            { label: 'Email Templates', href: '/admin/email-templates', icon: 'bi-envelope-paper' },
             { label: 'Users', href: '/admin/users', icon: 'bi-people' },
         ]
     }
@@ -63,15 +69,21 @@ const isActive = (item) => {
 </script>
 
 <template>
-    <div class="admin-panel min-h-screen flex" style="background: #f1f5f9; font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;">
+    <div
+        class="admin-panel min-h-screen"
+        :style="{
+            background: '#f1f5f9',
+            fontFamily: 'Inter, Segoe UI, system-ui, -apple-system, sans-serif',
+            paddingLeft: sidebarCollapsed ? '70px' : '260px'
+        }"
+    >
 
         <!-- Sidebar -->
         <aside
             :class="[
-                'flex flex-col transition-all duration-300 fixed h-full z-40',
-                sidebarCollapsed ? 'w-[70px]' : 'w-[260px]'
+                'flex flex-col transition-all duration-300 fixed top-0 left-0 h-full z-40'
             ]"
-            style="background: #0f172a;"
+            :style="{ background: '#0f172a', width: sidebarCollapsed ? '70px' : '260px' }"
         >
             <!-- Logo -->
             <div class="flex items-center justify-between px-4 flex-shrink-0" style="height: 64px; border-bottom: 1px solid rgba(255,255,255,0.07);">
@@ -144,11 +156,10 @@ const isActive = (item) => {
             </div>
         </aside>
 
-        <!-- Main -->
-        <div :class="['flex flex-col min-h-screen transition-all duration-300', sidebarCollapsed ? 'ml-[70px]' : 'ml-[260px]']">
-
-            <!-- Top Bar — sticky within the flex column, no fixed positioning -->
-            <header class="flex-shrink-0 flex items-center justify-between px-6 bg-white sticky top-0 z-30" style="height: 64px; border-bottom: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+        <!-- Main Content Area -->
+        <div class="min-h-screen flex flex-col">
+            <!-- Top Bar — fixed at top -->
+            <header class="flex items-center justify-between px-6 bg-white z-30" style="height: 64px; border-bottom: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                 <div class="flex items-center gap-3">
                     <div class="flex items-center gap-2 text-sm" style="color: #cbd5e1;">
                         <i class="bi bi-grid-3x3-gap"></i>
@@ -167,8 +178,8 @@ const isActive = (item) => {
                 </div>
             </header>
 
-            <!-- Page Content -->
-            <div class="flex-1 p-6">
+            <!-- Page Content - scrollable area -->
+            <main class="flex-1 overflow-auto" style="padding: 24px;">
                 <div v-if="$page.props.flash?.success" class="mb-5 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
                     <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style="background: #dcfce7;">
                         <i class="bi bi-check text-xs"></i>
@@ -183,14 +194,48 @@ const isActive = (item) => {
                 </div>
 
                 <slot />
-            </div>
+            </main>
         </div>
     </div>
 </template>
 
 <style>
+/* Reset Paradise template styles for admin panel */
+.admin-panel,
+.admin-panel *,
+.admin-panel *::before,
+.admin-panel *::after {
+    box-sizing: border-box;
+}
+.admin-panel {
+    position: relative !important;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    line-height: 1.5;
+}
 .admin-panel * {
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+.admin-panel main {
+    margin-top: 0 !important;
+}
+.admin-panel header {
+    position: relative !important;
+    margin-top: 0 !important;
+    flex-shrink: 0 !important;
+}
+/* Override any Paradise template negative margins */
+.admin-panel .flex,
+.admin-panel .grid,
+.admin-panel div {
+    margin-top: revert;
+}
+.admin-panel h1, .admin-panel h2, .admin-panel h3, .admin-panel h4, .admin-panel h5, .admin-panel h6 {
+    margin: 0;
+    font-weight: 600;
+}
+.admin-panel p {
+    margin: 0;
 }
 .admin-panel nav::-webkit-scrollbar {
     width: 4px;

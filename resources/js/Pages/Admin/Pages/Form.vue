@@ -39,7 +39,7 @@ watch(() => form.title.en, generateSlug);
 
 const submit = () => {
     if (isEdit) {
-        form.put(`/admin/pages/${props.page.id}`);
+        form.put(`/admin/pages/${props.page.slug}`);
     } else {
         form.post('/admin/pages');
     }

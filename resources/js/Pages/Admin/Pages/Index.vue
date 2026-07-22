@@ -9,7 +9,7 @@ const props = defineProps({
 const deleteForm = useForm({});
 const destroy = (page) => {
     if (confirm('Are you sure you want to delete this page?')) {
-        deleteForm.delete(`/admin/pages/${page.id}`);
+        deleteForm.delete(`/admin/pages/${page.slug}`);
     }
 };
 </script>
@@ -74,7 +74,7 @@ const destroy = (page) => {
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <Link 
-                                        :href="`/admin/pages/${page.id}/edit`" 
+                                        :href="`/admin/pages/${page.slug}/edit`" 
                                         class="p-2 text-slate-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                                         title="Edit"
                                     >

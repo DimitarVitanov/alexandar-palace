@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class NewsController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         return Inertia::render('Admin/News/Index', [
@@ -40,8 +42,13 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
+        $newsData = $this->prepareBilingualData(
+            $news,
+            ['title', 'excerpt', 'content']
+        );
+        
         return Inertia::render('Admin/News/Form', [
-            'news' => $news,
+            'news' => $newsData,
         ]);
     }
 

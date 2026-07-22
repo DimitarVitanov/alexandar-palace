@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class PageController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         return Inertia::render('Admin/Pages/Index', [
@@ -27,6 +29,7 @@ class PageController extends Controller
             'slug' => 'required|string|unique:pages',
             'title' => 'required|array',
             'content' => 'nullable|array',
+            'featured_image' => 'nullable|string',
             'is_active' => 'boolean',
             'meta_title' => 'nullable|array',
             'meta_description' => 'nullable|array',
@@ -39,8 +42,13 @@ class PageController extends Controller
 
     public function edit(Page $page)
     {
+        $pageData = $this->prepareBilingualData(
+            $page->load('sections'),
+            ['title', 'content', 'meta_title', 'meta_description']
+        );
+        
         return Inertia::render('Admin/Pages/Form', [
-            'page' => $page->load('sections'),
+            'page' => $pageData,
         ]);
     }
 
@@ -49,6 +57,7 @@ class PageController extends Controller
         $validated = $request->validate([
             'title' => 'required|array',
             'content' => 'nullable|array',
+            'featured_image' => 'nullable|string',
             'is_active' => 'boolean',
             'meta_title' => 'nullable|array',
             'meta_description' => 'nullable|array',

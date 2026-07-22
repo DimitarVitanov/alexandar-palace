@@ -80,8 +80,8 @@ const addFacility = () => {
     }
     form.sections.facilities.data.push({
         icon: 'customicon-wifi',
-        title: '',
-        description: '',
+        title: { en: '', mk: '' },
+        description: { en: '', mk: '' },
     });
 };
 
@@ -94,8 +94,8 @@ const addAmenity = () => {
         form.sections.local_amenities.data = [];
     }
     form.sections.local_amenities.data.push({
-        title: '',
-        description: '',
+        title: { en: '', mk: '' },
+        description: { en: '', mk: '' },
         image: '',
     });
 };
@@ -282,22 +282,14 @@ const facilityIcons = [
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1">Icon</label>
-                                        <select v-model="facility.icon" class="w-full border border-slate-300 rounded-lg px-3 py-2">
-                                            <option v-for="icon in facilityIcons" :key="icon" :value="icon">{{ icon }}</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1">Title</label>
-                                        <input type="text" v-model="facility.title" class="w-full border border-slate-300 rounded-lg px-3 py-2">
-                                    </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium mb-1">Icon</label>
+                                    <select v-model="facility.icon" class="w-full border border-slate-300 rounded-lg px-3 py-2">
+                                        <option v-for="icon in facilityIcons" :key="icon" :value="icon">{{ icon }}</option>
+                                    </select>
                                 </div>
-                                <div class="mt-3">
-                                    <label class="block text-sm font-medium mb-1">Description</label>
-                                    <textarea v-model="facility.description" rows="2" class="w-full border border-slate-300 rounded-lg px-3 py-2"></textarea>
-                                </div>
+                                <BilingualInput v-model="facility.title" label="Title" />
+                                <BilingualInput v-model="facility.description" label="Description" type="textarea" />
                             </div>
                         </div>
                     </div>
@@ -334,20 +326,12 @@ const facilityIcons = [
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1">Title</label>
-                                        <input type="text" v-model="amenity.title" class="w-full border border-slate-300 rounded-lg px-3 py-2">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1">Image Path</label>
-                                        <input type="text" v-model="amenity.image" class="w-full border border-slate-300 rounded-lg px-3 py-2" placeholder="e.g., img/local_amenities_1.jpg">
-                                    </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium mb-1">Image Path</label>
+                                    <input type="text" v-model="amenity.image" class="w-full border border-slate-300 rounded-lg px-3 py-2" placeholder="e.g., img/local_amenities_1.jpg">
                                 </div>
-                                <div class="mt-3">
-                                    <label class="block text-sm font-medium mb-1">Description</label>
-                                    <textarea v-model="amenity.description" rows="2" class="w-full border border-slate-300 rounded-lg px-3 py-2"></textarea>
-                                </div>
+                                <BilingualInput v-model="amenity.title" label="Title" />
+                                <BilingualInput v-model="amenity.description" label="Description" type="textarea" />
                             </div>
                         </div>
                     </div>

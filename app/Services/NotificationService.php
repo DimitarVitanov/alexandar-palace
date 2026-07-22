@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\EmailTemplate;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +15,7 @@ class NotificationService
         $setting = Setting::where('key', 'admin_notification_emails')->first();
         
         if (!$setting || empty($setting->value)) {
-            return [config('mail.from.address', 'admin@alexandarpalace.mk')];
+            return [config('mail.from.address', 'info@aleksandarpalace.com.mk')];
         }
         
         $emails = is_array($setting->value) 
@@ -23,10 +24,21 @@ class NotificationService
         
         return array_filter($emails, fn($email) => filter_var($email, FILTER_VALIDATE_EMAIL));
     }
-    
-    public static function notifyAdmins(Mailable $mailable): void
+
+    public static function getTemplateRecipients(string $templateKey): array
     {
-        $emails = self::getAdminEmails();
+        $template = EmailTemplate::where('key', $templateKey)->first();
+        
+        if (!$template || empty($template->recipient_emails)) {
+            return self::getAdminEmails();
+        }
+        
+        return array_filter($template->recipient_emails, fn($email) => filter_var($email, FILTER_VALIDATE_EMAIL));
+    }
+    
+    public static function notifyAdmins(Mailable $mailable, ?string $templateKey = null): void
+    {
+        $emails = $templateKey ? self::getTemplateRecipients($templateKey) : self::getAdminEmails();
         
         foreach ($emails as $email) {
             try {

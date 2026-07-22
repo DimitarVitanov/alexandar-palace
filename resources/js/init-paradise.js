@@ -235,6 +235,19 @@ function initOwlCarousel() {
     // Destroy existing instances first
     $('.carousel_testimonials').trigger('destroy.owl.carousel');
     $('.carousel_item_centered').trigger('destroy.owl.carousel');
+    $('.owl-carousel.kenburns').trigger('destroy.owl.carousel');
+    
+    // Restaurant/kenburns carousel (full-screen slider)
+    $('.owl-carousel.kenburns').owlCarousel({
+        items: 1,
+        loop: true,
+        nav: false,
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        animateOut: 'fadeOut',
+        animateIn: 'fadeIn',
+    });
     
     // Testimonials carousel
     $('.carousel_testimonials').owlCarousel({
@@ -254,19 +267,24 @@ function initOwlCarousel() {
         }
     });
     
-    // Room gallery carousel (centered items with ken burns effect)
-    $('.carousel_item_centered').owlCarousel({
-        center: true,
-        items: 2,
-        loop: true,
-        margin: 10,
-        autoplay: true,
-        autoplayTimeout: 5000,
-        autoplayHoverPause: true,
-        responsive: {
-            0: { items: 1 },
-            600: { items: 2 },
-            1000: { items: 3 }
+    // Carousel items centered generals - exact copy from original template
+    $('.carousel_item_centered').owlCarousel({    
+        loop:true,
+        margin:5,
+        nav:true,
+        dots:false,
+        center:true,
+        navText: ["<i class='bi bi-arrow-left-short'></i>","<i class='bi bi-arrow-right-short'></i>"],
+        responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:2
+            },
+            1000:{
+                items:2
+            }
         }
     });
 }
@@ -345,6 +363,13 @@ function initProgressWrap() {
     window._progressWrapInitialized = true;
 }
 
+function initFsLightbox() {
+    // Refresh fslightbox to pick up dynamically added elements
+    if (typeof window.refreshFsLightbox === 'function') {
+        window.refreshFsLightbox();
+    }
+}
+
 export function initParadise() {
     // Debounce and prevent concurrent runs
     if (initTimeout) {
@@ -370,6 +395,7 @@ export function initParadise() {
             initScrollCue();
             initNiceSelect();
             initProgressWrap();
+            initFsLightbox();
             
             isInitializing = false;
         });

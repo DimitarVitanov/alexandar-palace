@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\GalleryItem;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class GalleryController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         return Inertia::render('Admin/Gallery/Index', [
@@ -38,8 +40,13 @@ class GalleryController extends Controller
 
     public function edit(GalleryItem $gallery)
     {
+        $itemData = $this->prepareBilingualData(
+            $gallery,
+            ['title', 'description']
+        );
+        
         return Inertia::render('Admin/Gallery/Form', [
-            'item' => $gallery,
+            'item' => $itemData,
         ]);
     }
 

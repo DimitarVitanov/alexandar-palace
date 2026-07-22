@@ -9,7 +9,7 @@ const props = defineProps({
 const deleteForm = useForm({});
 const destroy = (room) => {
     if (confirm('Are you sure you want to delete this room?')) {
-        deleteForm.delete(`/admin/rooms/${room.id}`);
+        deleteForm.delete(`/admin/rooms/${room.slug}`);
     }
 };
 
@@ -38,6 +38,7 @@ const formatPrice = (price) => {
                         <tr class="bg-slate-50 border-b border-slate-200">
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Room</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Price</th>
+                            <th class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Quantity</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Capacity</th>
                             <th class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Featured</th>
                             <th class="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
@@ -46,7 +47,7 @@ const formatPrice = (price) => {
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         <tr v-if="!rooms?.length">
-                            <td colspan="6" class="px-6 py-12 text-center text-slate-500">
+                            <td colspan="7" class="px-6 py-12 text-center text-slate-500">
                                 <i class="bi bi-door-open text-4xl mb-2 block text-slate-300"></i>
                                 No rooms found. Create your first room.
                             </td>
@@ -75,6 +76,11 @@ const formatPrice = (price) => {
                                 <span class="font-semibold text-slate-800">{{ formatPrice(room.price_per_night) }}</span>
                                 <span class="text-sm text-slate-500">/night</span>
                             </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="px-2.5 py-1 text-sm font-semibold bg-blue-100 text-blue-700 rounded-full">
+                                    {{ room.quantity || 1 }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 text-slate-600">
                                 <span class="flex items-center gap-1">
                                     <i class="bi bi-people"></i>
@@ -100,7 +106,7 @@ const formatPrice = (price) => {
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <Link 
-                                        :href="`/admin/rooms/${room.id}/edit`" 
+                                        :href="`/admin/rooms/${room.slug}/edit`" 
                                         class="p-2 text-slate-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
                                         title="Edit"
                                     >

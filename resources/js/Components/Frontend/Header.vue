@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 
@@ -7,6 +7,7 @@ const { t, locale } = useI18n();
 const page = usePage();
 const menuOpen = ref(false);
 const activeItem = ref(null);
+const isNavigating = ref(false);
 
 const toggleMenu = () => {
     menuOpen.value = !menuOpen.value;
@@ -21,21 +22,16 @@ const closeMenu = () => {
 };
 
 const navigateTo = (href) => {
-    // Start closing menu animation (slides up)
+    if (isNavigating.value) return;
+    isNavigating.value = true;
+    
+    // Close menu with animation
     closeMenu();
     
-    // Fade out content while menu is sliding
-    document.querySelector('main')?.classList.add('page-transitioning');
-    
-    // Wait for menu slide animation (600ms from CSS), then navigate
+    // Wait for menu close animation (600ms from CSS), then navigate
     setTimeout(() => {
-        router.visit(href, {
-            preserveScroll: false,
-            onFinish: () => {
-                document.querySelector('main')?.classList.remove('page-transitioning');
-            }
-        });
-    }, 500); // Slightly less than 600ms so navigation starts as menu finishes
+        window.location.href = href;
+    }, 600);
 };
 
 const setLocale = (lang) => {
@@ -45,13 +41,18 @@ const setLocale = (lang) => {
 
 const asset = (path) => `/assets/paradise/${path}`;
 
-const navItems = [
+const navItems = computed(() => [
     { label: t('nav.home'), href: '/', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
-    { label: t('nav.rooms'), href: '/rooms', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
     { label: t('nav.about'), href: '/about', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
-    { label: t('nav.news'), href: '/news', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
+    { label: t('nav.rooms'), href: '/rooms', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
+    { label: t('nav.restaurant'), href: '/restaurant', image: 'img/restaurant/slides/slide_1.jpg' },
+    { label: t('nav.tennis_restaurant'), href: '/tennis-restaurant', image: 'img/tennis-restaurant/tennis-restaurant-hero.jpg' },
+    { label: t('nav.congress'), href: '/congress-center', image: 'img/congress/Kongresnasala1-400x300.jpg' },
+    { label: t('nav.celebrations'), href: '/celebrations', image: 'img/celebrations/svadba-1-400x340.jpg' },
+    { label: t('nav.activities'), href: '/activities', image: 'img/activities/teniszaweb.webp' },
+    // { label: t('nav.news'), href: '/news', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
     { label: t('nav.contact'), href: '/contacts', image: 'img/490891522_9769845339721129_8431070351770986907_n.jpg' },
-];
+]);
 </script>
 
 <template>
@@ -60,10 +61,10 @@ const navItems = [
             <div class="row align-items-center">
                 <div class="col-6">
                     <Link href="/" class="logo_normal">
-                        <img :src="`/assets/paradise/img/logo.png`" width="135" height="45" alt="Alexandar Palace">
+                        <img :src="asset('img/logo.png')" width="135" height="45" alt="Alexandar Palace">
                     </Link>
                     <Link href="/" class="logo_sticky">
-                        <img :src="`/assets/paradise/img/logo_sticky.png`" width="135" height="45" alt="Alexandar Palace">
+                        <img :src="asset('img/logo_sticky.png')" width="135" height="45" alt="Alexandar Palace">
                     </Link>
                 </div>
                 <div class="col-6">
@@ -145,9 +146,3 @@ const navItems = [
     </div>
 </template>
 
-<style scoped>
-.panel_menu.active {
-    visibility: visible;
-    opacity: 1;
-}
-</style>

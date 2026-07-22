@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class RoomController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         return Inertia::render('Admin/Rooms/Index', [
@@ -27,11 +29,25 @@ class RoomController extends Controller
             'slug' => 'required|string|unique:rooms',
             'name' => 'required|array',
             'description' => 'nullable|array',
+            'short_description' => 'nullable|array',
+            'amenities' => 'nullable|array',
             'price_per_night' => 'required|numeric',
+            'discounted_price' => 'nullable|numeric',
+            'quantity' => 'required|integer|min:1',
             'max_guests' => 'required|integer',
+            'bedrooms' => 'nullable|integer',
+            'bathrooms' => 'nullable|integer',
+            'square_meters' => 'nullable|integer',
+            'featured_image' => 'nullable|string',
+            'gallery_images' => 'nullable|array',
+            'view_type' => 'nullable|string',
+            'bed_type' => 'nullable|string',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'sort_order' => 'nullable|integer',
         ]);
+
+        $validated['available_quantity'] = $validated['quantity'];
 
         Room::create($validated);
 
@@ -40,8 +56,13 @@ class RoomController extends Controller
 
     public function edit(Room $room)
     {
+        $roomData = $this->prepareBilingualData(
+            $room->load('media'),
+            ['name', 'description', 'short_description']
+        );
+        
         return Inertia::render('Admin/Rooms/Form', [
-            'room' => $room->load('media'),
+            'room' => $roomData,
         ]);
     }
 
@@ -50,10 +71,22 @@ class RoomController extends Controller
         $validated = $request->validate([
             'name' => 'required|array',
             'description' => 'nullable|array',
+            'short_description' => 'nullable|array',
+            'amenities' => 'nullable|array',
             'price_per_night' => 'required|numeric',
+            'discounted_price' => 'nullable|numeric',
+            'quantity' => 'required|integer|min:1',
             'max_guests' => 'required|integer',
+            'bedrooms' => 'nullable|integer',
+            'bathrooms' => 'nullable|integer',
+            'square_meters' => 'nullable|integer',
+            'featured_image' => 'nullable|string',
+            'gallery_images' => 'nullable|array',
+            'view_type' => 'nullable|string',
+            'bed_type' => 'nullable|string',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'sort_order' => 'nullable|integer',
         ]);
 
         $room->update($validated);

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\SpaService;
 use App\Models\SpaAvailability;
+use App\Traits\HandlesBilingualFields;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class SpaServiceController extends Controller
 {
+    use HandlesBilingualFields;
     public function index()
     {
         return Inertia::render('Admin/Spa/Services/Index', [
@@ -63,8 +65,13 @@ class SpaServiceController extends Controller
 
     public function edit(SpaService $service)
     {
+        $serviceData = $this->prepareBilingualData(
+            $service->load('availability'),
+            ['name', 'description']
+        );
+        
         return Inertia::render('Admin/Spa/Services/Edit', [
-            'service' => $service->load('availability'),
+            'service' => $serviceData,
         ]);
     }
 

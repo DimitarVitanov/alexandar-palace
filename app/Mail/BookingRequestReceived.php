@@ -13,14 +13,14 @@ class BookingRequestReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Booking $booking)
+    public function __construct(public Booking $booking, public string $bookingLocale = 'en')
     {
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Reservation Request - ' . $this->booking->booking_reference,
+            subject: ($this->bookingLocale === 'mk' ? 'Вашето барање за резервација - ' : 'Your Reservation Request - ') . $this->booking->booking_reference,
         );
     }
 

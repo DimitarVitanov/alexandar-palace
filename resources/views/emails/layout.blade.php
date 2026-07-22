@@ -11,182 +11,185 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            background-color: #f7f7f7;
+            color: #1f1f1f;
+            font-family: Arial, Helvetica, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
         }
         .email-wrapper {
-            max-width: 600px;
-            margin: 0 auto;
             background-color: #ffffff;
+            margin: 0 auto;
+            max-width: 600px;
+            width: 100%;
         }
         .header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 40px 30px;
+            background: #ffffff;
+            border-bottom: 1px solid #e4e4e4;
+            padding: 34px 30px 30px;
             text-align: center;
         }
         .logo {
-            color: #d4af37;
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
+            color: #20201e;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 22px;
+            font-weight: normal;
+            letter-spacing: 3px;
+            margin-bottom: 7px;
         }
         .tagline {
-            color: #a0a0a0;
-            font-size: 12px;
-            letter-spacing: 3px;
+            color: #77746f;
+            font-size: 10px;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
         }
         .content {
-            padding: 40px 30px;
+            padding: 44px 38px;
         }
         .greeting {
-            font-size: 24px;
-            color: #1a1a2e;
-            margin-bottom: 20px;
+            color: #20201e;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 26px;
+            font-weight: normal;
+            letter-spacing: -.2px;
+            margin-bottom: 16px;
         }
         .message {
-            color: #555;
-            margin-bottom: 25px;
-            font-size: 16px;
+            color: #555555;
+            font-size: 15px;
+            line-height: 1.75;
+            margin-bottom: 20px;
         }
         .details-box {
-            background-color: #f8f6f0;
-            border-left: 4px solid #d4af37;
-            padding: 25px;
-            margin: 25px 0;
+            background-color: #ffffff;
+            border: 1px solid #e2e2e2;
+            padding: 22px;
+            margin: 26px 0;
         }
         .details-box h3 {
-            color: #1a1a2e;
-            font-size: 16px;
-            margin-bottom: 15px;
+            color: #20201e;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.6px;
+            margin-bottom: 17px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
         .details-row {
+            border-top: 1px solid #ededed;
             display: flex;
-            margin-bottom: 10px;
             font-size: 14px;
+            margin: 0;
+            padding: 11px 0;
         }
+        .details-row:first-of-type { border-top: 0; padding-top: 0; }
         .details-label {
-            color: #888;
-            width: 140px;
+            color: #777777;
             flex-shrink: 0;
+            width: 142px;
         }
         .details-value {
-            color: #333;
+            color: #282725;
             font-weight: 500;
         }
         .cta-button {
+            background: #282725;
+            color: #ffffff;
             display: inline-block;
-            background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
-            color: #1a1a2e;
-            padding: 15px 35px;
-            text-decoration: none;
+            font-size: 11px;
             font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 13px;
+            letter-spacing: 1.3px;
             margin: 20px 0;
+            padding: 14px 24px;
+            text-decoration: none;
+            text-transform: uppercase;
         }
         .divider {
+            background: #dedede;
             height: 1px;
-            background: linear-gradient(to right, transparent, #d4af37, transparent);
-            margin: 30px 0;
+            margin: 32px 0;
         }
         .footer {
-            background-color: #1a1a2e;
+            background-color: #fafafa;
+            border-top: 1px solid #e2e2e2;
             padding: 30px;
             text-align: center;
         }
         .footer-logo {
-            color: #d4af37;
-            font-size: 18px;
-            font-weight: bold;
+            color: #343330;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 15px;
+            font-weight: normal;
             letter-spacing: 2px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .footer-contact {
-            color: #a0a0a0;
-            font-size: 13px;
+            color: #77746f;
+            font-size: 12px;
             line-height: 1.8;
         }
         .footer-contact a {
-            color: #d4af37;
-            text-decoration: none;
+            color: #343330;
+            text-decoration: underline;
         }
         .social-links {
             margin-top: 20px;
         }
         .social-links a {
+            background-color: #ffffff;
+            border: 1px solid #d8d8d8;
+            color: #343330;
             display: inline-block;
-            width: 35px;
+            font-size: 14px;
             height: 35px;
-            background-color: #2a2a4e;
-            color: #d4af37;
-            text-decoration: none;
             line-height: 35px;
             margin: 0 5px;
-            font-size: 14px;
+            text-decoration: none;
+            width: 35px;
         }
         .copyright {
-            color: #666;
+            border-top: 1px solid #e2e2e2;
+            color: #888888;
             font-size: 11px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid #2a2a4e;
         }
         .highlight {
-            color: #d4af37;
+            color: #20201e;
             font-weight: bold;
         }
         .status-badge {
+            border: 1px solid #b8b8b8;
+            color: #444444;
             display: inline-block;
-            padding: 5px 15px;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
+            letter-spacing: 1.4px;
+            padding: 7px 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        .status-confirmed {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .status-cancelled {
-            background-color: #f8d7da;
-            color: #842029;
-        }
+        .status-pending, .status-confirmed, .status-cancelled { background-color: transparent; color: #444444; }
         @media only screen and (max-width: 600px) {
-            .content {
-                padding: 30px 20px;
-            }
-            .header {
-                padding: 30px 20px;
-            }
-            .details-box {
-                padding: 20px;
-            }
-            .details-row {
-                flex-direction: column;
-            }
-            .details-label {
-                width: 100%;
-                margin-bottom: 3px;
-            }
+            .email-wrapper { width: 100% !important; }
+            .content { padding: 30px 20px !important; }
+            .header { padding: 28px 20px !important; }
+            .footer { padding: 26px 20px !important; }
+            .greeting { font-size: 23px !important; }
+            .message { font-size: 16px !important; }
+            .details-box { padding: 18px !important; }
+            .details-row { display: block !important; margin-bottom: 14px !important; }
+            .details-label { display: block !important; margin-bottom: 3px !important; width: 100% !important; }
+            .cta-button { box-sizing: border-box !important; padding: 15px 18px !important; width: 100% !important; }
         }
     </style>
 </head>
 <body>
     <div class="email-wrapper">
         <div class="header">
-            <div class="logo">ALEXANDAR PALACE</div>
-            <div class="tagline">Luxury Hotel & Spa</div>
+            <img src="{{ config('app.url') }}/assets/paradise/img/logo.png" alt="Alexandar Palace" style="max-width: 200px; height: auto; margin-bottom: 10px;">
         </div>
 
         <div class="content">
@@ -194,11 +197,11 @@
         </div>
 
         <div class="footer">
-            <div class="footer-logo">ALEXANDAR PALACE</div>
+            <img src="{{ config('app.url') }}/assets/paradise/img/logo.png" alt="Alexandar Palace" style="max-width: 150px; height: auto; margin-bottom: 15px;">
             <div class="footer-contact">
-                <p>Bul. Ilinden 123, Skopje, North Macedonia</p>
-                <p>Phone: <a href="tel:+38923123456">+389 2 312 3456</a></p>
-                <p>Email: <a href="mailto:info@alexandarpalace.mk">info@alexandarpalace.mk</a></p>
+                <p>Blvd. 8th September No. 15, Skopje, Macedonia</p>
+                <p>Phone: <a href="tel:+38923092392">+389 (2) 3092 392</a></p>
+                <p>Email: <a href="mailto:info@aleksandarpalace.com.mk">info@aleksandarpalace.com.mk</a></p>
             </div>
             <div class="copyright">
                 &copy; {{ date('Y') }} Alexandar Palace Hotel. All rights reserved.

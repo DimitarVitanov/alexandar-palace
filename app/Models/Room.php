@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\Translatable;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +23,8 @@ class Room extends Model
         'amenities',
         'price_per_night',
         'discounted_price',
+        'quantity',
+        'available_quantity',
         'max_guests',
         'bedrooms',
         'bathrooms',
@@ -95,25 +99,100 @@ class Room extends Model
         return 'slug';
     }
 
+    /**
+     * Get available units for a date range by checking each night's occupancy.
+     * A guest occupies a room from check-in date until (but not including) check-out date.
+     */
     public function getAvailableUnits($checkIn, $checkOut): int
     {
-        $bookedUnits = $this->bookings()
+        $checkInDate = Carbon::parse($checkIn)->startOfDay();
+        $checkOutDate = Carbon::parse($checkOut)->startOfDay();
+        
+        // Get all active bookings that could potentially overlap
+        $bookings = $this->bookings()
             ->whereNotIn('status', ['cancelled', 'rejected'])
-            ->where(function ($query) use ($checkIn, $checkOut) {
-                $query->whereBetween('check_in', [$checkIn, $checkOut])
-                    ->orWhereBetween('check_out', [$checkIn, $checkOut])
-                    ->orWhere(function ($q) use ($checkIn, $checkOut) {
-                        $q->where('check_in', '<=', $checkIn)
-                          ->where('check_out', '>=', $checkOut);
-                    });
-            })
-            ->count();
-
-        return max(0, $this->total_units - $bookedUnits);
+            ->where('check_in', '<', $checkOutDate)
+            ->where('check_out', '>', $checkInDate)
+            ->get(['check_in', 'check_out']);
+        
+        if ($bookings->isEmpty()) {
+            return $this->total_units ?? 1;
+        }
+        
+        // Check each night in the requested range
+        $minAvailable = $this->total_units ?? 1;
+        $period = CarbonPeriod::create($checkInDate, $checkOutDate->copy()->subDay());
+        
+        foreach ($period as $night) {
+            $occupiedUnits = 0;
+            
+            foreach ($bookings as $booking) {
+                $bookingStart = Carbon::parse($booking->check_in)->startOfDay();
+                $bookingEnd = Carbon::parse($booking->check_out)->startOfDay();
+                
+                // A booking occupies the room on nights from check_in to check_out-1
+                if ($night->gte($bookingStart) && $night->lt($bookingEnd)) {
+                    $occupiedUnits++;
+                }
+            }
+            
+            $availableThisNight = max(0, ($this->total_units ?? 1) - $occupiedUnits);
+            $minAvailable = min($minAvailable, $availableThisNight);
+            
+            // Early exit if no availability
+            if ($minAvailable === 0) {
+                return 0;
+            }
+        }
+        
+        return $minAvailable;
     }
 
+    /**
+     * Check if at least one unit is available for the entire date range.
+     */
     public function isAvailable($checkIn, $checkOut): bool
     {
         return $this->getAvailableUnits($checkIn, $checkOut) > 0;
+    }
+    
+    /**
+     * Get occupancy for each day in a date range (useful for calendar views).
+     */
+    public function getOccupancyByDate($startDate, $endDate): array
+    {
+        $start = Carbon::parse($startDate)->startOfDay();
+        $end = Carbon::parse($endDate)->startOfDay();
+        
+        $bookings = $this->bookings()
+            ->whereNotIn('status', ['cancelled', 'rejected'])
+            ->where('check_in', '<=', $end)
+            ->where('check_out', '>=', $start)
+            ->get(['check_in', 'check_out']);
+        
+        $occupancy = [];
+        $period = CarbonPeriod::create($start, $end);
+        
+        foreach ($period as $date) {
+            $dateStr = $date->format('Y-m-d');
+            $occupied = 0;
+            
+            foreach ($bookings as $booking) {
+                $bookingStart = Carbon::parse($booking->check_in)->startOfDay();
+                $bookingEnd = Carbon::parse($booking->check_out)->startOfDay();
+                
+                if ($date->gte($bookingStart) && $date->lt($bookingEnd)) {
+                    $occupied++;
+                }
+            }
+            
+            $occupancy[$dateStr] = [
+                'occupied' => $occupied,
+                'available' => max(0, ($this->total_units ?? 1) - $occupied),
+                'total' => $this->total_units ?? 1,
+            ];
+        }
+        
+        return $occupancy;
     }
 }
