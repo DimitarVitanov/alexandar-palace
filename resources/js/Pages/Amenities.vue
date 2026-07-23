@@ -37,8 +37,18 @@ const asset = (path) => `/assets/paradise/${path}`;
                 <img :src="asset('img/spa/DSC_4700-scaled.webp')" alt="Alexandar Palace">
             </div>
             <div class="hero-overlay"></div>
+            <div class="hero-particles">
+                <div class="particle p1"></div>
+                <div class="particle p2"></div>
+                <div class="particle p3"></div>
+            </div>
             <div class="hero-content">
-                <img :src="asset('img/logo.webp')" alt="Alexandar Palace" class="hero-logo">
+                <div class="hero-badge">
+                    <span>★★★★★</span>
+                </div>
+                <div class="logo-wrapper">
+                    <img :src="asset('img/logo.png')" alt="Alexandar Palace" class="hero-logo">
+                </div>
                 <div class="hero-divider">
                     <span></span>
                     <i class="bi bi-diamond-fill"></i>
@@ -46,6 +56,9 @@ const asset = (path) => `/assets/paradise/${path}`;
                 </div>
                 <h1>Welcome to Alexandar Palace</h1>
                 <p class="hero-tagline">Discover Our World-Class Amenities</p>
+                <div class="scroll-indicator">
+                    <i class="bi bi-chevron-down"></i>
+                </div>
             </div>
         </section>
 
@@ -336,7 +349,7 @@ const asset = (path) => `/assets/paradise/${path}`;
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
 
 * {
     margin: 0;
@@ -347,9 +360,9 @@ const asset = (path) => `/assets/paradise/${path}`;
 .amenities-page {
     font-family: 'Inter', sans-serif;
     color: #fff;
-    background: #0a0a0a;
+    background: #080808;
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.8s ease;
 }
 
 .amenities-page.loaded {
@@ -359,8 +372,8 @@ const asset = (path) => `/assets/paradise/${path}`;
 /* Hero Section */
 .hero-section {
     position: relative;
-    height: 60vh;
-    min-height: 400px;
+    height: 70vh;
+    min-height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -376,12 +389,60 @@ const asset = (path) => `/assets/paradise/${path}`;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    animation: subtle-zoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes subtle-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 50%, rgba(8,8,8,1) 100%);
+}
+
+.hero-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #c9a227;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float-up 8s ease-in-out infinite;
+}
+
+.particle.p1 {
+    left: 20%;
+    bottom: -10px;
+    animation-delay: 0s;
+}
+
+.particle.p2 {
+    left: 50%;
+    bottom: -10px;
+    animation-delay: 2s;
+}
+
+.particle.p3 {
+    left: 80%;
+    bottom: -10px;
+    animation-delay: 4s;
+}
+
+@keyframes float-up {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-70vh) scale(0.5); opacity: 0; }
 }
 
 .hero-content {
@@ -391,10 +452,27 @@ const asset = (path) => `/assets/paradise/${path}`;
     padding: 20px;
 }
 
-.hero-logo {
-    height: 70px;
-    width: auto;
+.hero-badge {
     margin-bottom: 20px;
+}
+
+.hero-badge span {
+    display: inline-block;
+    color: #c9a227;
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+}
+
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.hero-logo {
+    height: 80px;
+    width: auto;
     filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5));
 }
 
@@ -402,12 +480,12 @@ const asset = (path) => `/assets/paradise/${path}`;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 20px;
+    margin-bottom: 25px;
 }
 
 .hero-divider span {
-    width: 60px;
+    width: 80px;
     height: 1px;
     background: linear-gradient(90deg, transparent, #c9a227, transparent);
 }
@@ -415,21 +493,48 @@ const asset = (path) => `/assets/paradise/${path}`;
 .hero-divider i {
     color: #c9a227;
     font-size: 0.5rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
 }
 
 .hero-content h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 600;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    margin-bottom: 15px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    letter-spacing: 1px;
+    color: #fff;
 }
 
 .hero-tagline {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.8);
-    letter-spacing: 2px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: #fff;
+    letter-spacing: 4px;
     text-transform: uppercase;
+    font-weight: 500;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.scroll-indicator {
+    margin-top: 40px;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator i {
+    font-size: 1.5rem;
+    color: #c9a227;
+    opacity: 0.7;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
 }
 
 /* Quick Services */
@@ -437,7 +542,8 @@ const asset = (path) => `/assets/paradise/${path}`;
     display: flex;
     justify-content: space-around;
     background: linear-gradient(135deg, #c9a227 0%, #a68520 100%);
-    padding: 15px 10px;
+    padding: 18px 10px;
+    box-shadow: 0 4px 30px rgba(201, 162, 39, 0.3);
 }
 
 .service-item {
@@ -461,31 +567,47 @@ const asset = (path) => `/assets/paradise/${path}`;
 
 /* Section Styles */
 .amenity-section {
-    padding: 50px 20px;
+    padding: 60px 20px;
+    position: relative;
+}
+
+.amenity-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.5), transparent);
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
 
 .section-header.light {
-    color: #1a1a1a;
+    color: #fff;
 }
 
 .section-label {
     display: block;
-    font-size: 0.75rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
     color: #c9a227;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 8px;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+    font-weight: 500;
 }
 
 .section-header h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 600;
+    letter-spacing: 1px;
+    color: #fff;
 }
 
 /* SPA Section */
@@ -523,23 +645,30 @@ const asset = (path) => `/assets/paradise/${path}`;
 .features-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 25px;
 }
 
 .feature {
-    background: rgba(255,255,255,0.05);
+    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
     border: 1px solid rgba(201,162,39,0.2);
-    border-radius: 10px;
-    padding: 15px 10px;
+    border-radius: 14px;
+    padding: 18px 10px;
     text-align: center;
+    transition: all 0.4s ease;
+}
+
+.feature:hover {
+    transform: translateY(-3px);
+    border-color: rgba(201,162,39,0.4);
+    box-shadow: 0 10px 30px rgba(201, 162, 39, 0.1);
 }
 
 .feature i {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: #c9a227;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .feature span {
@@ -576,13 +705,13 @@ const asset = (path) => `/assets/paradise/${path}`;
 }
 
 .hours-badge.dark span {
-    color: #1a1a1a;
+    color: #fff;
 }
 
 /* Sport Section */
 .sport-section {
-    background: #f8f8f8;
-    color: #1a1a1a;
+    background: #111;
+    color: #fff;
 }
 
 .sport-section .section-label {
@@ -690,12 +819,14 @@ const asset = (path) => `/assets/paradise/${path}`;
     font-family: 'Playfair Display', serif;
     font-size: 1.1rem;
     margin-bottom: 3px;
+    color: #fff;
 }
 
 .restaurant-info p {
     font-size: 0.8rem;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.9);
     margin-bottom: 5px;
+    font-weight: 400;
 }
 
 .restaurant-info .time {
@@ -719,8 +850,8 @@ const asset = (path) => `/assets/paradise/${path}`;
 
 /* Rooms Section */
 .rooms-section {
-    background: #f8f8f8;
-    color: #1a1a1a;
+    background: #111;
+    color: #fff;
 }
 
 .rooms-showcase {
@@ -770,9 +901,9 @@ const asset = (path) => `/assets/paradise/${path}`;
     align-items: center;
     gap: 5px;
     padding: 15px 10px;
-    background: #fff;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,162,39,0.2);
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .amenity-item i {
@@ -782,7 +913,7 @@ const asset = (path) => `/assets/paradise/${path}`;
 
 .amenity-item span {
     font-size: 0.7rem;
-    color: #666;
+    color: rgba(255,255,255,0.8);
     text-align: center;
 }
 
@@ -825,12 +956,14 @@ const asset = (path) => `/assets/paradise/${path}`;
     font-family: 'Playfair Display', serif;
     font-size: 1.2rem;
     margin-bottom: 8px;
+    color: #fff;
 }
 
 .event-feature p {
     font-size: 0.85rem;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.9);
     line-height: 1.5;
+    font-weight: 400;
 }
 
 .event-services {
@@ -944,9 +1077,21 @@ const asset = (path) => `/assets/paradise/${path}`;
 
 /* Footer */
 .page-footer {
-    background: #0a0a0a;
-    padding: 40px 20px;
+    background: linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+    padding: 50px 20px;
     text-align: center;
+    position: relative;
+}
+
+.page-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.4), transparent);
 }
 
 .footer-divider {
@@ -954,11 +1099,11 @@ const asset = (path) => `/assets/paradise/${path}`;
     align-items: center;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .footer-divider span {
-    width: 40px;
+    width: 50px;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(201,162,39,0.5), transparent);
 }
@@ -966,30 +1111,54 @@ const asset = (path) => `/assets/paradise/${path}`;
 .footer-divider i {
     color: #c9a227;
     font-size: 0.5rem;
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 .page-footer p {
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 5px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
 }
 
 .page-footer h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: #fff;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
 }
 
 .page-footer small {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: rgba(255,255,255,0.4);
+    font-style: italic;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
+    .hero-section {
+        height: 65vh;
+        min-height: 450px;
+    }
+    
     .hero-content h1 {
-        font-size: 1.6rem;
+        font-size: 2rem;
+    }
+    
+    .hero-tagline {
+        font-size: 0.9rem;
+        letter-spacing: 3px;
+    }
+    
+    .hero-logo {
+        height: 65px;
     }
     
     .image-showcase {
@@ -1022,6 +1191,10 @@ const asset = (path) => `/assets/paradise/${path}`;
     
     .room-amenities {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .section-header h2 {
+        font-size: 1.7rem;
     }
 }
 

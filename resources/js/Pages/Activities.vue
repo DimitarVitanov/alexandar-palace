@@ -234,27 +234,27 @@ const successMessage = computed(() => page.props.flash?.success);
                 <div class="showcase-grid">
                     <div class="showcase-item" data-cue="fadeIn">
                         <img :src="asset('img/activities/edited5-scaled.webp')" alt="Sport Facilities">
-                        <div class="showcase-overlay">
+                        <!-- <div class="showcase-overlay">
                             <span>{{ t('activities.tennis_courts') }}</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="showcase-item" data-cue="fadeIn" data-delay="100">
                         <img :src="asset('img/activities/slika-9-440x550.webp')" alt="Tennis">
-                        <div class="showcase-overlay">
+                        <!-- <div class="showcase-overlay">
                             <span>{{ t('activities.basketball_courts') }}</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="showcase-item" data-cue="fadeIn" data-delay="200">
                         <img :src="asset('img/activities/slika-10-440x550.webp')" alt="Sport">
-                        <div class="showcase-overlay">
+                        <!-- <div class="showcase-overlay">
                             <span>{{ t('activities.football_pitch') }}</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="showcase-item" data-cue="fadeIn" data-delay="300">
                         <img :src="asset('img/activities/image00003-440x550.webp')" alt="Facilities">
-                        <div class="showcase-overlay">
+                        <!-- <div class="showcase-overlay">
                             <span>{{ t('activities.our_facilities') }}</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </section>
@@ -517,7 +517,7 @@ const successMessage = computed(() => page.props.flash?.success);
                         <!-- Hammam -->
                         <div class="spa-service-card" data-cue="fadeIn">
                             <div class="service-image">
-                                <img :src="asset('img/spa/26991eb2-5b77-4586-8283-1e6d42e61df8-scaled.webp')" alt="Hammam">
+                                <img :src="asset('img/spa/spa-banner-new-e1639394449773.webp')" alt="Hammam">
                             </div>
                             <div class="service-content">
                                 <h3>{{ t('activities.hammam') }}</h3>
@@ -527,7 +527,7 @@ const successMessage = computed(() => page.props.flash?.success);
                         <!-- Massages -->
                         <div class="spa-service-card" data-cue="fadeIn" data-delay="100">
                             <div class="service-image">
-                                <img :src="asset('img/spa/4c57de08-be2f-4d4b-984f-3dda85a7b5ae-scaled.webp')" alt="Massages">
+                                <img :src="asset('img/spa/spa_3.webp')" alt="Massages">
                             </div>
                             <div class="service-content">
                                 <h3>{{ t('activities.classical_massages') }}</h3>

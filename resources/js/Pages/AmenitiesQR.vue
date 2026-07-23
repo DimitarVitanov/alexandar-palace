@@ -50,7 +50,7 @@ const printQR = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     </Head>
 
@@ -60,59 +60,56 @@ const printQR = () => {
         
         <!-- Main Content -->
         <div class="qr-container">
-            <!-- Header -->
-            <header class="qr-header">
-                <img :src="asset('img/logo-white.png')" alt="Alexandar Palace" class="logo">
+            <!-- QR Card -->
+            <div class="qr-card">
+                <div class="logo-wrapper">
+                    <img :src="asset('img/logo.png')" alt="Alexandar Palace" class="logo">
+                </div>
                 <div class="header-decoration">
                     <div class="line"></div>
                     <i class="bi bi-diamond-fill"></i>
                     <div class="line"></div>
                 </div>
-            </header>
-
-            <!-- QR Card -->
-            <div class="qr-card">
-                <div class="card-glow"></div>
-                
                 <div class="card-header">
                     <span class="subtitle">Discover Our</span>
                     <h1>Hotel Amenities</h1>
-                    <p>Scan the QR code to explore all our luxury facilities and services</p>
+                    <p>Scan to explore our world-class facilities & services</p>
                 </div>
 
                 <div class="qr-wrapper">
-                    <div class="qr-frame">
-                        <div class="corner top-left"></div>
-                        <div class="corner top-right"></div>
-                        <div class="corner bottom-left"></div>
-                        <div class="corner bottom-right"></div>
-                        
-                        <img 
-                            :src="qrCodeUrl" 
-                            alt="Scan for Amenities" 
-                            class="qr-code"
-                            @load="qrLoaded = true"
-                            :class="{ 'loaded': qrLoaded }"
-                        >
-                        
-                        <div v-if="!qrLoaded" class="qr-loading">
-                            <div class="spinner"></div>
+                    <div class="qr-outer-frame">
+                        <div class="qr-frame">
+                            <div class="corner top-left"></div>
+                            <div class="corner top-right"></div>
+                            <div class="corner bottom-left"></div>
+                            <div class="corner bottom-right"></div>
+                            
+                            <div class="qr-inner">
+                                <img 
+                                    :src="qrCodeUrl" 
+                                    alt="Scan for Amenities" 
+                                    class="qr-code"
+                                    @load="qrLoaded = true"
+                                    :class="{ 'loaded': qrLoaded }"
+                                >
+                                
+                                <div v-if="!qrLoaded" class="qr-loading">
+                                    <div class="spinner"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="scan-instruction">
-                    <div class="phone-icon">
-                        <i class="bi bi-phone"></i>
-                        <div class="scan-lines"></div>
-                    </div>
+                    <i class="bi bi-phone"></i>
                     <span>Point your camera at the QR code</span>
                 </div>
 
                 <div class="amenities-preview">
                     <div class="preview-item">
                         <i class="bi bi-droplet-half"></i>
-                        <span>SPA & Wellness</span>
+                        <span>SPA</span>
                     </div>
                     <div class="preview-item">
                         <i class="bi bi-cup-hot"></i>
@@ -155,14 +152,14 @@ const printQR = () => {
                     <div class="line"></div>
                 </div>
                 <p>Alexandar Palace Hotel</p>
-                <small>Bul. Ilinden 101, Skopje</small>
+                <small>Blvd. 8-mi Septemvri No. 15, Skopje</small>
             </footer>
         </div>
     </div>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
 
 * {
     margin: 0;
@@ -206,71 +203,50 @@ const printQR = () => {
     z-index: 2;
 }
 
-/* Header */
-.qr-header {
-    text-align: center;
-    margin-bottom: 30px;
+.logo-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .logo {
-    height: 50px;
+    height: 60px;
     width: auto;
-    margin-bottom: 20px;
     filter: drop-shadow(0 4px 20px rgba(201, 162, 39, 0.3));
 }
 
-.header-decoration,
-.footer-decoration {
+.header-decoration {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
+    margin-bottom: 20px;
 }
 
-.header-decoration .line,
-.footer-decoration .line {
+.header-decoration .line {
     width: 50px;
     height: 1px;
     background: linear-gradient(90deg, transparent, #c9a227, transparent);
 }
 
-.header-decoration i,
-.footer-decoration i {
+.header-decoration i {
     color: #c9a227;
     font-size: 0.5rem;
 }
 
 /* QR Card */
 .qr-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    background: linear-gradient(165deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
     border: 1px solid rgba(201, 162, 39, 0.3);
     border-radius: 24px;
     padding: 40px 30px;
     position: relative;
-    overflow: hidden;
-}
-
-.card-glow {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 50%);
-    animation: rotate 20s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .card-header {
     text-align: center;
-    margin-bottom: 35px;
-    position: relative;
-    z-index: 2;
+    margin-bottom: 30px;
 }
 
 .card-header .subtitle {
@@ -292,8 +268,9 @@ const printQR = () => {
 
 .card-header p {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.6;
+    font-weight: 300;
 }
 
 /* QR Code */
@@ -301,51 +278,60 @@ const printQR = () => {
     display: flex;
     justify-content: center;
     margin-bottom: 25px;
-    position: relative;
-    z-index: 2;
+}
+
+.qr-outer-frame {
+    padding: 3px;
+    background: linear-gradient(135deg, #c9a227 0%, #a68520 100%);
+    border-radius: 18px;
 }
 
 .qr-frame {
     position: relative;
     padding: 20px;
-    background: linear-gradient(145deg, rgba(15, 15, 15, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%);
-    border-radius: 16px;
+    background: #0f0f0f;
+    border-radius: 15px;
 }
 
 .corner {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-color: #c9a227;
     border-style: solid;
+    opacity: 0.6;
 }
 
 .corner.top-left {
-    top: 0;
-    left: 0;
-    border-width: 3px 0 0 3px;
-    border-radius: 8px 0 0 0;
+    top: 8px;
+    left: 8px;
+    border-width: 2px 0 0 2px;
+    border-radius: 6px 0 0 0;
 }
 
 .corner.top-right {
-    top: 0;
-    right: 0;
-    border-width: 3px 3px 0 0;
-    border-radius: 0 8px 0 0;
+    top: 8px;
+    right: 8px;
+    border-width: 2px 2px 0 0;
+    border-radius: 0 6px 0 0;
 }
 
 .corner.bottom-left {
-    bottom: 0;
-    left: 0;
-    border-width: 0 0 3px 3px;
-    border-radius: 0 0 0 8px;
+    bottom: 8px;
+    left: 8px;
+    border-width: 0 0 2px 2px;
+    border-radius: 0 0 0 6px;
 }
 
 .corner.bottom-right {
-    bottom: 0;
-    right: 0;
-    border-width: 0 3px 3px 0;
-    border-radius: 0 0 8px 0;
+    bottom: 8px;
+    right: 8px;
+    border-width: 0 2px 2px 0;
+    border-radius: 0 0 6px 0;
+}
+
+.qr-inner {
+    position: relative;
 }
 
 .qr-code {
@@ -362,17 +348,17 @@ const printQR = () => {
 
 .qr-loading {
     position: absolute;
-    inset: 20px;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(15, 15, 15, 0.9);
+    background: #0f0f0f;
 }
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(201, 162, 39, 0.2);
+    width: 45px;
+    height: 45px;
+    border: 3px solid rgba(201, 162, 39, 0.15);
     border-top-color: #c9a227;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -389,30 +375,11 @@ const printQR = () => {
     justify-content: center;
     gap: 12px;
     margin-bottom: 30px;
-    position: relative;
-    z-index: 2;
 }
 
-.phone-icon {
-    position: relative;
+.scan-instruction i {
     font-size: 1.5rem;
     color: #c9a227;
-}
-
-.scan-lines {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 2px;
-    background: #c9a227;
-    animation: scan 1.5s ease-in-out infinite;
-}
-
-@keyframes scan {
-    0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scaleX(0.5); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scaleX(1); }
 }
 
 .scan-instruction span {
@@ -425,8 +392,6 @@ const printQR = () => {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    position: relative;
-    z-index: 2;
 }
 
 .preview-item {
@@ -461,7 +426,7 @@ const printQR = () => {
 .action-buttons {
     display: flex;
     gap: 15px;
-    margin-top: 30px;
+    margin-top: 35px;
 }
 
 .action-btn {
@@ -470,12 +435,12 @@ const printQR = () => {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 15px 20px;
-    border-radius: 12px;
+    padding: 16px 24px;
+    border-radius: 14px;
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     border: none;
     font-family: inherit;
 }
@@ -483,22 +448,24 @@ const printQR = () => {
 .action-btn.download {
     background: linear-gradient(135deg, #c9a227 0%, #a68520 100%);
     color: #fff;
+    box-shadow: 0 4px 20px rgba(201, 162, 39, 0.3);
 }
 
 .action-btn.download:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(201, 162, 39, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(201, 162, 39, 0.5);
 }
 
 .action-btn.print {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(201, 162, 39, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(201, 162, 39, 0.4);
     color: #c9a227;
 }
 
 .action-btn.print:hover {
-    background: rgba(201, 162, 39, 0.2);
-    transform: translateY(-2px);
+    background: rgba(201, 162, 39, 0.15);
+    transform: translateY(-3px);
+    border-color: rgba(201, 162, 39, 0.6);
 }
 
 /* Direct Link */
@@ -509,7 +476,7 @@ const printQR = () => {
 }
 
 .direct-link span {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
     margin-right: 8px;
 }
 
@@ -518,6 +485,7 @@ const printQR = () => {
     text-decoration: none;
     border-bottom: 1px solid rgba(201, 162, 39, 0.3);
     transition: all 0.3s ease;
+    padding-bottom: 2px;
 }
 
 .direct-link a:hover {
@@ -530,11 +498,29 @@ const printQR = () => {
     margin-top: 40px;
 }
 
+.footer-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.footer-decoration .line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.5), transparent);
+}
+
+.footer-decoration i {
+    color: #c9a227;
+    font-size: 0.5rem;
+}
+
 .qr-footer p {
     font-family: 'Playfair Display', serif;
     font-size: 1rem;
     color: #fff;
-    margin-top: 15px;
     margin-bottom: 5px;
 }
 
@@ -560,45 +546,73 @@ const printQR = () => {
         box-shadow: none;
     }
     
-    .card-glow {
-        display: none;
+    .card-border-glow,
+    .card-inner-glow,
+    .floating-elements,
+    .bg-gradient,
+    .bg-pattern {
+        display: none !important;
     }
     
     .card-header h1,
     .card-header p,
     .scan-instruction span,
     .preview-item span,
-    .qr-footer p,
-    .qr-footer small {
+    .hotel-name,
+    .address {
         color: #1a1a1a !important;
     }
     
-    .bg-pattern {
-        display: none;
+    .qr-outer-frame {
+        box-shadow: none;
     }
 }
 
 /* Responsive */
 @media (max-width: 480px) {
+    .qr-page {
+        padding: 30px 15px;
+    }
+    
     .qr-card {
-        padding: 30px 20px;
+        padding: 35px 25px;
+        border-radius: 24px;
     }
     
     .card-header h1 {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
     }
     
     .qr-code {
-        width: 180px;
-        height: 180px;
+        width: 170px;
+        height: 170px;
+    }
+    
+    .qr-outer-frame {
+        padding: 3px;
+    }
+    
+    .qr-frame {
+        padding: 20px;
     }
     
     .amenities-preview {
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
     
     .action-buttons {
         flex-direction: column;
+    }
+    
+    .contact-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hotel-tagline {
+        font-size: 0.85rem;
+        letter-spacing: 3px;
     }
 }
 </style>
