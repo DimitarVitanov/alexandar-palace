@@ -74,6 +74,41 @@ class RestaurantController extends Controller
         ]);
     }
 
+    /**
+     * Standalone "Menu of the Day" presentation page (/restaurant-menu).
+     * Not linked anywhere yet — used to present the layout for approval.
+     */
+    public function menuOfTheDay()
+    {
+        $settings = Setting::all()->keyBy('key');
+        $siteName = $this->getSettingValue($settings, 'site_name', config('app.name'));
+        $locale = app()->getLocale();
+
+        $sections = MenuCategory::with('activeItems')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn (MenuCategory $category) => [
+                'title' => $category->getLocalizedName($locale),
+                'subtitle' => $this->getTranslatedValue($category->banner_subtitle, $locale),
+                'items' => $category->activeItems->map(fn ($item) => [
+                    'name' => $item->getLocalizedName($locale),
+                    'description' => $item->getLocalizedDescription($locale),
+                    'price' => $item->price,
+                ])->values(),
+            ])
+            ->filter(fn ($section) => $section['items']->isNotEmpty())
+            ->values();
+
+        return Inertia::render('MenuOfTheDay', [
+            'sections' => $sections,
+            'phone' => $this->getSettingValue($settings, 'contact_phone', ''),
+            'seo' => [
+                'title' => 'Menu of the Day | ' . $siteName,
+            ],
+        ]);
+    }
+
     private function getSettingValue($settings, string $key, $default = '')
     {
         $setting = $settings->get($key);

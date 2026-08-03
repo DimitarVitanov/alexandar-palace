@@ -1,6 +1,6 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import AdminLayout from '../Layout.vue';
 
 const props = defineProps({
@@ -9,6 +9,7 @@ const props = defineProps({
 
 const form = useForm({
     room_id: '',
+    rooms_count: 1,
     name: '',
     email: '',
     phone: '',
@@ -39,9 +40,40 @@ const nights = computed(() => {
 const calculateTotal = () => {
     if (selectedRoom.value && nights.value > 0) {
         const price = selectedRoom.value.discounted_price || selectedRoom.value.price_per_night;
-        form.total_price = (price * nights.value).toFixed(2);
+        form.total_price = (price * nights.value * Math.max(1, Number(form.rooms_count) || 1)).toFixed(2);
     }
 };
+
+const availability = ref({ checked: false, checking: false, available: false, availableRooms: 0, message: '' });
+
+const checkAvailability = async () => {
+    if (!form.room_id || !form.check_in || !form.check_out || nights.value < 1) {
+        availability.value = { checked: false, checking: false, available: false, availableRooms: 0, message: '' };
+        return;
+    }
+
+    availability.value.checking = true;
+
+    try {
+        const rooms = Math.max(1, Number(form.rooms_count) || 1);
+        const response = await fetch(`/api/rooms/${form.room_id}/availability?check_in=${form.check_in}&check_out=${form.check_out}&rooms_count=${rooms}`);
+        const data = await response.json();
+
+        availability.value = {
+            checked: true,
+            checking: false,
+            available: !!data.available,
+            availableRooms: data.available_rooms ?? 0,
+            message: data.message || '',
+        };
+    } catch (error) {
+        availability.value = { checked: true, checking: false, available: false, availableRooms: 0, message: 'Could not check availability.' };
+    }
+};
+
+watch([() => form.room_id, () => form.check_in, () => form.check_out, () => form.rooms_count], checkAvailability);
+
+const blockedByAvailability = computed(() => availability.value.checked && !availability.value.available);
 
 const submit = () => {
     form.post('/admin/bookings');
@@ -85,9 +117,29 @@ const getRoomName = (room) => {
                         <input v-model="form.check_out" @change="calculateTotal" type="date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500" required>
                         <p v-if="form.errors.check_out" class="text-red-500 text-sm mt-1">{{ form.errors.check_out }}</p>
                     </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Number of rooms *</label>
+                        <input v-model.number="form.rooms_count" @change="calculateTotal" type="number" min="1" max="100" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500" required>
+                        <p v-if="form.errors.rooms_count" class="text-red-500 text-sm mt-1">{{ form.errors.rooms_count }}</p>
+                    </div>
                 </div>
                 <div v-if="nights > 0" class="mt-4 p-3 bg-amber-50 rounded-lg">
                     <span class="text-amber-700 font-medium">{{ nights }} night(s)</span>
+                </div>
+
+                <div v-if="availability.checking" class="mt-4 flex items-center gap-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-sm text-slate-600">
+                    <i class="bi bi-hourglass-split"></i> Checking availability...
+                </div>
+                <div v-else-if="availability.checked && availability.available" class="mt-4 flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-sm text-green-700">
+                    <i class="bi bi-check-circle"></i>
+                    {{ availability.availableRooms }} room(s) of this type available for these dates.
+                </div>
+                <div v-else-if="availability.checked" class="mt-4 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+                    <i class="bi bi-x-circle"></i>
+                    <span v-if="availability.availableRooms > 0">
+                        Only {{ availability.availableRooms }} room(s) available for these dates — you requested {{ form.rooms_count }}.
+                    </span>
+                    <span v-else>No rooms of this type are available for these dates.</span>
                 </div>
             </div>
 
@@ -178,7 +230,7 @@ const getRoomName = (room) => {
                 <Link href="/admin/bookings" class="px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
                     Cancel
                 </Link>
-                <button type="submit" :disabled="form.processing" class="px-6 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50">
+                <button type="submit" :disabled="form.processing || availability.checking || blockedByAvailability" class="px-6 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <i class="bi bi-check-lg mr-2"></i> Create Booking
                 </button>
             </div>

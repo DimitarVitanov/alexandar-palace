@@ -38,6 +38,7 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{room:slug}', [RoomController::class, 'show'])->name('rooms.show');
 Route::get('/restaurant', [RestaurantController::class, 'index'])->name('restaurant');
+Route::get('/restaurant-menu', [RestaurantController::class, 'menuOfTheDay'])->name('restaurant.menu');
 Route::get('/tennis-restaurant', [TennisRestaurantController::class, 'index'])->name('tennis-restaurant');
 Route::get('/congress-center', [CongressController::class, 'index'])->name('congress');
 Route::post('/congress/contact', [CongressController::class, 'submitContact'])->name('congress.contact');
@@ -54,6 +55,7 @@ Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.st
 Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/api/rooms/{room:id}/availability', [BookingController::class, 'checkAvailability'])->name('rooms.availability');
+Route::get('/api/rooms/{room:id}/availability-calendar', [BookingController::class, 'availabilityCalendar'])->name('rooms.availability.calendar');
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/unsubscribe/{email}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');

@@ -275,11 +275,8 @@ const getRoomName = (room) => {
                             </td>
                             <td class="px-4 py-3 text-sm">
                                 <div class="text-slate-600">{{ getRoomName(item.room) }}</div>
-                                <div v-if="item.room_unit" class="text-xs text-amber-600 font-medium mt-0.5">
-                                    <i class="bi bi-door-open me-1"></i>{{ item.room_unit.unit_code }}
-                                </div>
-                                <div v-else-if="item.status === 'confirmed'" class="text-xs text-slate-400 mt-0.5">
-                                    No unit assigned
+                                <div class="text-xs text-amber-600 font-medium mt-0.5">
+                                    <i class="bi bi-door-open me-1"></i>{{ item.rooms_count || 1 }} room(s)
                                 </div>
                             </td>
                             <td class="px-4 py-3">

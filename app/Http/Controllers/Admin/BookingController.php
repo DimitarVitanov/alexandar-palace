@@ -78,6 +78,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'room_id' => 'required|exists:rooms,id',
+            'rooms_count' => 'required|integer|min:1|max:100',
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:50',
@@ -93,6 +94,17 @@ class BookingController extends Controller
             'payment_status' => 'nullable|string',
             'payment_method' => 'nullable|string',
         ]);
+
+        $room = Room::with('inventories')->findOrFail($validated['room_id']);
+        $availableRooms = $room->getAvailableUnits($validated['check_in'], $validated['check_out']);
+
+        if ($availableRooms < $validated['rooms_count']) {
+            return back()->withInput()->withErrors([
+                'rooms_count' => $availableRooms > 0
+                    ? 'Only ' . $availableRooms . ' room(s) of this type are available for these dates.'
+                    : 'No rooms of this type are available for these dates.',
+            ]);
+        }
 
         $booking = Booking::create($validated);
 
@@ -112,6 +124,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'room_id' => 'sometimes|exists:rooms,id',
+            'rooms_count' => 'sometimes|integer|min:1|max:100',
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|max:255',
             'phone' => 'nullable|string|max:50',
@@ -135,17 +148,6 @@ class BookingController extends Controller
 
     public function confirm(Booking $booking)
     {
-        // Auto-assign the best available room unit if not already assigned
-        if (!$booking->room_unit_id && $booking->room) {
-            $booking->room->load(['units.availabilities']);
-            $bestUnit = $booking->room->getBestAvailableUnit($booking->check_in, $booking->check_out);
-            
-            if ($bestUnit) {
-                $booking->room_unit_id = $bestUnit->id;
-                $booking->save();
-            }
-        }
-        
         $booking->confirm();
         
         // Load relationships for email
@@ -199,6 +201,7 @@ class BookingController extends Controller
                     'id' => $booking->id,
                     'name' => $booking->name,
                     'room_id' => $booking->room_id,
+                    'rooms_count' => $booking->rooms_count,
                     'room' => $booking->room,
                     'room_unit' => $booking->roomUnit,
                     'check_in' => $booking->check_in->format('Y-m-d'),

@@ -34,6 +34,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', AdminMiddleware::cla
     Route::resource('pages', PageController::class)->except(['show']);
     Route::resource('rooms', RoomController::class);
     
+    // Room Availability (quantity based inventory)
+    Route::get('room-availability', [App\Http\Controllers\Admin\RoomInventoryController::class, 'index'])->name('room-availability.index');
+    Route::post('rooms/{room:id}/availability', [App\Http\Controllers\Admin\RoomInventoryController::class, 'store'])->name('room-availability.store');
+    Route::put('room-availability/{inventory}', [App\Http\Controllers\Admin\RoomInventoryController::class, 'update'])->name('room-availability.update');
+    Route::delete('room-availability/{inventory}', [App\Http\Controllers\Admin\RoomInventoryController::class, 'destroy'])->name('room-availability.destroy');
+
     // Room Units Management
     Route::get('room-units', [App\Http\Controllers\Admin\RoomUnitController::class, 'index'])->name('room-units.index');
     Route::get('rooms/{room:id}/units/create', [App\Http\Controllers\Admin\RoomUnitController::class, 'create'])->name('room-units.create');

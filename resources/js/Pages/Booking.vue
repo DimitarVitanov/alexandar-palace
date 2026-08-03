@@ -50,6 +50,8 @@ const t = computed(() => locale.value === 'mk' ? {
     exploreRooms: 'Разгледајте соби и апартмани',
     checkingAvailability: 'Проверка на достапност...',
     notAvailable: 'Избраната соба не е достапна за овие датуми. Ве молиме изберете други датуми или друга соба.',
+    roomsCount: 'Број на соби',
+    totalRooms: 'Соби',
 } : {
     hotelName: 'Alexandar Palace Hotel',
     requestReservation: 'Request a Reservation',
@@ -84,10 +86,13 @@ const t = computed(() => locale.value === 'mk' ? {
     exploreRooms: 'Explore Rooms & Suites',
     checkingAvailability: 'Checking availability...',
     notAvailable: 'The selected room is not available for these dates. Please choose different dates or another room.',
+    roomsCount: 'Number of rooms',
+    totalRooms: 'Rooms',
 });
 
 const form = useForm({
     room_id: props.selectedRoomId || '',
+    rooms_count: 1,
     name: '',
     last_name: '',
     email: '',
@@ -101,7 +106,7 @@ const form = useForm({
 
 const selectedRoom = computed(() => props.rooms.find((room) => room.id === Number(form.room_id)));
 
-const maxGuests = computed(() => selectedRoom.value?.max_guests || 10);
+const maxGuests = computed(() => (selectedRoom.value?.max_guests || 10) * Math.max(1, form.rooms_count || 1));
 
 const totalGuests = computed(() => (form.adults || 0) + (form.children || 0));
 
@@ -122,7 +127,7 @@ const checkAvailability = async () => {
     const minDisplayTime = 1000; // Show checking state for at least 1 second
     
     try {
-        const response = await fetch(`/api/rooms/${form.room_id}/availability?check_in=${form.check_in}&check_out=${form.check_out}`);
+        const response = await fetch(`/api/rooms/${form.room_id}/availability?check_in=${form.check_in}&check_out=${form.check_out}&rooms_count=${form.rooms_count || 1}`);
         const data = await response.json();
         
         // Ensure minimum display time
@@ -142,7 +147,7 @@ const checkAvailability = async () => {
 };
 
 // Watch for changes in room or dates
-watch([() => form.room_id, () => form.check_in, () => form.check_out], () => {
+watch([() => form.room_id, () => form.check_in, () => form.check_out, () => form.rooms_count], () => {
     checkAvailability();
 }, { immediate: true });
 
@@ -160,7 +165,9 @@ const nights = computed(() => {
 
 const totalPrice = computed(() => {
     if (!selectedRoom.value || !nights.value) return 0;
-    return Number(selectedRoom.value.discounted_price || selectedRoom.value.price_per_night) * nights.value;
+    return Number(selectedRoom.value.discounted_price || selectedRoom.value.price_per_night)
+        * nights.value
+        * Math.max(1, form.rooms_count || 1);
 });
 
 const formatPrice = (price) => Number(price).toFixed(2);
@@ -215,6 +222,7 @@ const submit = () => {
                             <p>{{ t.fromPerNight }} €{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }} {{ t.perNight }}</p>
                         </div>
                         <div v-if="selectedRoom && nights > 0" class="price-breakdown">
+                            <div><span>{{ t.totalRooms }}</span><strong>{{ form.rooms_count }}</strong></div>
                             <div><span>{{ t.nights }}</span><strong>{{ nights }}</strong></div>
                             <div><span>{{ t.ratePerNight }}</span><strong>€{{ formatPrice(selectedRoom.discounted_price || selectedRoom.price_per_night) }}</strong></div>
                             <div class="total"><span>{{ t.estimatedTotal }}</span><strong>€{{ formatPrice(totalPrice) }}</strong></div>
@@ -248,6 +256,11 @@ const submit = () => {
                                 <label for="check_out" class="form-label">{{ t.checkOut }}</label>
                                 <input id="check_out" v-model="form.check_out" type="date" class="form-control" :min="form.check_in || new Date().toISOString().split('T')[0]" required>
                                 <div v-if="form.errors.check_out" class="field-error">{{ form.errors.check_out }}</div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="rooms_count" class="form-label">{{ t.roomsCount }}</label>
+                                <input id="rooms_count" v-model.number="form.rooms_count" type="number" min="1" max="100" class="form-control" required>
+                                <div v-if="form.errors.rooms_count" class="field-error">{{ form.errors.rooms_count }}</div>
                             </div>
                             <!-- Availability Warning -->
                             <div v-if="roomNotAvailable" class="col-12 mb-4">

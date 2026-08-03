@@ -15,6 +15,7 @@ class Booking extends Model
         'booking_reference',
         'room_id',
         'room_unit_id',
+        'rooms_count',
         'name',
         'last_name',
         'locale',
@@ -39,6 +40,7 @@ class Booking extends Model
     protected $casts = [
         'check_in' => 'date',
         'check_out' => 'date',
+        'rooms_count' => 'integer',
         'total_price' => 'decimal:2',
         'deposit_amount' => 'decimal:2',
         'confirmed_at' => 'datetime',

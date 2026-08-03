@@ -32,9 +32,8 @@ const getRoomName = (room) => {
             <p><strong>Name:</strong> {{ booking.name }} {{ booking.last_name }}</p>
             <p><strong>Email:</strong> {{ booking.email }}</p>
             <p><strong>Phone:</strong> {{ booking.phone }}</p>
-            <p><strong>Room:</strong> {{ getRoomName(booking.room) }}</p>
-            <p v-if="booking.room_unit"><strong>Room Number:</strong> <span class="text-amber-600 font-semibold">{{ booking.room_unit.unit_code }}</span></p>
-            <p v-else-if="booking.status === 'pending'" class="text-slate-400 text-sm italic">Room unit will be assigned when booking is confirmed</p>
+            <p><strong>Room type:</strong> {{ getRoomName(booking.room) }}</p>
+            <p><strong>Rooms booked:</strong> <span class="text-amber-600 font-semibold">{{ booking.rooms_count || 1 }}</span></p>
             <p><strong>Check In:</strong> {{ formatDate(booking.check_in) }}</p>
             <p><strong>Check Out:</strong> {{ formatDate(booking.check_out) }}</p>
             <p><strong>Adults:</strong> {{ booking.adults }}</p>
