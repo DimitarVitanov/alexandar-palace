@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import { useLocale } from '@/composables/useLocale';
 
 const page = usePage();
 
@@ -11,7 +12,7 @@ const props = defineProps({
     }
 });
 
-const locale = computed(() => page.props.locale || 'en');
+const { locale, ml } = useLocale();
 
 const selectedRoom = ref('');
 const adults = ref(1);
@@ -130,12 +131,12 @@ const bookNow = () => {
     
     // Validate required fields
     if (!selectedRoom.value) {
-        bookingError.value = locale.value === 'mk' ? 'Ве молиме изберете соба' : 'Please select a room';
+        bookingError.value = ml({ en: 'Please select a room', mk: 'Ве молиме изберете соба', sr: 'Molimo izaberite sobu', tr: 'Lütfen bir oda seçin', sq: 'Ju lutemi zgjidhni një dhomë' });
         console.log('Error: no room selected');
         return;
     }
     if (!checkIn.value || !checkOut.value) {
-        bookingError.value = locale.value === 'mk' ? 'Ве молиме изберете датуми' : 'Please select check-in and check-out dates';
+        bookingError.value = ml({ en: 'Please select check-in and check-out dates', mk: 'Ве молиме изберете датуми', sr: 'Molimo izaberite datume dolaska i odlaska', tr: 'Lütfen giriş ve çıkış tarihlerini seçin', sq: 'Ju lutemi zgjidhni datat e ardhjes dhe të nisjes' });
         console.log('Error: no dates selected');
         return;
     }
@@ -161,7 +162,7 @@ onMounted(() => {
                 const picker = new window.easepick.create({
                     element: element,
                     css: ['/assets/paradise/css/daterangepicker_v2.css'],
-                    lang: locale.value === 'mk' ? 'mk-MK' : 'en-EN',
+                    lang: ml({ en: 'en-EN', mk: 'mk-MK', sr: 'sr-RS', tr: 'tr-TR', sq: 'sq-AL' }),
                     format: 'DD/MM/YYYY',
                     calendars: 2,
                     grid: 2,
@@ -173,8 +174,8 @@ onMounted(() => {
                             return num - 1;
                         },
                         locale: {
-                            one: locale.value === 'mk' ? 'ноќ' : 'night',
-                            other: locale.value === 'mk' ? 'ноќи' : 'nights',
+                            one: ml({ en: 'night', mk: 'ноќ', sr: 'noć', tr: 'gece', sq: 'natë' }),
+                            other: ml({ en: 'nights', mk: 'ноќи', sr: 'noći', tr: 'gece', sq: 'net' }),
                         },
                     },
                     LockPlugin: {
@@ -214,17 +215,20 @@ onMounted(() => {
                     <div data-cue="slideInUp">
                         <div class="title">
                             <small>Alexandar Palace</small>
-                            <h2>{{ locale === 'mk' ? 'Проверете Достапност' : 'Check Availability' }}</h2>
+                            <h2>{{ ml({ en: 'Check Availability', mk: 'Проверете Достапност', sr: 'Proverite Dostupnost', tr: 'Müsaitliği Kontrol Edin', sq: 'Kontrolloni Disponueshmërinë' }) }}</h2>
                         </div>
-                        <p>{{ locale === 'mk' 
-                            ? 'Резервирајте го вашиот престој во Хотел Александар Палас. Уживајте во луксузно сместување во срцето на Скопје.' 
-                            : 'Book your stay at Alexandar Palace Hotel. Enjoy luxurious accommodation in the heart of Skopje.' 
-                        }}</p>
+                        <p>{{ ml({
+                            en: 'Book your stay at Alexandar Palace Hotel. Enjoy luxurious accommodation in the heart of Skopje.',
+                            mk: 'Резервирајте го вашиот престој во Хотел Александар Палас. Уживајте во луксузно сместување во срцето на Скопје.',
+                            sr: 'Rezervišite svoj boravak u Hotelu Alexandar Palace. Uživajte u luksuznom smeštaju u srcu Skoplja.',
+                            tr: 'Alexandar Palace Otel\'de konaklamanızı rezerve edin. Üsküp\'ün kalbinde lüks bir konaklamanın tadını çıkarın.',
+                            sq: 'Rezervoni qëndrimin tuaj në Hotel Alexandar Palace. Shijoni akomodim luksoz në zemër të Shkupit.',
+                        }) }}</p>
                         <p class="phone_element no_borders">
                             <a href="tel:+38923092392">
                                 <i class="bi bi-telephone"></i>
                                 <span>
-                                    <em>{{ locale === 'mk' ? 'Информации и резервации' : 'Info and Bookings' }}</em>
+                                    <em>{{ ml({ en: 'Info and Bookings', mk: 'Информации и резервации', sr: 'Informacije i rezervacije', tr: 'Bilgi ve Rezervasyon', sq: 'Informacione dhe Rezervime' }) }}</em>
                                     +389 2 3092 392
                                 </span>
                             </a>
@@ -239,14 +243,14 @@ onMounted(() => {
                             </div>
                             <div class="row">
                                 <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-                                    <label class="qty-label">{{ locale === 'mk' ? 'Соба' : 'Room' }}</label>
+                                    <label class="qty-label">{{ ml({ en: 'Room', mk: 'Соба', sr: 'Soba', tr: 'Oda', sq: 'Dhoma' }) }}</label>
                                     <div class="custom_select">
                                         <select ref="roomSelect" v-model="selectedRoom" class="wide" @change="onRoomChange">
                                             <option value="">{{ loadingRooms 
-                                                ? (locale === 'mk' ? 'Вчитување...' : 'Loading...') 
+                                                ? ml({ en: 'Loading...', mk: 'Вчитување...', sr: 'Učitavanje...', tr: 'Yükleniyor...', sq: 'Duke u ngarkuar...' }) 
                                                 : (availableRooms.length === 0 && checkIn && checkOut
-                                                    ? (locale === 'mk' ? 'Нема достапни соби' : 'No rooms available')
-                                                    : (locale === 'mk' ? 'Изберете Соба' : 'Select Room')) 
+                                                    ? ml({ en: 'No rooms available', mk: 'Нема достапни соби', sr: 'Nema dostupnih soba', tr: 'Uygun oda yok', sq: 'Nuk ka dhoma të disponueshme' })
+                                                    : ml({ en: 'Select Room', mk: 'Изберете Соба', sr: 'Izaberite Sobu', tr: 'Oda Seçin', sq: 'Zgjidhni Dhomën' })) 
                                             }}</option>
                                             <option v-for="room in availableRooms" :key="room.slug" :value="room.slug">
                                                 {{ room.name }}
@@ -257,7 +261,7 @@ onMounted(() => {
                                 <div class="col-12 col-lg-8">
                                     <div class="row">
                                         <div class="col-12 col-sm-6 mb-3 mb-sm-0">
-                                            <label class="qty-label">{{ locale === 'mk' ? 'Возрасни' : 'Adults' }}</label>
+                                            <label class="qty-label">{{ ml({ en: 'Adults', mk: 'Возрасни', sr: 'Odrasli', tr: 'Yetişkinler', sq: 'Të rritur' }) }}</label>
                                             <div class="qty-buttons mb-3 version_2">
                                                 <input type="button" value="+" class="qtyplus" @click="incrementAdults">
                                                 <input type="text" :value="adults" class="qty form-control" readonly>
@@ -265,7 +269,7 @@ onMounted(() => {
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
-                                            <label class="qty-label">{{ locale === 'mk' ? 'Деца' : 'Children' }}</label>
+                                            <label class="qty-label">{{ ml({ en: 'Children', mk: 'Деца', sr: 'Deca', tr: 'Çocuklar', sq: 'Fëmijë' }) }}</label>
                                             <div class="qty-buttons mb-3 version_2">
                                                 <input type="button" value="+" class="qtyplus" @click="incrementChildren">
                                                 <input type="text" :value="children" class="qty form-control" readonly>
@@ -279,27 +283,35 @@ onMounted(() => {
                         <!-- No rooms available for dates -->
                         <div v-if="availableRooms.length === 0 && checkIn && checkOut && !loadingRooms" class="alert alert-warning mt-3 text-center">
                             <i class="bi bi-calendar-x me-2"></i>
-                            {{ locale === 'mk' 
-                                ? 'Нема достапни соби за избраните датуми. Ве молиме изберете други датуми.'
-                                : 'No rooms available for selected dates. Please choose different dates.' }}
+                            {{ ml({
+                                en: 'No rooms available for selected dates. Please choose different dates.',
+                                mk: 'Нема достапни соби за избраните датуми. Ве молиме изберете други датуми.',
+                                sr: 'Nema dostupnih soba za izabrane datume. Molimo izaberite druge datume.',
+                                tr: 'Seçilen tarihler için uygun oda yok. Lütfen başka tarihler seçin.',
+                                sq: 'Nuk ka dhoma të disponueshme për datat e zgjedhura. Ju lutemi zgjidhni data të tjera.',
+                            }) }}
                         </div>
                         <!-- Availability Status -->
                         <div v-else-if="roomNotAvailable" class="alert alert-danger mt-3 text-center">
                             <i class="bi bi-x-circle me-2"></i>
-                            {{ locale === 'mk' 
-                                ? 'Избраната соба не е достапна за овие датуми. Ве молиме изберете други датуми или друга соба.'
-                                : 'The selected room is not available for these dates. Please choose different dates or another room.' }}
+                            {{ ml({
+                                en: 'The selected room is not available for these dates. Please choose different dates or another room.',
+                                mk: 'Избраната соба не е достапна за овие датуми. Ве молиме изберете други датуми или друга соба.',
+                                sr: 'Izabrana soba nije dostupna za ove datume. Molimo izaberite druge datume ili drugu sobu.',
+                                tr: 'Seçilen oda bu tarihler için uygun değil. Lütfen başka tarihler veya başka bir oda seçin.',
+                                sq: 'Dhoma e zgjedhur nuk është e disponueshme për këto data. Ju lutemi zgjidhni data të tjera ose një dhomë tjetër.',
+                            }) }}
                         </div>
                         <div v-else-if="isChecking" class="alert alert-info mt-3 text-center">
                             <i class="bi bi-hourglass-split me-2"></i>
-                            {{ locale === 'mk' ? 'Проверка на достапност...' : 'Checking availability...' }}
+                            {{ ml({ en: 'Checking availability...', mk: 'Проверка на достапност...', sr: 'Proverava se dostupnost...', tr: 'Müsaitlik kontrol ediliyor...', sq: 'Duke kontrolluar disponueshmërinë...' }) }}
                         </div>
                         <div v-else-if="bookingError" class="alert alert-warning mt-3 text-center">
                             {{ bookingError }}
                         </div>
                         <p class="text-end mt-4">
                             <button type="button" class="btn_1 outline" @click="bookNow" :disabled="roomNotAvailable || isChecking || loadingRooms || (availableRooms.length === 0 && checkIn && checkOut)" :class="{ 'disabled': roomNotAvailable || isChecking || loadingRooms || (availableRooms.length === 0 && checkIn && checkOut) }">
-                                {{ loadingRooms ? (locale === 'mk' ? 'Вчитување...' : 'Loading...') : (locale === 'mk' ? 'Резервирај' : 'Book Now') }}
+                                {{ loadingRooms ? ml({ en: 'Loading...', mk: 'Вчитување...', sr: 'Učitavanje...', tr: 'Yükleniyor...', sq: 'Duke u ngarkuar...' }) : ml({ en: 'Book Now', mk: 'Резервирај', sr: 'Rezerviši', tr: 'Şimdi Rezervasyon Yap', sq: 'Rezervo Tani' }) }}
                             </button>
                         </p>
                     </div>

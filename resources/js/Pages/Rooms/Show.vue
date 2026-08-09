@@ -3,9 +3,11 @@ import { ref, onMounted, nextTick } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const { t } = useI18n();
 const page = usePage();
+const { ml } = useLocale();
 
 onMounted(() => {
     // Wait for DOM to be fully ready then initialize carousel
@@ -52,26 +54,26 @@ const bookingHref = () => {
 };
 
 const amenityIcons = {
-    'wifi': { icon: 'icon-hotel-wifi', label: { en: 'Wi-Fi Internet', mk: 'Wi-Fi Интернет' } },
-    'lan': { icon: 'icon-hotel-wifi', label: { en: 'LAN Connection', mk: 'LAN Конекција' } },
-    'parking': { icon: 'icon-hotel-parking', label: { en: 'Free Parking', mk: 'Бесплатен Паркинг' } },
-    'smart-tv': { icon: 'icon-hotel-tv', label: { en: 'Smart TV', mk: 'Smart TV' } },
-    'mini-bar': { icon: 'icon-hotel-bottle', label: { en: 'Mini Bar', mk: 'Мини Бар' } },
-    'telephone': { icon: 'icon-hotel-reception', label: { en: 'Telephone', mk: 'Телефон' } },
-    'spa': { icon: 'icon-spa-candles', label: { en: 'Spa Access', mk: 'Пристап до Спа' } },
-    'pool': { icon: 'icon-hotel-swimming_pool', label: { en: 'Swimming Pool', mk: 'Базен' } },
-    'laundry': { icon: 'icon-hotel-loundry', label: { en: 'Laundry Service', mk: 'Перење' } },
-    'fitness': { icon: 'icon-hotel-gym', label: { en: 'Fitness Center', mk: 'Фитнес Центар' } },
-    'turkish-bath': { icon: 'icon-hotel-bath', label: { en: 'Turkish Bath', mk: 'Турско Бањо' } },
-    'swedish-sauna': { icon: 'icon-hotel-bath', label: { en: 'Swedish Sauna', mk: 'Шведска Сауна' } },
-    'infrared-sauna': { icon: 'icon-hotel-bath', label: { en: 'Infrared Sauna', mk: 'Инфрацрвена Сауна' } },
-    'steam-room': { icon: 'icon-hotel-shower', label: { en: 'Steam Room', mk: 'Парна Соба' } },
-    'massage': { icon: 'icon-spa-cartified_massagist', label: { en: 'Massage Services', mk: 'Масажа' } },
-    'dry-cleaning': { icon: 'icon-hotel-loundry', label: { en: 'Dry Cleaning', mk: 'Хемиско Чистење' } },
-    'jacuzzi': { icon: 'icon-hotel-bath', label: { en: 'Jacuzzi', mk: 'Џакузи' } },
-    'vip-service': { icon: 'icon-hotel-room_service', label: { en: 'VIP Service', mk: 'ВИП Услуга' } },
-    'airport-transfer': { icon: 'icon-hotel-car', label: { en: 'Airport Transfer', mk: 'Аеродромски Трансфер' } },
-    'private-dining': { icon: 'icon-hotel-restaurant', label: { en: 'Private Dining', mk: 'Приватна Трпезарија' } },
+    'wifi': { icon: 'icon-hotel-wifi', label: { en: 'Wi-Fi Internet', mk: 'Wi-Fi Интернет', sr: 'Wi-Fi Internet', tr: 'Wi-Fi İnternet', sq: 'Internet Wi-Fi' } },
+    'lan': { icon: 'icon-hotel-wifi', label: { en: 'LAN Connection', mk: 'LAN Конекција', sr: 'LAN Konekcija', tr: 'LAN Bağlantısı', sq: 'Lidhje LAN' } },
+    'parking': { icon: 'icon-hotel-parking', label: { en: 'Free Parking', mk: 'Бесплатен Паркинг', sr: 'Besplatan Parking', tr: 'Ücretsiz Otopark', sq: 'Parking Falas' } },
+    'smart-tv': { icon: 'icon-hotel-tv', label: { en: 'Smart TV', mk: 'Smart TV', sr: 'Smart TV', tr: 'Akıllı TV', sq: 'TV Smart' } },
+    'mini-bar': { icon: 'icon-hotel-bottle', label: { en: 'Mini Bar', mk: 'Мини Бар', sr: 'Mini Bar', tr: 'Mini Bar', sq: 'Mini Bar' } },
+    'telephone': { icon: 'icon-hotel-reception', label: { en: 'Telephone', mk: 'Телефон', sr: 'Telefon', tr: 'Telefon', sq: 'Telefon' } },
+    'spa': { icon: 'icon-spa-candles', label: { en: 'Spa Access', mk: 'Пристап до Спа', sr: 'Pristup Spa Centru', tr: 'Spa Erişimi', sq: 'Qasje në Spa' } },
+    'pool': { icon: 'icon-hotel-swimming_pool', label: { en: 'Swimming Pool', mk: 'Базен', sr: 'Bazen', tr: 'Yüzme Havuzu', sq: 'Pishinë' } },
+    'laundry': { icon: 'icon-hotel-loundry', label: { en: 'Laundry Service', mk: 'Перење', sr: 'Usluga Pranja Veša', tr: 'Çamaşır Hizmeti', sq: 'Shërbim Larje Rrobash' } },
+    'fitness': { icon: 'icon-hotel-gym', label: { en: 'Fitness Center', mk: 'Фитнес Центар', sr: 'Fitnes Centar', tr: 'Fitness Merkezi', sq: 'Qendër Fitnesi' } },
+    'turkish-bath': { icon: 'icon-hotel-bath', label: { en: 'Turkish Bath', mk: 'Турско Бањо', sr: 'Tursko Kupatilo', tr: 'Türk Hamamı', sq: 'Banjë Turke' } },
+    'swedish-sauna': { icon: 'icon-hotel-bath', label: { en: 'Swedish Sauna', mk: 'Шведска Сауна', sr: 'Švedska Sauna', tr: 'İsveç Saunası', sq: 'Saunë Suedeze' } },
+    'infrared-sauna': { icon: 'icon-hotel-bath', label: { en: 'Infrared Sauna', mk: 'Инфрацрвена Сауна', sr: 'Infracrvena Sauna', tr: 'Kızılötesi Sauna', sq: 'Saunë Infra të Kuqe' } },
+    'steam-room': { icon: 'icon-hotel-shower', label: { en: 'Steam Room', mk: 'Парна Соба', sr: 'Parno Kupatilo', tr: 'Buhar Odası', sq: 'Dhomë Avulli' } },
+    'massage': { icon: 'icon-spa-cartified_massagist', label: { en: 'Massage Services', mk: 'Масажа', sr: 'Usluge Masaže', tr: 'Masaj Hizmetleri', sq: 'Shërbime Masazhi' } },
+    'dry-cleaning': { icon: 'icon-hotel-loundry', label: { en: 'Dry Cleaning', mk: 'Хемиско Чистење', sr: 'Hemijsko Čišćenje', tr: 'Kuru Temizleme', sq: 'Pastrim Kimik' } },
+    'jacuzzi': { icon: 'icon-hotel-bath', label: { en: 'Jacuzzi', mk: 'Џакузи', sr: 'Džakuzi', tr: 'Jakuzi', sq: 'Jakuzi' } },
+    'vip-service': { icon: 'icon-hotel-room_service', label: { en: 'VIP Service', mk: 'ВИП Услуга', sr: 'VIP Usluga', tr: 'VIP Hizmet', sq: 'Shërbim VIP' } },
+    'airport-transfer': { icon: 'icon-hotel-car', label: { en: 'Airport Transfer', mk: 'Аеродромски Трансфер', sr: 'Transfer sa Aerodroma', tr: 'Havalimanı Transferi', sq: 'Transferi nga Aeroporti' } },
+    'private-dining': { icon: 'icon-hotel-restaurant', label: { en: 'Private Dining', mk: 'Приватна Трпезарија', sr: 'Privatna Trpezarija', tr: 'Özel Yemek', sq: 'Darkim Privat' } },
 };
 
 const getAmenityIcon = (amenity) => amenityIcons[amenity]?.icon || 'bi bi-check-circle';
@@ -128,7 +130,7 @@ onMounted(() => {
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
-                            <small class="slide-animated one">{{ room.bed_type || 'Luxury' }} {{ room.view_type ? '• ' + room.view_type : '' }}</small>
+                            <small class="slide-animated one">{{ room.bed_type || ml({ en: 'Luxury', mk: 'Луксузно', sr: 'Luksuzno', tr: 'Lüks', sq: 'Luksoze' }) }} {{ room.view_type ? '• ' + room.view_type : '' }}</small>
                             <h1 class="slide-animated two">{{ room.name }}</h1>
                             <p class="slide-animated three">{{ room.short_description }}</p>
                         </div>
@@ -154,18 +156,18 @@ onMounted(() => {
                         <div v-html="room.description"></div>
                         <div class="room_info_box mt-4">
                             <ul>
-                                <li><strong>{{ $page.props.locale === 'mk' ? 'Цена' : 'Price' }}:</strong> €{{ room.price_per_night }} / {{ $page.props.locale === 'mk' ? 'ноќ' : 'night' }}</li>
-                                <li><strong>{{ $page.props.locale === 'mk' ? 'Гости' : 'Guests' }}:</strong> {{ room.max_guests }}</li>
-                                <li><strong>{{ $page.props.locale === 'mk' ? 'Спални' : 'Bedrooms' }}:</strong> {{ room.bedrooms }}</li>
-                                <li><strong>{{ $page.props.locale === 'mk' ? 'Бањи' : 'Bathrooms' }}:</strong> {{ room.bathrooms }}</li>
-                                <li v-if="room.square_meters"><strong>{{ $page.props.locale === 'mk' ? 'Површина' : 'Size' }}:</strong> {{ room.square_meters }} m²</li>
-                                <li v-if="room.bed_type"><strong>{{ $page.props.locale === 'mk' ? 'Кревет' : 'Bed' }}:</strong> {{ room.bed_type }}</li>
+                                <li><strong>{{ ml({ en: 'Price', mk: 'Цена', sr: 'Cena', tr: 'Fiyat', sq: 'Çmimi' }) }}:</strong> €{{ room.price_per_night }} / {{ ml({ en: 'night', mk: 'ноќ', sr: 'noć', tr: 'gece', sq: 'natë' }) }}</li>
+                                <li><strong>{{ ml({ en: 'Guests', mk: 'Гости', sr: 'Gosti', tr: 'Misafirler', sq: 'Mysafirë' }) }}:</strong> {{ room.max_guests }}</li>
+                                <li><strong>{{ ml({ en: 'Bedrooms', mk: 'Спални', sr: 'Spavaće Sobe', tr: 'Yatak Odası', sq: 'Dhoma Gjumi' }) }}:</strong> {{ room.bedrooms }}</li>
+                                <li><strong>{{ ml({ en: 'Bathrooms', mk: 'Бањи', sr: 'Kupatila', tr: 'Banyo', sq: 'Banjo' }) }}:</strong> {{ room.bathrooms }}</li>
+                                <li v-if="room.square_meters"><strong>{{ ml({ en: 'Size', mk: 'Површина', sr: 'Veličina', tr: 'Boyut', sq: 'Madhësia' }) }}:</strong> {{ room.square_meters }} m²</li>
+                                <li v-if="room.bed_type"><strong>{{ ml({ en: 'Bed', mk: 'Кревет', sr: 'Krevet', tr: 'Yatak', sq: 'Shtrat' }) }}:</strong> {{ room.bed_type }}</li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="room_facilities_list">
-                            <h5 class="mb-3">{{ $page.props.locale === 'mk' ? 'Удобности' : 'Amenities' }}</h5>
+                            <h5 class="mb-3">{{ ml({ en: 'Amenities', mk: 'Удобности', sr: 'Sadržaji', tr: 'Olanaklar', sq: 'Pajisje' }) }}</h5>
                             <ul data-cues="slideInLeft">
                                 <li v-for="amenity in room.amenities" :key="amenity">
                                     <i :class="getAmenityIcon(amenity)"></i> {{ getAmenityLabel(amenity, $page.props.locale) }}
@@ -189,7 +191,7 @@ onMounted(() => {
                 </div>
                 <div class="text-center mt-5">
                     <a class="btn_1 outline" href="#" @click.prevent="openLightbox(0)">
-                        {{ $page.props.locale === 'mk' ? 'Целосна Галерија' : 'FullScreen Gallery' }}
+                        {{ ml({ en: 'FullScreen Gallery', mk: 'Целосна Галерија', sr: 'Puni Ekran Galerije', tr: 'Tam Ekran Galeri', sq: 'Galeri Ekran i Plotë' }) }}
                     </a>
                 </div>
             </div>
@@ -203,11 +205,11 @@ onMounted(() => {
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="title white">
-                                <small>{{ $page.props.locale === 'mk' ? 'Резервирајте Сега' : 'Book Now' }}</small>
+                                <small>{{ ml({ en: 'Book Now', mk: 'Резервирајте Сега', sr: 'Rezerviši Sada', tr: 'Hemen Rezervasyon Yap', sq: 'Rezervo Tani' }) }}</small>
                                 <h2>{{ room.name }}</h2>
-                                <p>{{ $page.props.locale === 'mk' ? 'Од' : 'From' }} €{{ room.price_per_night }} / {{ $page.props.locale === 'mk' ? 'ноќ' : 'night' }}</p>
+                                <p>{{ ml({ en: 'From', mk: 'Од', sr: 'Od', tr: 'Başlangıç', sq: 'Nga' }) }} €{{ room.price_per_night }} / {{ ml({ en: 'night', mk: 'ноќ', sr: 'noć', tr: 'gece', sq: 'natë' }) }}</p>
                             </div>
-                            <a :href="bookingHref()" class="btn_1">{{ $page.props.locale === 'mk' ? 'Резервирај' : 'Book This Room' }}</a>
+                            <a :href="bookingHref()" class="btn_1">{{ ml({ en: 'Book This Room', mk: 'Резервирај', sr: 'Rezerviši Ovu Sobu', tr: 'Bu Odayı Rezerve Et', sq: 'Rezervo Këtë Dhomë' }) }}</a>
                         </div>
                     </div>
                 </div>
@@ -217,8 +219,8 @@ onMounted(() => {
         <!-- Related Rooms Section -->
         <div class="container margin_120_95" v-if="relatedRooms && relatedRooms.length > 0">
             <div class="title text-center mb-5">
-                <small data-cue="slideInUp">{{ $page.props.locale === 'mk' ? 'Повеќе Опции' : 'More Options' }}</small>
-                <h2 data-cue="slideInUp" data-delay="100">{{ $page.props.locale === 'mk' ? 'Други Соби и Апартмани' : 'Other Rooms & Suites' }}</h2>
+                <small data-cue="slideInUp">{{ ml({ en: 'More Options', mk: 'Повеќе Опции', sr: 'Više Opcija', tr: 'Diğer Seçenekler', sq: 'Më Shumë Opsione' }) }}</small>
+                <h2 data-cue="slideInUp" data-delay="100">{{ ml({ en: 'Other Rooms & Suites', mk: 'Други Соби и Апартмани', sr: 'Druge Sobe i Apartmani', tr: 'Diğer Oda ve Süitler', sq: 'Dhoma dhe Suita të Tjera' }) }}</h2>
             </div>
             <div class="row">
                 <div v-for="related in relatedRooms.slice(0, 3)" :key="related.id" class="col-lg-4 col-md-6" data-cue="slideInUp">
@@ -226,9 +228,9 @@ onMounted(() => {
                         <figure>
                             <div class="background-image" :style="{ backgroundImage: `url(${asset(related.featured_image)})` }"></div>
                             <div class="info">
-                                <small>{{ $page.props.locale === 'mk' ? 'Од' : 'From' }} €{{ related.price_per_night }}/{{ $page.props.locale === 'mk' ? 'ноќ' : 'night' }}</small>
+                                <small>{{ ml({ en: 'From', mk: 'Од', sr: 'Od', tr: 'Başlangıç', sq: 'Nga' }) }} €{{ related.price_per_night }}/{{ ml({ en: 'night', mk: 'ноќ', sr: 'noć', tr: 'gece', sq: 'natë' }) }}</small>
                                 <h3>{{ related.name }}</h3>
-                                <span>{{ $page.props.locale === 'mk' ? 'Прочитај повеќе' : 'Read more' }}</span>
+                                <span>{{ ml({ en: 'Read more', mk: 'Прочитај повеќе', sr: 'Pročitaj više', tr: 'Devamını oku', sq: 'Lexo më shumë' }) }}</span>
                             </div>
                         </figure>
                     </Link>

@@ -34,6 +34,7 @@ class BookingController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('passport_id', 'like', "%{$search}%")
                   ->orWhere('booking_reference', 'like', "%{$search}%");
             });
         }
@@ -82,6 +83,7 @@ class BookingController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:50',
+            'passport_id' => 'nullable|string|max:100',
             'check_in' => 'required|date|after_or_equal:today',
             'check_out' => 'required|date|after:check_in',
             'adults' => 'required|integer|min:1',
@@ -128,6 +130,7 @@ class BookingController extends Controller
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|max:255',
             'phone' => 'nullable|string|max:50',
+            'passport_id' => 'nullable|string|max:100',
             'check_in' => 'sometimes|date',
             'check_out' => 'sometimes|date|after:check_in',
             'adults' => 'sometimes|integer|min:1',

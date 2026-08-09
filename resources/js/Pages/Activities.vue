@@ -3,9 +3,11 @@ import { ref, computed, nextTick, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useForm, usePage } from '@inertiajs/vue3';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const { t } = useI18n();
 const page = usePage();
+const { locale, ml } = useLocale();
 
 const props = defineProps({
     seo: Object,
@@ -367,10 +369,10 @@ const successMessage = computed(() => page.props.flash?.success);
                                             </select>
                                         </div>
                                         <div class="col-md-6" v-if="courtsForType.length > 1">
-                                            <label class="form-label">{{ t('activities.select_court') || 'Select Court' }} *</label>
+                                            <label class="form-label">{{ ml({ en: 'Select Court', mk: 'Изберете Терен', sr: 'Izaberite Teren', tr: 'Kort Seçin', sq: 'Zgjidhni Fushën' }) }} *</label>
                                             <select v-model="form.court_number" class="form-select" required>
                                                 <option v-for="court in courtsForType" :key="court.id" :value="court.court_number">
-                                                    {{ court.name || `Court #${court.court_number}` }}
+                                                    {{ court.name || ml({ en: `Court #${court.court_number}`, mk: `Терен бр. ${court.court_number}`, sr: `Teren br. ${court.court_number}`, tr: `Kort #${court.court_number}`, sq: `Fusha nr. ${court.court_number}` }) }}
                                                 </option>
                                             </select>
                                         </div>
@@ -389,15 +391,15 @@ const successMessage = computed(() => page.props.flash?.success);
                                         
                                         <!-- Time Slot Selection -->
                                         <div class="col-12" v-if="form.booking_date">
-                                            <label class="form-label">{{ t('activities.select_time') || 'Select Time Slot' }} *</label>
+                                            <label class="form-label">{{ ml({ en: 'Select Time Slot', mk: 'Изберете Термин', sr: 'Izaberite Termin', tr: 'Saat Aralığı Seçin', sq: 'Zgjidhni Orarin' }) }} *</label>
                                             <div v-if="loadingSlots" class="text-center py-3">
                                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
+                                                    <span class="visually-hidden">{{ ml({ en: 'Loading...', mk: 'Се вчитува...', sr: 'Učitavanje...', tr: 'Yükleniyor...', sq: 'Duke u ngarkuar...' }) }}</span>
                                                 </div>
-                                                <span class="ms-2">{{ t('activities.loading_slots') || 'Loading available slots...' }}</span>
+                                                <span class="ms-2">{{ ml({ en: 'Loading available slots...', mk: 'Се вчитуваат достапни термини...', sr: 'Učitavanje dostupnih termina...', tr: 'Uygun saatler yükleniyor...', sq: 'Duke ngarkuar orarët e disponueshëm...' }) }}</span>
                                             </div>
                                             <div v-else-if="availableSlots.length === 0" class="alert alert-warning">
-                                                {{ t('activities.no_slots') || 'No available slots for this date. Please select another date.' }}
+                                                {{ ml({ en: 'No available slots for this date. Please select another date.', mk: 'Нема достапни термини за овој датум. Ве молиме изберете друг датум.', sr: 'Nema dostupnih termina za ovaj datum. Molimo izaberite drugi datum.', tr: 'Bu tarih için uygun saat bulunmamaktadır. Lütfen başka bir tarih seçin.', sq: 'Nuk ka orare të disponueshme për këtë datë. Ju lutemi zgjidhni një datë tjetër.' }) }}
                                             </div>
                                             <div v-else class="time-slots-grid">
                                                 <button 
@@ -417,7 +419,7 @@ const successMessage = computed(() => page.props.flash?.success);
                                         <div class="col-12" v-if="form.start_time && form.end_time">
                                             <div class="selected-time-display">
                                                 <i class="bi bi-clock me-2"></i>
-                                                <strong>{{ t('activities.selected_time') || 'Selected' }}:</strong> 
+                                                <strong>{{ ml({ en: 'Selected', mk: 'Избрано', sr: 'Izabrano', tr: 'Seçilen', sq: 'Zgjedhur' }) }}:</strong> 
                                                 {{ form.start_time }} - {{ form.end_time }}
                                             </div>
                                         </div>

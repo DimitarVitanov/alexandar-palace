@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     page: Object,
@@ -10,7 +10,7 @@ const props = defineProps({
     seo: Object,
 });
 
-const locale = computed(() => usePage().props.locale || 'en');
+const { locale, ml } = useLocale();
 
 const img = (path) => `/assets/paradise/${path}`;
 
@@ -26,7 +26,7 @@ const getLocalized = (obj, field) => {
 
 <template>
     <Layout
-        :title="seo?.title || 'Restaurant'"
+        :title="seo?.title || ml({ en: 'Restaurant', mk: 'Ресторан', sr: 'Restoran', tr: 'Restoran', sq: 'Restorant' })"
         :description="seo?.description"
         :keywords="seo?.keywords"
         :image="seo?.image"
@@ -40,7 +40,7 @@ const getLocalized = (obj, field) => {
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
                     <small class="slide-animated one">Alexandar Palace Hotel</small>
-                    <h1 class="slide-animated two">Restaurant</h1>
+                    <h1 class="slide-animated two">{{ ml({ en: 'Restaurant', mk: 'Ресторан', sr: 'Restoran', tr: 'Restoran', sq: 'Restorant' }) }}</h1>
                 </div>
             </div>
         </div>
@@ -52,30 +52,30 @@ const getLocalized = (obj, field) => {
                     <div class="intro">
                         <div class="title">
                             <small>Alexandar Palace Hotel</small>
-                            <h2>The Restaurant</h2>
+                            <h2>{{ ml({ en: 'The Restaurant', mk: 'Ресторанот', sr: 'Restoran', tr: 'Restoran', sq: 'Restoranti' }) }}</h2>
                         </div>
-                        <p class="lead">Experience culinary excellence at our award-winning restaurant, where traditional Macedonian flavors meet contemporary cuisine.</p>
-                        <p>Our talented chefs craft each dish with passion, using locally sourced ingredients and time-honored recipes passed down through generations. Whether you're enjoying a leisurely breakfast, a business lunch, or an intimate dinner, our restaurant offers an unforgettable dining experience.</p>
-                        <p><em>Enjoy...the Chef</em></p>
+                        <p class="lead">{{ ml({ en: 'Experience culinary excellence at our award-winning restaurant, where traditional Macedonian flavors meet contemporary cuisine.', mk: 'Доживејте кулинарска извонредност во нашиот награден ресторан, каде традиционалните македонски вкусови се среќаваат со современата кујна.', sr: 'Doživite kulinarsku izvrsnost u našem nagrađivanom restoranu, gde se tradicionalni makedonski ukusi susreću sa savremenom kuhinjom.', tr: 'Geleneksel Makedon lezzetlerinin çağdaş mutfakla buluştuğu ödüllü restoranımızda mutfak mükemmelliğini yaşayın.', sq: 'Përjetoni përsosmërinë kulinare në restorantin tonë të vlerësuar, ku shijet tradicionale maqedonase takohen me kuzhinën bashkëkohore.' }) }}</p>
+                        <p>{{ ml({ en: 'Our talented chefs craft each dish with passion, using locally sourced ingredients and time-honored recipes passed down through generations. Whether you\'re enjoying a leisurely breakfast, a business lunch, or an intimate dinner, our restaurant offers an unforgettable dining experience.', mk: 'Нашите талентирани готвачи со страст го подготвуваат секое јадење, користејќи локално набавени состојки и рецепти пренесувани низ генерации. Без разлика дали уживате во опуштен појадок, деловен ручек или интимна вечера, нашиот ресторан нуди незаборавно кулинарско искуство.', sr: 'Naši talentovani kuvari sa strašću pripremaju svako jelo, koristeći lokalno nabavljene sastojke i recepte koji se prenose kroz generacije. Bilo da uživate u opuštenom doručku, poslovnom ručku ili intimnoj večeri, naš restoran nudi nezaboravno kulinarsko iskustvo.', tr: 'Yetenekli şeflerimiz, yerel olarak temin edilen malzemeler ve nesillerden nesillere aktarılan tarifler kullanarak her yemeği tutkuyla hazırlar. İster keyifli bir kahvaltının, ister iş yemeğinin, isterse samimi bir akşam yemeğinin tadını çıkarın, restoranımız unutulmaz bir yemek deneyimi sunar.', sq: 'Kuzhinierët tanë të talentuar përgatisin çdo pjatë me pasion, duke përdorur përbërës vendas dhe receta të trashëguara nga breza në breza. Qoftë duke shijuar një mëngjes të qetë, një drekë pune apo një darkë intime, restoranti ynë ofron një përvojë kulinare të paharrueshme.' }) }}</p>
+                        <p><em>{{ ml({ en: 'Enjoy...the Chef', mk: 'Уживајте...со Шефот', sr: 'Uživajte...sa Šefom', tr: 'Afiyet olsun...Şef ile', sq: 'Shijoni...me Shefin' }) }}</em></p>
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <div>
                         <ul class="list-unstyled mb-4">
                             <li class="d-flex justify-content-between mb-2 text-end">
-                                <strong>Breakfast</strong> <span>7.00am – 10.30am</span>
+                                <strong>{{ ml({ en: 'Breakfast', mk: 'Појадок', sr: 'Doručak', tr: 'Kahvaltı', sq: 'Mëngjesi' }) }}</strong> <span>7.00am – 10.30am</span>
                             </li>
                             <li class="d-flex justify-content-between mb-2 text-end">
-                                <strong>Lunch</strong> <span>12.00pm – 2.00pm</span>
+                                <strong>{{ ml({ en: 'Lunch', mk: 'Ручек', sr: 'Ručak', tr: 'Öğle Yemeği', sq: 'Dreka' }) }}</strong> <span>12.00pm – 2.00pm</span>
                             </li>
                             <li class="d-flex justify-content-between mb-2 text-end">
-                                <strong>Dinner</strong> <span>open from 7.30pm<br><small>(kitchen closes at 11.30pm)</small></span>
+                                <strong>{{ ml({ en: 'Dinner', mk: 'Вечера', sr: 'Večera', tr: 'Akşam Yemeği', sq: 'Darka' }) }}</strong> <span>{{ ml({ en: 'open from 7.30pm', mk: 'отворено од 19.30ч', sr: 'otvoreno od 19.30č', tr: '19.30\'dan itibaren açık', sq: 'hapur nga ora 19.30' }) }}<br><small>{{ ml({ en: '(kitchen closes at 11.30pm)', mk: '(кујната затвора во 23.30ч)', sr: '(kuhinja se zatvara u 23.30č)', tr: '(mutfak 23.30\'da kapanır)', sq: '(kuzhina mbyllet në orën 23.30)' }) }}</small></span>
                             </li>
                         </ul>
                         <p class="phone_element">
                             <a href="tel:+38923092392">
                                 <i class="bi bi-telephone"></i>
-                                <span><em>Reservations</em>+389 2 309 2392</span>
+                                <span><em>{{ ml({ en: 'Reservations', mk: 'Резервации', sr: 'Rezervacije', tr: 'Rezervasyonlar', sq: 'Rezervime' }) }}</em>+389 2 309 2392</span>
                             </a>
                         </p>
                     </div>
@@ -88,7 +88,7 @@ const getLocalized = (obj, field) => {
             <div class="container margin_120_95">
                 <div class="title text-center mb-5">
                     <small data-cue="slideInUp">Alexandar Palace Hotel</small>
-                    <h2 data-cue="slideInUp" data-delay="100">{{ locale === 'mk' ? 'Мени на Ресторанот' : 'Restaurant Menu' }}</h2>
+                    <h2 data-cue="slideInUp" data-delay="100">{{ ml({ en: 'Restaurant Menu', mk: 'Мени на Ресторанот', sr: 'Meni Restorana', tr: 'Restoran Menüsü', sq: 'Menyja e Restorantit' }) }}</h2>
                 </div>
                 
                 <div class="tabs_menu" data-cue="slideInUp" data-delay="200">

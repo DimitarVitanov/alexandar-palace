@@ -1,6 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     news: Object,
@@ -8,6 +10,8 @@ const props = defineProps({
     seo: Object,
 });
 
+const { t } = useI18n();
+const { ml } = useLocale();
 const asset = (path) => `/assets/paradise/${path}`;
 </script>
 
@@ -49,7 +53,7 @@ const asset = (path) => `/assets/paradise/${path}`;
 
             <div v-if="related.length" class="row mt-5">
                 <div class="col-12">
-                    <h3>Related News</h3>
+                    <h3>{{ ml({ en: 'Related News', mk: 'Слични новости', sr: 'Сличне вести', tr: 'İlgili Haberler', sq: 'Lajme të Ngjashme' }) }}</h3>
                 </div>
                 <div v-for="post in related" :key="post.id" class="item col-xl-4 col-lg-6">
                     <Link :href="`/news/${post.slug}`" class="box_contents">
@@ -57,7 +61,7 @@ const asset = (path) => `/assets/paradise/${path}`;
                         <div class="wrapper">
                             <small>{{ post.category }}<span></span></small>
                             <h2>{{ post.title }}</h2>
-                            <em>Read more</em>
+                            <em>{{ t('home.read_more') }}</em>
                         </div>
                     </Link>
                 </div>

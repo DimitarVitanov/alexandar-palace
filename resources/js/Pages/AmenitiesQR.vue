@@ -1,11 +1,14 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     amenitiesUrl: String,
     seo: Object,
 });
+
+const { locale, ml } = useLocale();
 
 const qrLoaded = ref(false);
 const isLoaded = ref(false);
@@ -71,9 +74,9 @@ const printQR = () => {
                     <div class="line"></div>
                 </div>
                 <div class="card-header">
-                    <span class="subtitle">Discover Our</span>
-                    <h1>Hotel Amenities</h1>
-                    <p>Scan to explore our world-class facilities & services</p>
+                    <span class="subtitle">{{ ml({ en: 'Discover Our', mk: 'Откријте ги', sr: 'Otkrijte Naše', tr: 'Keşfedin', sq: 'Zbuloni' }) }}</span>
+                    <h1>{{ ml({ en: 'Hotel Amenities', mk: 'Содржините на Хотелот', sr: 'Sadržaje Hotela', tr: 'Otel Olanakları', sq: 'Ambientet e Hotelit' }) }}</h1>
+                    <p>{{ ml({ en: 'Scan to explore our world-class facilities & services', mk: 'Скенирајте за да ги истражите нашите врвни капацитети и услуги', sr: 'Skenirajte da istražite naše vrhunske sadržaje i usluge', tr: 'Dünya standartlarındaki tesislerimizi ve hizmetlerimizi keşfetmek için tarayın', sq: 'Skanoni për të eksploruar ambientet dhe shërbimet tona të klasit botëror' }) }}</p>
                 </div>
 
                 <div class="qr-wrapper">
@@ -103,25 +106,25 @@ const printQR = () => {
 
                 <div class="scan-instruction">
                     <i class="bi bi-phone"></i>
-                    <span>Point your camera at the QR code</span>
+                    <span>{{ ml({ en: 'Point your camera at the QR code', mk: 'Насочете ја камерата кон QR кодот', sr: 'Usmerite kameru ka QR kodu', tr: 'Kameranızı QR koduna doğrultun', sq: 'Drejtoni kamerën tuaj drejt kodit QR' }) }}</span>
                 </div>
 
                 <div class="amenities-preview">
                     <div class="preview-item">
                         <i class="bi bi-droplet-half"></i>
-                        <span>SPA</span>
+                        <span>{{ ml({ en: 'SPA', mk: 'СПА', sr: 'SPA', tr: 'SPA', sq: 'SPA' }) }}</span>
                     </div>
                     <div class="preview-item">
                         <i class="bi bi-cup-hot"></i>
-                        <span>Dining</span>
+                        <span>{{ ml({ en: 'Dining', mk: 'Ресторани', sr: 'Restorani', tr: 'Yemek', sq: 'Ushqim' }) }}</span>
                     </div>
                     <div class="preview-item">
                         <i class="bi bi-dribbble"></i>
-                        <span>Sports</span>
+                        <span>{{ ml({ en: 'Sports', mk: 'Спорт', sr: 'Sport', tr: 'Spor', sq: 'Sport' }) }}</span>
                     </div>
                     <div class="preview-item">
                         <i class="bi bi-building"></i>
-                        <span>Rooms</span>
+                        <span>{{ ml({ en: 'Rooms', mk: 'Соби', sr: 'Sobe', tr: 'Odalar', sq: 'Dhoma' }) }}</span>
                     </div>
                 </div>
             </div>
@@ -130,17 +133,17 @@ const printQR = () => {
             <div class="action-buttons no-print">
                 <button @click="downloadQR" class="action-btn download">
                     <i class="bi bi-download"></i>
-                    <span>Download QR</span>
+                    <span>{{ ml({ en: 'Download QR', mk: 'Преземи QR', sr: 'Preuzmi QR', tr: 'QR\'ı İndir', sq: 'Shkarko QR-në' }) }}</span>
                 </button>
                 <button @click="printQR" class="action-btn print">
                     <i class="bi bi-printer"></i>
-                    <span>Print</span>
+                    <span>{{ ml({ en: 'Print', mk: 'Печати', sr: 'Štampaj', tr: 'Yazdır', sq: 'Printo' }) }}</span>
                 </button>
             </div>
 
             <!-- Direct Link -->
             <div class="direct-link no-print">
-                <span>Or visit directly:</span>
+                <span>{{ ml({ en: 'Or visit directly:', mk: 'Или посетете директно:', sr: 'Ili posetite direktno:', tr: 'Veya doğrudan ziyaret edin:', sq: 'Ose vizitoni drejtpërdrejt:' }) }}</span>
                 <a :href="amenitiesUrl">{{ amenitiesUrl }}</a>
             </div>
 
@@ -151,7 +154,7 @@ const printQR = () => {
                     <i class="bi bi-star-fill"></i>
                     <div class="line"></div>
                 </div>
-                <p>Alexandar Palace Hotel</p>
+                <p>{{ ml({ en: 'Alexandar Palace Hotel', mk: 'Хотел Alexandar Palace', sr: 'Hotel Alexandar Palace', tr: 'Alexandar Palace Oteli', sq: 'Hoteli Alexandar Palace' }) }}</p>
                 <small>Blvd. 8-mi Septemvri No. 15, Skopje</small>
             </footer>
         </div>

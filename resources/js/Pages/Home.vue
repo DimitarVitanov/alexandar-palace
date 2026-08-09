@@ -4,6 +4,7 @@ import { useForm, Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
 import BookingSection from '@/Components/Frontend/BookingSection.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     page: Object,
@@ -16,6 +17,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { locale, ml } = useLocale();
 
 const hero = props.sections?.hero;
 const about = props.sections?.about;
@@ -200,10 +202,10 @@ const getRoomImage = (room) => {
                     <div class="col-lg-5">
                         <div class="parallax_wrapper">
 
-                            <img :src="asset('img/about-1.webp')" :alt="about?.title || 'About Us'" class="img-fluid rounded-img">
+                            <img :src="asset('img/about-1.webp')" :alt="about?.title || ml({ en: 'About Us', mk: 'За Нас', sr: 'O Nama', tr: 'Hakkımızda', sq: 'Rreth Nesh' })" class="img-fluid rounded-img">
                             <div data-cue="slideInUp" class="img_over">
                                 <span>
-                                    <img :src="asset('img/about-us-two.webp')" :alt="about?.title || 'About Us'" class="rounded-img">
+                                    <img :src="asset('img/about-us-two.webp')" :alt="about?.title || ml({ en: 'About Us', mk: 'За Нас', sr: 'O Nama', tr: 'Hakkımızda', sq: 'Rreth Nesh' })" class="rounded-img">
                                 </span>
                             </div>
                         </div>
@@ -255,9 +257,9 @@ const getRoomImage = (room) => {
                         <figure>
                             <div class="background-image" :style="{ backgroundImage: `url(${asset(getRoomImage(room))})` }"></div>
                             <div class="info">
-                                <small>From €{{ formatPrice(room.price_per_night) }}/night</small>
+                                <small>{{ ml({ en: `From €${formatPrice(room.price_per_night)}/night`, mk: `Од €${formatPrice(room.price_per_night)}/ноќ`, sr: `Od €${formatPrice(room.price_per_night)}/noć`, tr: `Gecelik €${formatPrice(room.price_per_night)}'dan itibaren`, sq: `Nga €${formatPrice(room.price_per_night)}/nata` }) }}</small>
                                 <h3>{{ room.name }}</h3>
-                                <span>Read more</span>
+                                <span>{{ t('home.read_more') }}</span>
                             </div>
                         </figure>
                     </Link>
@@ -282,7 +284,11 @@ const getRoomImage = (room) => {
 
         <div class="marquee">
             <div class="track">
-                <div class="content">&nbsp;Relax Enjoy Luxury Holiday Travel Discover Experience Relax Enjoy Luxury Holiday Travel Discover Experience Relax Enjoy Luxury Holiday Travel Discover Experience Relax Enjoy Luxury Holiday Travel Discover Experience</div>
+                <div class="content" v-if="locale === 'mk'">&nbsp;Релаксирајте Уживајте Луксуз Одмор Патување Откријте Доживејте Релаксирајте Уживајте Луксуз Одмор Патување Откријте Доживејте Релаксирајте Уживајте Луксуз Одмор Патување Откријте Доживејте Релаксирајте Уживајте Луксуз Одмор Патување Откријте Доживејте</div>
+                <div class="content" v-else-if="locale === 'sr'">&nbsp;Opustite se Uživajte Luksuz Odmor Putovanje Otkrijte Doživite Opustite se Uživajte Luksuz Odmor Putovanje Otkrijte Doživite Opustite se Uživajte Luksuz Odmor Putovanje Otkrijte Doživite Opustite se Uživajte Luksuz Odmor Putovanje Otkrijte Doživite</div>
+                <div class="content" v-else-if="locale === 'tr'">&nbsp;Rahatlayın Keyif Alın Lüks Tatil Seyahat Keşfedin Deneyimleyin Rahatlayın Keyif Alın Lüks Tatil Seyahat Keşfedin Deneyimleyin Rahatlayın Keyif Alın Lüks Tatil Seyahat Keşfedin Deneyimleyin Rahatlayın Keyif Alın Lüks Tatil Seyahat Keşfedin Deneyimleyin</div>
+                <div class="content" v-else-if="locale === 'sq'">&nbsp;Relaksohuni Shijoni Luks Pushime Udhëtim Zbuloni Përjetoni Relaksohuni Shijoni Luks Pushime Udhëtim Zbuloni Përjetoni Relaksohuni Shijoni Luks Pushime Udhëtim Zbuloni Përjetoni Relaksohuni Shijoni Luks Pushime Udhëtim Zbuloni Përjetoni</div>
+                <div class="content" v-else>&nbsp;Relax Enjoy Luxury Holiday Travel Discover Experience Relax Enjoy Luxury Holiday Travel Discover Experience Relax Enjoy Luxury Holiday Travel Discover Experience Relax Enjoy Luxury Holiday Travel Discover Experience</div>
             </div>
         </div>
 

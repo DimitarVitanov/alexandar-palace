@@ -143,7 +143,7 @@ const features = [
         <div class="gallery-section">
             <div class="container">
                 <div class="section-header text-center" data-cue="fadeIn">
-                    <span class="section-label">Our Gallery</span>
+                    <span class="section-label">{{ t('tennisRestaurant.our_gallery') }}</span>
                     <h2 class="section-heading">{{ t('tennisRestaurant.gallery_title') }}</h2>
                 </div>
                 <div class="gallery-grid" data-cue="fadeIn" data-delay="200">

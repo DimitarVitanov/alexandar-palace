@@ -23,6 +23,12 @@
             <span class="details-value">{{ $booking->phone }}</span>
         </div>
         @endif
+        @if($booking->passport_id)
+        <div class="details-row">
+            <span class="details-label">Passport / ID:</span>
+            <span class="details-value">{{ $booking->passport_id }}</span>
+        </div>
+        @endif
     </div>
 
     <div class="details-box">

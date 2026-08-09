@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     rooms: Array,
@@ -11,84 +12,49 @@ const props = defineProps({
 });
 
 const page = usePage();
-const locale = computed(() => page.props.locale || 'en');
+const { locale, ml } = useLocale();
 
 const asset = (path) => `/assets/paradise/${path}`;
 
 // Translations
-const t = computed(() => locale.value === 'mk' ? {
-    hotelName: 'Александар Палас Хотел',
-    requestReservation: 'Барање за резервација',
-    heroSubtitle: 'Ќе го разгледаме вашето барање и ќе одговориме што е можно поскоро.',
-    yourStay: 'Вашиот престој',
-    fromPerNight: 'Од',
-    perNight: 'по ноќ',
-    nights: 'Ноќевања',
-    ratePerNight: 'Цена по ноќ',
-    estimatedTotal: 'Проценет вкупен износ',
-    reservationNote: 'Вашата резервација не е потврдена додека не добиете потврда по е-пошта од нашиот тим.',
-    reservationDetails: 'Детали за резервација',
-    planYourStay: 'Планирајте го вашиот престој',
-    roomOrSuite: 'Соба или апартман',
-    selectRoom: 'Изберете соба или апартман',
-    checkIn: 'Пријавување',
-    checkOut: 'Одјавување',
-    adults: 'Возрасни',
-    children: 'Деца',
-    firstName: 'Име',
-    lastName: 'Презиме',
-    email: 'Е-пошта',
-    phone: 'Телефон',
-    specialRequests: 'Посебни барања',
-    optional: 'опционално',
-    specialRequestsPlaceholder: 'Време на пристигнување, потреби за пристапност или други барања',
-    sendRequest: 'Испрати барање за резервација',
-    sendingRequest: 'Се испраќа барање...',
-    backToRooms: 'Назад кон соби',
-    requestOnItsWay: 'Вашето барање е на пат',
-    teamWillReview: 'Нашиот тим за резервации ќе ги разгледа деталите и ќе ве контактира што е можно поскоро.',
-    exploreRooms: 'Разгледајте соби и апартмани',
-    checkingAvailability: 'Проверка на достапност...',
-    notAvailable: 'Избраната соба не е достапна за овие датуми. Ве молиме изберете други датуми или друга соба.',
-    roomsCount: 'Број на соби',
-    totalRooms: 'Соби',
-} : {
-    hotelName: 'Alexandar Palace Hotel',
-    requestReservation: 'Request a Reservation',
-    heroSubtitle: 'We will review your request and reply as soon as possible.',
-    yourStay: 'Your stay',
-    fromPerNight: 'From',
-    perNight: 'per night',
-    nights: 'Nights',
-    ratePerNight: 'Rate per night',
-    estimatedTotal: 'Estimated total',
-    reservationNote: 'Your reservation is not confirmed until you receive a confirmation email from our team.',
-    reservationDetails: 'Reservation details',
-    planYourStay: 'Plan your stay',
-    roomOrSuite: 'Room or Suite',
-    selectRoom: 'Select a room or suite',
-    checkIn: 'Check-in',
-    checkOut: 'Check-out',
-    adults: 'Adults',
-    children: 'Children',
-    firstName: 'First name',
-    lastName: 'Last name',
-    email: 'Email address',
-    phone: 'Phone number',
-    specialRequests: 'Special requests',
-    optional: 'optional',
-    specialRequestsPlaceholder: 'Arrival time, accessibility requirements, or other requests',
-    sendRequest: 'Send Reservation Request',
-    sendingRequest: 'Sending request…',
-    backToRooms: 'Back to Rooms',
-    requestOnItsWay: 'Your request is on its way',
-    teamWillReview: 'Our reservations team will review the details and contact you as soon as possible.',
-    exploreRooms: 'Explore Rooms & Suites',
-    checkingAvailability: 'Checking availability...',
-    notAvailable: 'The selected room is not available for these dates. Please choose different dates or another room.',
-    roomsCount: 'Number of rooms',
-    totalRooms: 'Rooms',
-});
+const t = computed(() => ({
+    hotelName: ml({ en: 'Alexandar Palace Hotel', mk: 'Александар Палас Хотел', sr: 'Hotel Alexandar Palace', tr: 'Alexandar Palace Otel', sq: 'Hoteli Alexandar Palace' }),
+    requestReservation: ml({ en: 'Request a Reservation', mk: 'Барање за резервација', sr: 'Zahtev za rezervaciju', tr: 'Rezervasyon Talebi', sq: 'Kërkesë për Rezervim' }),
+    heroSubtitle: ml({ en: 'We will review your request and reply as soon as possible.', mk: 'Ќе го разгледаме вашето барање и ќе одговориме што е можно поскоро.', sr: 'Razmotrićemo vaš zahtev i odgovoriti u najkraćem mogućem roku.', tr: 'Talebinizi inceleyip en kısa sürede yanıt vereceğiz.', sq: 'Do ta shqyrtojmë kërkesën tuaj dhe do të përgjigjemi sa më shpejt të jetë e mundur.' }),
+    yourStay: ml({ en: 'Your stay', mk: 'Вашиот престој', sr: 'Vaš boravak', tr: 'Konaklamanız', sq: 'Qëndrimi juaj' }),
+    fromPerNight: ml({ en: 'From', mk: 'Од', sr: 'Od', tr: 'Başlangıç', sq: 'Nga' }),
+    perNight: ml({ en: 'per night', mk: 'по ноќ', sr: 'po noći', tr: 'gecelik', sq: 'për natë' }),
+    nights: ml({ en: 'Nights', mk: 'Ноќевања', sr: 'Noćenja', tr: 'Geceler', sq: 'Netë' }),
+    ratePerNight: ml({ en: 'Rate per night', mk: 'Цена по ноќ', sr: 'Cena po noći', tr: 'Gecelik ücret', sq: 'Çmimi për natë' }),
+    estimatedTotal: ml({ en: 'Estimated total', mk: 'Проценет вкупен износ', sr: 'Procenjeni ukupan iznos', tr: 'Tahmini toplam', sq: 'Totali i vlerësuar' }),
+    reservationNote: ml({ en: 'Your reservation is not confirmed until you receive a confirmation email from our team.', mk: 'Вашата резервација не е потврдена додека не добиете потврда по е-пошта од нашиот тим.', sr: 'Vaša rezervacija nije potvrđena dok ne dobijete potvrdu putem e-pošte od našeg tima.', tr: 'Ekibimizden bir onay e-postası alana kadar rezervasyonunuz onaylanmış sayılmaz.', sq: 'Rezervimi juaj nuk konfirmohet derisa të merrni një email konfirmimi nga ekipi ynë.' }),
+    reservationDetails: ml({ en: 'Reservation details', mk: 'Детали за резервација', sr: 'Detalji rezervacije', tr: 'Rezervasyon detayları', sq: 'Detajet e rezervimit' }),
+    planYourStay: ml({ en: 'Plan your stay', mk: 'Планирајте го вашиот престој', sr: 'Isplanirajte svoj boravak', tr: 'Konaklamanızı planlayın', sq: 'Planifikoni qëndrimin tuaj' }),
+    roomOrSuite: ml({ en: 'Room or Suite', mk: 'Соба или апартман', sr: 'Soba ili apartman', tr: 'Oda veya Süit', sq: 'Dhomë ose Suitë' }),
+    selectRoom: ml({ en: 'Select a room or suite', mk: 'Изберете соба или апартман', sr: 'Izaberite sobu ili apartman', tr: 'Bir oda veya süit seçin', sq: 'Zgjidhni një dhomë ose suitë' }),
+    checkIn: ml({ en: 'Check-in', mk: 'Пријавување', sr: 'Prijava', tr: 'Giriş', sq: 'Check-in' }),
+    checkOut: ml({ en: 'Check-out', mk: 'Одjавување', sr: 'Odjava', tr: 'Çıkış', sq: 'Check-out' }),
+    adults: ml({ en: 'Adults', mk: 'Возрасни', sr: 'Odrasli', tr: 'Yetişkinler', sq: 'Të rritur' }),
+    children: ml({ en: 'Children', mk: 'Деца', sr: 'Deca', tr: 'Çocuklar', sq: 'Fëmijë' }),
+    firstName: ml({ en: 'First name', mk: 'Име', sr: 'Ime', tr: 'Ad', sq: 'Emri' }),
+    lastName: ml({ en: 'Last name', mk: 'Презиме', sr: 'Prezime', tr: 'Soyad', sq: 'Mbiemri' }),
+    email: ml({ en: 'Email address', mk: 'Е-пошта', sr: 'E-adresa', tr: 'E-posta adresi', sq: 'Adresa e emailit' }),
+    phone: ml({ en: 'Phone number', mk: 'Телефон', sr: 'Broj telefona', tr: 'Telefon numarası', sq: 'Numri i telefonit' }),
+    passportId: ml({ en: 'Passport / ID number', mk: 'Пасош / број на лична карта', sr: 'Pasoš / broj lične karte', tr: 'Pasaport / Kimlik numarası', sq: 'Pasaportë / Numri i letërnjoftimit' }),
+    specialRequests: ml({ en: 'Special requests', mk: 'Посебни барања', sr: 'Posebni zahtevi', tr: 'Özel istekler', sq: 'Kërkesa të veçanta' }),
+    optional: ml({ en: 'optional', mk: 'опционално', sr: 'opciono', tr: 'isteğe bağlı', sq: 'opsionale' }),
+    specialRequestsPlaceholder: ml({ en: 'Arrival time, accessibility requirements, or other requests', mk: 'Време на пристигнување, потреби за пристапност или други барања', sr: 'Vreme dolaska, zahtevi za pristupačnost ili druge napomene', tr: 'Varış saati, erişilebilirlik gereksinimleri veya diğer istekler', sq: 'Ora e mbërritjes, kërkesat për aksesueshmëri ose kërkesa të tjera' }),
+    sendRequest: ml({ en: 'Send Reservation Request', mk: 'Испрати барање за резервација', sr: 'Pošalji zahtev za rezervaciju', tr: 'Rezervasyon Talebi Gönder', sq: 'Dërgo Kërkesën për Rezervim' }),
+    sendingRequest: ml({ en: 'Sending request…', mk: 'Се испраќа барање...', sr: 'Slanje zahteva...', tr: 'Talep gönderiliyor...', sq: 'Duke dërguar kërkesën...' }),
+    backToRooms: ml({ en: 'Back to Rooms', mk: 'Назад кон соби', sr: 'Nazad na sobe', tr: 'Odalara Dön', sq: 'Kthehu te Dhomat' }),
+    requestOnItsWay: ml({ en: 'Your request is on its way', mk: 'Вашето барање е на пат', sr: 'Vaš zahtev je poslat', tr: 'Talebiniz iletiliyor', sq: 'Kërkesa juaj është duke u dërguar' }),
+    teamWillReview: ml({ en: 'Our reservations team will review the details and contact you as soon as possible.', mk: 'Нашиот тим за резервации ќе ги разгледа деталите и ќе ве контактира што е можно поскоро.', sr: 'Naš tim za rezervacije će pregledati detalje i kontaktirati vas u najkraćem roku.', tr: 'Rezervasyon ekibimiz detayları inceleyip en kısa sürede sizinle iletişime geçecektir.', sq: 'Ekipi ynë i rezervimeve do t\'i shqyrtojë detajet dhe do t\'ju kontaktojë sa më shpejt të jetë e mundur.' }),
+    exploreRooms: ml({ en: 'Explore Rooms & Suites', mk: 'Разгледајте соби и апартмани', sr: 'Istražite sobe i apartmane', tr: 'Odaları ve Süitleri Keşfedin', sq: 'Eksploroni Dhomat dhe Suitat' }),
+    checkingAvailability: ml({ en: 'Checking availability...', mk: 'Проверка на достапност...', sr: 'Proverava se dostupnost...', tr: 'Müsaitlik kontrol ediliyor...', sq: 'Duke kontrolluar disponueshmërinë...' }),
+    notAvailable: ml({ en: 'The selected room is not available for these dates. Please choose different dates or another room.', mk: 'Избраната соба не е достапна за овие датуми. Ве молиме изберете други датуми или друга соба.', sr: 'Izabrana soba nije dostupna za ove datume. Molimo izaberite druge datume ili drugu sobu.', tr: 'Seçilen oda bu tarihler için uygun değil. Lütfen başka tarihler veya başka bir oda seçin.', sq: 'Dhoma e zgjedhur nuk është e disponueshme për këto data. Ju lutemi zgjidhni data të tjera ose një dhomë tjetër.' }),
+    roomsCount: ml({ en: 'Number of rooms', mk: 'Број на соби', sr: 'Broj soba', tr: 'Oda sayısı', sq: 'Numri i dhomave' }),
+    totalRooms: ml({ en: 'Rooms', mk: 'Соби', sr: 'Sobe', tr: 'Odalar', sq: 'Dhomat' }),
+}));
 
 const form = useForm({
     room_id: props.selectedRoomId || '',
@@ -97,6 +63,7 @@ const form = useForm({
     last_name: '',
     email: '',
     phone: '',
+    passport_id: '',
     check_in: props.bookingDefaults.check_in || '',
     check_out: props.bookingDefaults.check_out || '',
     adults: props.bookingDefaults.adults || 1,
@@ -142,7 +109,7 @@ const checkAvailability = async () => {
         if (elapsed < minDisplayTime) {
             await new Promise(resolve => setTimeout(resolve, minDisplayTime - elapsed));
         }
-        availabilityStatus.value = { available: false, message: 'Error checking availability', checking: false };
+        availabilityStatus.value = { available: false, message: ml({ en: 'Error checking availability', mk: 'Грешка при проверка на достапност', sr: 'Greška prilikom provere dostupnosti', tr: 'Müsaitlik kontrol edilirken hata oluştu', sq: 'Gabim gjatë kontrollimit të disponueshmërisë' }), checking: false };
     }
 };
 
@@ -188,7 +155,7 @@ const submit = () => {
         :alternateUrls="seo.alternateUrls"
     >
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset(selectedRoom?.featured_image || 'img/about-us-modified.webp')" alt="Reservation">
+            <img class="jarallax-img" :src="asset(selectedRoom?.featured_image || 'img/about-us-modified.webp')" :alt="ml({ en: 'Reservation', mk: 'Резервација', sr: 'Rezervacija', tr: 'Rezervasyon', sq: 'Rezervim' })">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.55)">
                 <div class="container">
                     <small class="slide-animated one">{{ t.hotelName }}</small>
@@ -243,7 +210,7 @@ const submit = () => {
                                 <label for="room_id" class="form-label">{{ t.roomOrSuite }}</label>
                                 <select id="room_id" v-model="form.room_id" class="form-select" required>
                                     <option value="" disabled>{{ t.selectRoom }}</option>
-                                    <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }} — {{ t.fromPerNight }} €{{ room.price_per_night }}/{{ locale === 'mk' ? 'ноќ' : 'night' }}</option>
+                                    <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }} — {{ t.fromPerNight }} €{{ room.price_per_night }}/{{ ml({ en: 'night', mk: 'ноќ', sr: 'noć', tr: 'gece', sq: 'natë' }) }}</option>
                                 </select>
                                 <div v-if="form.errors.room_id" class="field-error">{{ form.errors.room_id }}</div>
                             </div>
@@ -288,9 +255,13 @@ const submit = () => {
                             <div v-if="guestsExceedMax" class="col-12 mb-4">
                                 <div class="alert alert-warning">
                                     <i class="bi bi-exclamation-triangle me-2"></i>
-                                    {{ locale === 'mk' 
-                                        ? `Избраната соба може да прими максимум ${maxGuests} гости. Моментално имате избрано ${totalGuests} гости.`
-                                        : `The selected room can accommodate a maximum of ${maxGuests} guests. You have selected ${totalGuests} guests.` }}
+                                    {{ ml({
+                                        en: `The selected room can accommodate a maximum of ${maxGuests} guests. You have selected ${totalGuests} guests.`,
+                                        mk: `Избраната соба може да прими максимум ${maxGuests} гости. Моментално имате избрано ${totalGuests} гости.`,
+                                        sr: `Izabrana soba može da primi maksimalno ${maxGuests} gostiju. Trenutno ste izabrali ${totalGuests} gostiju.`,
+                                        tr: `Seçilen oda en fazla ${maxGuests} misafir alabilir. Şu anda ${totalGuests} misafir seçtiniz.`,
+                                        sq: `Dhoma e zgjedhur mund të akomodojë maksimumi ${maxGuests} mysafirë. Aktualisht keni zgjedhur ${totalGuests} mysafirë.`,
+                                    }) }}
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
@@ -312,6 +283,11 @@ const submit = () => {
                                 <label for="phone" class="form-label">{{ t.phone }}</label>
                                 <input id="phone" v-model="form.phone" type="tel" autocomplete="tel" class="form-control" required>
                                 <div v-if="form.errors.phone" class="field-error">{{ form.errors.phone }}</div>
+                            </div>
+                            <div class="col-12 mb-4">
+                                <label for="passport_id" class="form-label">{{ t.passportId }}</label>
+                                <input id="passport_id" v-model="form.passport_id" type="text" autocomplete="off" class="form-control" required>
+                                <div v-if="form.errors.passport_id" class="field-error">{{ form.errors.passport_id }}</div>
                             </div>
                             <div class="col-12 mb-4">
                                 <label for="special_requests" class="form-label">{{ t.specialRequests }} <span class="text-muted">({{ t.optional }})</span></label>

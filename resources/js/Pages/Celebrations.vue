@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const { t } = useI18n();
 const page = usePage();
+const { locale, ml } = useLocale();
 
 const showSuccess = ref(false);
 const successMessage = ref('');
@@ -71,7 +73,7 @@ const eventTypes = [
     >
         <!-- Hero Section -->
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset('img/celebrations/celebrations-banner.webp')" alt="Celebrations">
+            <img class="jarallax-img" :src="asset('img/celebrations/celebrations-banner.webp')" :alt="ml({ en: 'Celebrations', mk: 'Прослави', sr: 'Proslave', tr: 'Kutlamalar', sq: 'Festime' })">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
                     <small class="slide-animated one">{{ t('celebrations.hero_subtitle') }}</small>
@@ -136,7 +138,7 @@ const eventTypes = [
             <div class="row g-4">
                 <div v-for="(img, index) in galleryImages" :key="index" class="col-lg-3 col-md-4 col-sm-6">
                     <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s ease;" class="gallery-item">
-                        <img :src="asset('img/' + img)" :alt="'Celebration ' + (index + 1)" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+                        <img :src="asset('img/' + img)" :alt="ml({ en: 'Celebration ', mk: 'Прослава ', sr: 'Proslava ', tr: 'Kutlama ', sq: 'Festim ' }) + (index + 1)" style="width: 100%; height: 220px; object-fit: cover; display: block;">
                     </div>
                 </div>
             </div>

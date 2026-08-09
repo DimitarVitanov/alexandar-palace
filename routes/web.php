@@ -26,7 +26,7 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/locale/{locale}', function (string $locale) {
-    if (in_array($locale, ['en', 'mk'])) {
+    if (in_array($locale, ['en', 'mk', 'sr', 'tr', 'sq'])) {
         session(['locale' => $locale, 'locale_set_by_user' => true]);
         app()->setLocale($locale);
     }

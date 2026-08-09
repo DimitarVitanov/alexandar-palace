@@ -21,6 +21,7 @@ class Booking extends Model
         'locale',
         'email',
         'phone',
+        'passport_id',
         'check_in',
         'check_out',
         'adults',

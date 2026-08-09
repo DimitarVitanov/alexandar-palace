@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     rooms: Array,
@@ -13,21 +14,30 @@ const props = defineProps({
 const { t } = useI18n();
 const page = usePage();
 const locale = page.props.locale;
+const { ml } = useLocale();
 const asset = (path) => `/assets/paradise/${path}`;
 
-const formatPrice = (price) => {
-    const num = Number(price);
-    return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+const dateLocales = {
+    en: 'en-GB',
+    mk: 'mk-MK',
+    sr: 'sr-RS',
+    tr: 'tr-TR',
+    sq: 'sq-AL',
 };
 
 const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleDateString(locale === 'mk' ? 'mk-MK' : 'en-GB', { 
+    return date.toLocaleDateString(dateLocales[locale] || 'en-GB', { 
         day: '2-digit', 
         month: '2-digit', 
         year: 'numeric' 
     });
+};
+
+const formatPrice = (price) => {
+    const num = Number(price);
+    return Number.isInteger(num) ? num.toString() : num.toFixed(2);
 };
 
 const availabilityQuery = () => {
@@ -72,12 +82,12 @@ const getAmenityIcon = (amenity) => {
 
 const getAmenityLabel = (amenity) => {
     const labels = {
-        'wifi': locale === 'mk' ? 'Wi-Fi' : 'Free Wifi',
-        'smart-tv': locale === 'mk' ? 'Smart TV' : 'Smart TV',
-        'mini-bar': locale === 'mk' ? 'Мини Бар' : 'Mini Bar',
-        'spa': locale === 'mk' ? 'Спа' : 'Spa Access',
-        'pool': locale === 'mk' ? 'Базен' : 'Pool',
-        'fitness': locale === 'mk' ? 'Фитнес' : 'Fitness',
+        'wifi': ml({ en: 'Free Wifi', mk: 'Wi-Fi', sr: 'Besplatan Wi-Fi', tr: 'Ücretsiz Wi-Fi', sq: 'Wi-Fi Falas' }),
+        'smart-tv': ml({ en: 'Smart TV', mk: 'Smart TV', sr: 'Smart TV', tr: 'Akıllı TV', sq: 'TV Smart' }),
+        'mini-bar': ml({ en: 'Mini Bar', mk: 'Мини Бар', sr: 'Mini Bar', tr: 'Mini Bar', sq: 'Mini Bar' }),
+        'spa': ml({ en: 'Spa Access', mk: 'Спа', sr: 'Pristup Spa Centru', tr: 'Spa Erişimi', sq: 'Qasje në Spa' }),
+        'pool': ml({ en: 'Pool', mk: 'Базен', sr: 'Bazen', tr: 'Havuz', sq: 'Pishinë' }),
+        'fitness': ml({ en: 'Fitness', mk: 'Фитнес', sr: 'Fitnes', tr: 'Fitness', sq: 'Fitness' }),
     };
     return labels[amenity] || amenity;
 };
@@ -104,10 +114,10 @@ const getShortDescription = (room) => {
         :alternateUrls="seo.alternateUrls"
     >
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset(featuredImage || 'img/hero_home_1.jpg')" alt="Rooms & Suites">
+            <img class="jarallax-img" :src="asset(featuredImage || 'img/hero_home_1.jpg')" :alt="t('home.rooms_title')">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
-                    <small class="slide-animated one">{{ locale === 'mk' ? 'Луксузно Хотелско Искуство' : 'Luxury Hotel Experience' }}</small>
+                    <small class="slide-animated one">{{ ml({ en: 'Luxury Hotel Experience', mk: 'Луксузно Хотелско Искуство', sr: 'Luksuzno Hotelsko Iskustvo', tr: 'Lüks Otel Deneyimi', sq: 'Përvojë Hoteli Luksoz' }) }}</small>
                     <h1 class="slide-animated two">{{ t('home.rooms_title') }}</h1>
                 </div>
             </div>
@@ -120,16 +130,16 @@ const getShortDescription = (room) => {
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div>
                         <h3 v-if="rooms.length > 0">
-                            {{ locale === 'mk' ? 'Достапни соби' : 'Available Rooms' }} 
-                            <span class="text-muted">({{ rooms.length }} {{ locale === 'mk' ? 'од' : 'of' }} {{ searchParams.total_rooms }})</span>
+                            {{ ml({ en: 'Available Rooms', mk: 'Достапни соби', sr: 'Dostupne Sobe', tr: 'Uygun Odalar', sq: 'Dhoma të Disponueshme' }) }} 
+                            <span class="text-muted">({{ rooms.length }} {{ ml({ en: 'of', mk: 'од', sr: 'od', tr: '/', sq: 'nga' }) }} {{ searchParams.total_rooms }})</span>
                         </h3>
                         <p class="text-muted mb-0">
-                            {{ locale === 'mk' ? 'За' : 'For' }} {{ searchParams.adults }} {{ locale === 'mk' ? 'возрасни' : 'adults' }}
-                            <span v-if="searchParams.children > 0">, {{ searchParams.children }} {{ locale === 'mk' ? 'деца' : 'children' }}</span>
+                            {{ ml({ en: 'For', mk: 'За', sr: 'Za', tr: 'İçin', sq: 'Për' }) }} {{ searchParams.adults }} {{ ml({ en: 'adults', mk: 'возрасни', sr: 'odraslih', tr: 'yetişkin', sq: 'të rritur' }) }}
+                            <span v-if="searchParams.children > 0">, {{ searchParams.children }} {{ ml({ en: 'children', mk: 'деца', sr: 'dece', tr: 'çocuk', sq: 'fëmijë' }) }}</span>
                         </p>
                     </div>
                     <button @click="resetSearch" class="btn_1 outline">
-                        {{ locale === 'mk' ? 'Прикажи ги сите' : 'Show All' }}
+                        {{ ml({ en: 'Show All', mk: 'Прикажи ги сите', sr: 'Prikaži Sve', tr: 'Tümünü Göster', sq: 'Shfaq të Gjitha' }) }}
                     </button>
                 </div>
             </div>
@@ -137,26 +147,34 @@ const getShortDescription = (room) => {
             <!-- No Results Message -->
             <div v-if="searchParams?.has_searched && rooms.length === 0" class="no-results text-center py-5">
                 <i class="bi bi-calendar-x" style="font-size: 48px; color: #ccc;"></i>
-                <h3 class="mt-3">{{ locale === 'mk' ? 'Нема достапни соби' : 'No Rooms Available' }}</h3>
+                <h3 class="mt-3">{{ ml({ en: 'No Rooms Available', mk: 'Нема достапни соби', sr: 'Nema Dostupnih Soba', tr: 'Uygun Oda Yok', sq: 'Nuk ka Dhoma të Disponueshme' }) }}</h3>
                 <p class="text-muted" v-if="searchParams.check_in && searchParams.check_out">
-                    {{ locale === 'mk' 
-                        ? `Нема достапни соби за периодот ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.`
-                        : `No rooms available for ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.` }}
+                    {{ ml({ 
+                        en: `No rooms available for ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.`,
+                        mk: `Нема достапни соби за периодот ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.`,
+                        sr: `Nema dostupnih soba za period ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.`,
+                        tr: `${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)} tarihleri için uygun oda yok.`,
+                        sq: `Nuk ka dhoma të disponueshme për periudhën ${formatDate(searchParams.check_in)} - ${formatDate(searchParams.check_out)}.`,
+                    }) }}
                 </p>
                 <p class="text-muted" v-else>
-                    {{ locale === 'mk' ? 'Нема соби за' : 'No rooms available for' }} {{ searchParams.adults + searchParams.children }} {{ locale === 'mk' ? 'гости' : 'guests' }}.
+                    {{ ml({ en: 'No rooms available for', mk: 'Нема соби за', sr: 'Nema soba za', tr: 'Şunlar için uygun oda yok:', sq: 'Nuk ka dhoma për' }) }} {{ searchParams.adults + searchParams.children }} {{ ml({ en: 'guests', mk: 'гости', sr: 'gostiju', tr: 'misafir', sq: 'mysafirë' }) }}.
                 </p>
                 <p class="text-muted mb-4">
-                    {{ locale === 'mk' 
-                        ? 'Ве молиме изберете други датуми или контактирајте нè директно.'
-                        : 'Please try different dates or contact us directly.' }}
+                    {{ ml({ 
+                        en: 'Please try different dates or contact us directly.',
+                        mk: 'Ве молиме изберете други датуми или контактирајте нè директно.',
+                        sr: 'Molimo pokušajte sa drugim datumima ili nas kontaktirajte direktno.',
+                        tr: 'Lütfen farklı tarihler deneyin veya doğrudan bizimle iletişime geçin.',
+                        sq: 'Ju lutemi provoni data të tjera ose na kontaktoni drejtpërdrejt.',
+                    }) }}
                 </p>
                 <div class="d-flex gap-3 justify-content-center flex-wrap">
                     <button @click="resetSearch" class="btn_1">
-                        {{ locale === 'mk' ? 'Прикажи ги сите соби' : 'Show All Rooms' }}
+                        {{ ml({ en: 'Show All Rooms', mk: 'Прикажи ги сите соби', sr: 'Prikaži Sve Sobe', tr: 'Tüm Odaları Göster', sq: 'Shfaq të Gjitha Dhomat' }) }}
                     </button>
                     <Link href="/contacts" class="btn_1 outline">
-                        {{ locale === 'mk' ? 'Контактирајте нè' : 'Contact Us' }}
+                        {{ ml({ en: 'Contact Us', mk: 'Контактирајте нè', sr: 'Kontaktirajte Nas', tr: 'Bize Ulaşın', sq: 'Na Kontaktoni' }) }}
                     </Link>
                 </div>
             </div>
@@ -175,7 +193,7 @@ const getShortDescription = (room) => {
                 <div class="row" :class="index % 2 === 0 ? 'justify-content-start' : 'justify-content-end'">
                     <div class="col-lg-8">
                         <div class="box_item_info" :class="{ 'float-lg-end': index % 2 !== 0 }" data-jarallax-element="-30">
-                            <small>{{ locale === 'mk' ? 'Од' : 'From' }} €{{ formatPrice(room.price_per_night) }}/{{ locale === 'mk' ? 'ноќ' : 'night' }}</small>
+                            <small>{{ ml({ en: 'From', mk: 'Од', sr: 'Od', tr: 'Başlangıç', sq: 'Nga' }) }} €{{ formatPrice(room.price_per_night) }}/{{ ml({ en: 'night', mk: 'ноќ', sr: 'noć', tr: 'gece', sq: 'natë' }) }}</small>
                             <h2>{{ room.name }}</h2>
                             <p>{{ getShortDescription(room) }}</p>
                             
@@ -192,10 +210,10 @@ const getShortDescription = (room) => {
                                     <span class="circle">
                                         <span class="icon arrow"></span>
                                     </span>
-                                    <span class="button-text">{{ locale === 'mk' ? 'Резервирај' : 'Book Now' }}</span>
+                                    <span class="button-text">{{ ml({ en: 'Book Now', mk: 'Резервирај', sr: 'Rezerviši Sada', tr: 'Hemen Rezervasyon Yap', sq: 'Rezervo Tani' }) }}</span>
                                 </a>
                                 <Link :href="roomHref(room)" class="animated_link">
-                                    <strong>{{ locale === 'mk' ? 'Прочитај повеќе' : 'Read more' }}</strong>
+                                    <strong>{{ ml({ en: 'Read more', mk: 'Прочитај повеќе', sr: 'Pročitaj više', tr: 'Devamını oku', sq: 'Lexo më shumë' }) }}</strong>
                                 </Link>
                             </div>
                         </div>

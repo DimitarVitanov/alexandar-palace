@@ -32,6 +32,7 @@ const getRoomName = (room) => {
             <p><strong>Name:</strong> {{ booking.name }} {{ booking.last_name }}</p>
             <p><strong>Email:</strong> {{ booking.email }}</p>
             <p><strong>Phone:</strong> {{ booking.phone }}</p>
+            <p><strong>Passport / ID:</strong> {{ booking.passport_id || '-' }}</p>
             <p><strong>Room type:</strong> {{ getRoomName(booking.room) }}</p>
             <p><strong>Rooms booked:</strong> <span class="text-amber-600 font-semibold">{{ booking.rooms_count || 1 }}</span></p>
             <p><strong>Check In:</strong> {{ formatDate(booking.check_in) }}</p>

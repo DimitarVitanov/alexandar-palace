@@ -110,17 +110,20 @@ const navItems = computed(() => [
                             <div class="menu_panel_details">
                                 <div class="row justify-content-between">
                                     <div class="col-lg-6 mb-lg-0 mb-4">
-                                        <h5>Address</h5>
+                                        <h5>{{ t('contact.address') }}</h5>
                                         <p>Blvd. 8th September No. 15<br>Skopje, Macedonia</p>
                                         <div class="styled-select lang-selector">
                                             <select :value="locale" @change="setLocale($event.target.value)">
                                                 <option value="en">English</option>
-                                                <option value="mk">Macedonian</option>
+                                                <option value="mk">Македонски</option>
+                                                <option value="sr">Srpski</option>
+                                                <option value="tr">Türkçe</option>
+                                                <option value="sq">Shqip</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-5 mb-lg-0 mb-4">
-                                        <h5>Contacts</h5>
+                                        <h5>{{ t('footer.contacts') }}</h5>
                                         <div class="contacts">
                                             <ul>
                                                 <li><a href="tel://38923092392">+389 (2) 3092 392</a></li>

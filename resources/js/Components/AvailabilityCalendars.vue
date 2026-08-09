@@ -18,9 +18,17 @@ const dayIndex = computed(() => {
     return map;
 });
 
-const weekdayLabels = computed(() => props.locale === 'mk'
-    ? ['Пон', 'Вто', 'Сре', 'Чет', 'Пет', 'Саб', 'Нед']
-    : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+const ml = (map) => map[props.locale] ?? map.en;
+
+const dateLocales = { en: 'en-GB', mk: 'mk-MK', sr: 'sr-RS', tr: 'tr-TR', sq: 'sq-AL' };
+
+const weekdayLabels = computed(() => ml({
+    en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    mk: ['Пон', 'Вто', 'Сре', 'Чет', 'Пет', 'Саб', 'Нед'],
+    sr: ['Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub', 'Ned'],
+    tr: ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'],
+    sq: ['Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht', 'Die'],
+}));
 
 const toKey = (date) => {
     const y = date.getFullYear();
@@ -35,7 +43,7 @@ const monthGrids = computed(() => {
 
     for (let offset = 0; offset < props.months; offset += 1) {
         const first = new Date(year, month - 1 + offset, 1);
-        const label = first.toLocaleDateString(props.locale === 'mk' ? 'mk-MK' : 'en-GB', {
+        const label = first.toLocaleDateString(dateLocales[props.locale] ?? 'en-GB', {
             month: 'long',
             year: 'numeric',
         });
@@ -80,9 +88,13 @@ const inRange = (key) => props.selectedFrom && props.selectedTo
 const titleFor = (cell) => {
     if (!cell?.info) return '';
     const info = cell.info;
-    return props.locale === 'mk'
-        ? `Достапни: ${info.available} / ${info.capacity}`
-        : `Available: ${info.available} of ${info.capacity}`;
+    return ml({
+        en: `Available: ${info.available} of ${info.capacity}`,
+        mk: `Достапни: ${info.available} / ${info.capacity}`,
+        sr: `Dostupno: ${info.available} od ${info.capacity}`,
+        tr: `Müsait: ${info.available} / ${info.capacity}`,
+        sq: `Në dispozicion: ${info.available} nga ${info.capacity}`,
+    });
 };
 </script>
 
@@ -93,10 +105,10 @@ const titleFor = (cell) => {
                 <i class="bi bi-chevron-left"></i>
             </button>
             <div class="avail-legend">
-                <span><i class="dot is-open"></i>{{ locale === 'mk' ? 'Слободно' : 'Available' }}</span>
-                <span><i class="dot is-high"></i>{{ locale === 'mk' ? 'Полу-полно' : 'Half full' }}</span>
-                <span><i class="dot is-full"></i>{{ locale === 'mk' ? 'Полно' : 'Full' }}</span>
-                <span><i class="dot is-closed"></i>{{ locale === 'mk' ? 'Затворено' : 'Closed' }}</span>
+                <span><i class="dot is-open"></i>{{ ml({ en: 'Available', mk: 'Слободно', sr: 'Slobodno', tr: 'Müsait', sq: 'Në dispozicion' }) }}</span>
+                <span><i class="dot is-high"></i>{{ ml({ en: 'Half full', mk: 'Полу-полно', sr: 'Poluprazno', tr: 'Yarı dolu', sq: 'Gjysmë e plotë' }) }}</span>
+                <span><i class="dot is-full"></i>{{ ml({ en: 'Full', mk: 'Полно', sr: 'Puno', tr: 'Dolu', sq: 'E plotë' }) }}</span>
+                <span><i class="dot is-closed"></i>{{ ml({ en: 'Closed', mk: 'Затворено', sr: 'Zatvoreno', tr: 'Kapalı', sq: 'Mbyllur' }) }}</span>
             </div>
             <button type="button" class="avail-nav" @click="emit('shift-months', 1)">
                 <i class="bi bi-chevron-right"></i>

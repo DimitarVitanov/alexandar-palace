@@ -40,8 +40,8 @@ class AboutPageSeeder extends Seeder
                 'title' => ['en' => 'Our History', 'mk' => 'Нашата Историја'],
                 'subtitle' => ['en' => 'Alexandar Palace Hotel', 'mk' => 'Хотел Александар Палас'],
                 'content' => [
-                    'en' => '<p class="lead">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p><p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo.</p><p><em>Maria...the Owner</em></p>',
-                    'mk' => '<p class="lead">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p><p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo.</p><p><em>Марија...Сопственик</em></p>',
+                    'en' => '<p class="lead">The hotel Aleksandar Palace, leading hotel in Macedonia, is located on the right bank of the river Vardar next to the city park, only 3 km away from the town center and just next to the most important administrative, cultural and historical buildings.</p>',
+                    'mk' => '<p class="lead">Хотелот Александар Палас, водечки хотел во Македонија, се наоѓа на десниот брег на реката Вардар веднаш до градскиот парк, само 3 км од центарот на градот и во непосредна близина на најважните административни, културни и историски објекти.</p>',
                 ],
                 'data' => [
                     'image1' => 'img/about_1.jpg',
@@ -104,10 +104,10 @@ class AboutPageSeeder extends Seeder
                 'subtitle' => ['en' => 'Alexandar Palace Hotel', 'mk' => 'Хотел Александар Палас'],
                 'data' => [
                     'items' => [
-                        ['icon' => 'customicon-private-parking', 'title' => 'Private Parking', 'description' => 'Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.'],
-                        ['icon' => 'customicon-wifi', 'title' => 'High Speed Wifi', 'description' => 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.'],
-                        ['icon' => 'customicon-cocktail', 'title' => 'Bar & Restaurant', 'description' => 'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.'],
-                        ['icon' => 'customicon-swimming-pool', 'title' => 'Swimming Pool', 'description' => 'Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.'],
+                        ['icon' => 'customicon-private-parking', 'title' => 'Private Parking', 'description' => 'Complimentary private parking is available for all hotel guests, ensuring a convenient and secure stay.'],
+                        ['icon' => 'customicon-wifi', 'title' => 'High Speed Wifi', 'description' => 'Stay connected with complimentary high-speed WiFi available throughout the hotel and in all rooms.'],
+                        ['icon' => 'customicon-cocktail', 'title' => 'Bar & Restaurant', 'description' => 'Enjoy exquisite dining at our restaurant and unwind at our bar with a selection of fine wines and cocktails.'],
+                        ['icon' => 'customicon-swimming-pool', 'title' => 'Swimming Pool', 'description' => 'Relax and refresh in our indoor swimming pool, perfect for a rejuvenating swim any time of year.'],
                     ],
                 ],
                 'sort_order' => 4,
@@ -128,20 +128,20 @@ class AboutPageSeeder extends Seeder
                 'data' => [
                     'items' => [
                         [
-                            'question' => 'Cancellation',
-                            'answer' => 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.',
+                            'question' => 'Cancellation Policy',
+                            'answer' => 'Free cancellation is available up to 48 hours before check-in. Cancellations made within 48 hours of arrival may be subject to a charge equivalent to one night\'s stay. No-shows will be charged the full reservation amount.',
                         ],
                         [
-                            'question' => 'Payments',
-                            'answer' => 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.',
+                            'question' => 'Payment Methods',
+                            'answer' => 'We accept all major credit cards (Visa, MasterCard, American Express), bank transfers, and cash payments. A valid credit card is required at check-in for incidentals. Full payment can be made upon arrival or departure.',
                         ],
                         [
-                            'question' => 'Check In / Out Rules',
-                            'answer' => 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.',
+                            'question' => 'Check In / Out Times',
+                            'answer' => 'Check-in time is from 14:00 (2:00 PM). Check-out time is until 11:00 (11:00 AM). Early check-in and late check-out may be available upon request, subject to availability and additional charges.',
                         ],
                         [
-                            'question' => 'Disable Access',
-                            'answer' => 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.',
+                            'question' => 'Accessibility',
+                            'answer' => 'Our hotel is fully accessible for guests with disabilities. We offer accessible rooms, ramps, elevators, and accessible parking spaces. Please contact us in advance to arrange any special requirements.',
                         ],
                     ],
                 ],

@@ -1,8 +1,9 @@
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     page: Object,
@@ -13,8 +14,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const page = usePage();
-const locale = computed(() => page.props.locale || 'en');
+const { locale, ml } = useLocale();
 
 const asset = (path) => `/assets/paradise/${path}`;
 
@@ -26,28 +26,119 @@ const facilities = props.sections?.facilities;
 const faq = props.sections?.faq;
 
 // Parse JSON data arrays
-const amenitiesList = amenities?.data?.items || [
-    { 
-        title: 'Local Restaurants', 
-        description: 'Discover the authentic flavors of Skopje, from traditional Macedonian taverns to modern fine dining. Enjoy local specialties such as tavče gravče, grilled meats, fresh salads, and homemade desserts in welcoming restaurants throughout the city.',
-        links: [
-            { name: 'Skopski Merak', url: 'https://www.google.com/maps/dir/?api=1&destination=Restaurant%20Skopski%20Merak%2CDebarca%20St%2051%2C%201000%2C%20Skopje%201000%2C%20North%20Macedonia' },
-            { name: 'Pelister', url: 'https://www.google.com/maps/dir/?api=1&destination=Pelister%2CBoulevard%20Macedonia%2C%20Skopje%201000%2C%20North%20Macedonia' },
-            { name: 'Vodenica Mulino', url: 'https://www.google.com/maps/dir/?api=1&destination=Vodenica%20Mulino%2CMitropolit%20Teodosij%20Gologanov%2069%2C%20Skopje%201000%2C%20North%20Macedonia' },
-        ]
-    },
-    { 
-        title: 'Nature', 
-        description: 'Escape into nature just minutes from the city center. Visit the breathtaking Matka Canyon Skopje, where you can enjoy hiking, kayaking, boat tours, and spectacular limestone cliffs. For panoramic views over the city, take a walk or cable car up Mount Vodno and experience one of Skopje\'s most beautiful landscapes.',
-    },
-    { 
-        title: 'Art & Culture', 
-        description: 'Skopje blends centuries of history with contemporary creativity. Wander through the historic Old Bazaar, visit the Museum of Contemporary Art Skopje, explore Kale Fortress, and admire the city\'s museums, galleries, and monuments. From Ottoman architecture to modern exhibitions, Skopje offers a rich cultural experience for every visitor.',
-        links: [
-            { name: 'Museum of Contemporary Art', url: 'https://www.google.com/maps/dir/?api=1&destination=Museum%20of%20Contemporary%20Art%20Skopje%2CSamoilova%2017%2C%20Skopje%201000%2C%20North%20Macedonia' },
-        ]
-    },
-];
+const amenitiesDefaultData = {
+    en: [
+        {
+            title: 'Local Restaurants',
+            description: 'Discover the authentic flavors of Skopje, from traditional Macedonian taverns to modern fine dining. Enjoy local specialties such as tavče gravče, grilled meats, fresh salads, and homemade desserts in welcoming restaurants throughout the city.',
+            links: [
+                { name: 'Skopski Merak', url: 'https://www.google.com/maps/dir/?api=1&destination=Restaurant%20Skopski%20Merak%2CDebarca%20St%2051%2C%201000%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Pelister', url: 'https://www.google.com/maps/dir/?api=1&destination=Pelister%2CBoulevard%20Macedonia%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Vodenica Mulino', url: 'https://www.google.com/maps/dir/?api=1&destination=Vodenica%20Mulino%2CMitropolit%20Teodosij%20Gologanov%2069%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+        {
+            title: 'Nature',
+            description: 'Escape into nature just minutes from the city center. Visit the breathtaking Matka Canyon Skopje, where you can enjoy hiking, kayaking, boat tours, and spectacular limestone cliffs. For panoramic views over the city, take a walk or cable car up Mount Vodno and experience one of Skopje\'s most beautiful landscapes.',
+        },
+        {
+            title: 'Art & Culture',
+            description: 'Skopje blends centuries of history with contemporary creativity. Wander through the historic Old Bazaar, visit the Museum of Contemporary Art Skopje, explore Kale Fortress, and admire the city\'s museums, galleries, and monuments. From Ottoman architecture to modern exhibitions, Skopje offers a rich cultural experience for every visitor.',
+            links: [
+                { name: 'Museum of Contemporary Art', url: 'https://www.google.com/maps/dir/?api=1&destination=Museum%20of%20Contemporary%20Art%20Skopje%2CSamoilova%2017%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+    ],
+    mk: [
+        {
+            title: 'Локални Ресторани',
+            description: 'Откријте ги автентичните вкусови на Скопје, од традиционални македонски кафeани до модерни ресторани за фино вечерање. Уживајте во локални специјалитети како тавче гравче, скара, свежи салати и домашни десерти во гостопримливи ресторани низ целиот град.',
+            links: [
+                { name: 'Skopski Merak', url: 'https://www.google.com/maps/dir/?api=1&destination=Restaurant%20Skopski%20Merak%2CDebarca%20St%2051%2C%201000%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Pelister', url: 'https://www.google.com/maps/dir/?api=1&destination=Pelister%2CBoulevard%20Macedonia%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Vodenica Mulino', url: 'https://www.google.com/maps/dir/?api=1&destination=Vodenica%20Mulino%2CMitropolit%20Teodosij%20Gologanov%2069%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+        {
+            title: 'Природа',
+            description: 'Побегнете во природата само неколку минути од центарот на градот. Посетете го прекрасниот кањон Матка во Скопје, каде можете да уживате во пешачење, кајак, бродски тури и импресивни варовнички карпи. За панорамски поглед на градот, прошетајте се или качете се со жичница на планината Водно и доживејте еден од најубавите пејзажи во Скопје.',
+        },
+        {
+            title: 'Уметност и Култура',
+            description: 'Скопје ги спојува вековите историја со современата креативност. Прошетајте низ историската Стара чаршија, посетете го Музејот на современа уметност Скопје, истражете ја тврдината Кале и восхитете се на музеите, галериите и споменициte на градот. Од отоманска архитектура до модерни изложби, Скопје нуди богато културно искуство за секој посетител.',
+            links: [
+                { name: 'Museum of Contemporary Art', url: 'https://www.google.com/maps/dir/?api=1&destination=Museum%20of%20Contemporary%20Art%20Skopje%2CSamoilova%2017%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+    ],
+    sr: [
+        {
+            title: 'Lokalni Restorani',
+            description: 'Otkrijte autentične ukuse Skoplja, od tradicionalnih makedonskih kafana do modernih restorana sa finom kuhinjom. Uživajte u lokalnim specijalitetima kao što su tavče gravče, roštilj, sveže salate i domaći deserti u gostoljubivim restoranima širom grada.',
+            links: [
+                { name: 'Skopski Merak', url: 'https://www.google.com/maps/dir/?api=1&destination=Restaurant%20Skopski%20Merak%2CDebarca%20St%2051%2C%201000%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Pelister', url: 'https://www.google.com/maps/dir/?api=1&destination=Pelister%2CBoulevard%20Macedonia%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Vodenica Mulino', url: 'https://www.google.com/maps/dir/?api=1&destination=Vodenica%20Mulino%2CMitropolit%20Teodosij%20Gologanov%2069%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+        {
+            title: 'Priroda',
+            description: 'Pobegnite u prirodu samo nekoliko minuta od centra grada. Posetite prelepi kanjon Matka u Skoplju, gde možete uživati u planinarenju, kajaku, brodskim turama i impresivnim krečnjačkim liticama. Za panoramski pogled na grad, prošetajte ili se popnite žičarom na planinu Vodno i doživite jedan od najlepših pejzaža Skoplja.',
+        },
+        {
+            title: 'Umetnost i Kultura',
+            description: 'Skoplje spaja vekovnu istoriju sa savremenom kreativnošću. Prošetajte kroz istorijsku Staru čaršiju, posetite Muzej savremene umetnosti Skoplje, istražite tvrđavu Kale i divite se muzejima, galerijama i spomenicima grada. Od otomanske arhitekture do modernih izložbi, Skoplje nudi bogato kulturno iskustvo za svakog posetioca.',
+            links: [
+                { name: 'Museum of Contemporary Art', url: 'https://www.google.com/maps/dir/?api=1&destination=Museum%20of%20Contemporary%20Art%20Skopje%2CSamoilova%2017%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+    ],
+    tr: [
+        {
+            title: 'Yerel Restoranlar',
+            description: 'Geleneksel Makedon meyhanelerinden modern şık restoranlara kadar Üsküp\'ün otantik lezzetlerini keşfedin. Şehir genelindeki misafirperver restoranlarda tavče gravče, ızgara etler, taze salatalar ve ev yapımı tatlılar gibi yöresel lezzetlerin tadını çıkarın.',
+            links: [
+                { name: 'Skopski Merak', url: 'https://www.google.com/maps/dir/?api=1&destination=Restaurant%20Skopski%20Merak%2CDebarca%20St%2051%2C%201000%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Pelister', url: 'https://www.google.com/maps/dir/?api=1&destination=Pelister%2CBoulevard%20Macedonia%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Vodenica Mulino', url: 'https://www.google.com/maps/dir/?api=1&destination=Vodenica%20Mulino%2CMitropolit%20Teodosij%20Gologanov%2069%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+        {
+            title: 'Doğa',
+            description: 'Şehir merkezinden sadece birkaç dakika uzaklıkta doğaya kaçış yapın. Yürüyüş, kano ve tekne turlarının yanı sıra etkileyici kireçtaşı kayalıklarıyla nefes kesici Matka Kanyonu\'nu ziyaret edin. Şehrin panoramik manzarası için Vodno Dağı\'na yürüyün veya teleferikle çıkın ve Üsküp\'ün en güzel manzaralarından birini yaşayın.',
+        },
+        {
+            title: 'Sanat ve Kültür',
+            description: 'Üsküp, asırlık tarihi çağdaş yaratıcılıkla harmanlıyor. Tarihi Eski Çarşı\'da gezinin, Üsküp Çağdaş Sanatlar Müzesi\'ni ziyaret edin, Kale Kalesi\'ni keşfedin ve şehrin müzelerine, galerilerine ve anıtlarına hayran kalın. Osmanlı mimarisinden modern sergilere kadar Üsküp, her ziyaretçiye zengin bir kültürel deneyim sunar.',
+            links: [
+                { name: 'Museum of Contemporary Art', url: 'https://www.google.com/maps/dir/?api=1&destination=Museum%20of%20Contemporary%20Art%20Skopje%2CSamoilova%2017%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+    ],
+    sq: [
+        {
+            title: 'Restorante Lokale',
+            description: 'Zbuloni shijet autentike të Shkupit, nga tavernat tradicionale maqedonase deri te restorantet moderne elegante. Shijoni specialitete lokale si tavče gravče, mish në skarë, sallata të freskëta dhe ëmbëlsira shtëpiake në restorante mikpritëse në të gjithë qytetin.',
+            links: [
+                { name: 'Skopski Merak', url: 'https://www.google.com/maps/dir/?api=1&destination=Restaurant%20Skopski%20Merak%2CDebarca%20St%2051%2C%201000%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Pelister', url: 'https://www.google.com/maps/dir/?api=1&destination=Pelister%2CBoulevard%20Macedonia%2C%20Skopje%201000%2C%20North%20Macedonia' },
+                { name: 'Vodenica Mulino', url: 'https://www.google.com/maps/dir/?api=1&destination=Vodenica%20Mulino%2CMitropolit%20Teodosij%20Gologanov%2069%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+        {
+            title: 'Natyra',
+            description: 'Shpëtoni në natyrë vetëm disa minuta larg qendrës së qytetit. Vizitoni kanionin mahnitës Matka të Shkupit, ku mund të shijoni ecje në natyrë, kajak, ture me varkë dhe shkëmbinj gëlqerorë spektakolarë. Për pamje panoramike mbi qytet, ecni ose merrni teleferikun në malin Vodno dhe përjetoni një nga peizazhet më të bukura të Shkupit.',
+        },
+        {
+            title: 'Arti dhe Kultura',
+            description: 'Shkupi bashkon shekuj histori me krijimtarinë bashkëkohore. Bredhni nëpër Çarshinë e Vjetër historike, vizitoni Muzeun e Artit Bashkëkohor të Shkupit, eksploroni Kalanë Kale dhe admironi muzetë, galeritë dhe monumentet e qytetit. Nga arkitektura osmane deri te ekspozitat moderne, Shkupi ofron një përvojë të pasur kulturore për çdo vizitor.',
+            links: [
+                { name: 'Museum of Contemporary Art', url: 'https://www.google.com/maps/dir/?api=1&destination=Museum%20of%20Contemporary%20Art%20Skopje%2CSamoilova%2017%2C%20Skopje%201000%2C%20North%20Macedonia' },
+            ]
+        },
+    ],
+};
+const amenitiesList = computed(() => amenities?.data?.items || amenitiesDefaultData[locale.value] || amenitiesDefaultData.en);
 
 const facilitiesData = {
     en: [
@@ -61,7 +152,25 @@ const facilitiesData = {
         { icon: 'customicon-wifi', title: 'Брз WiFi', description: 'Останете поврзани со бесплатен брз WiFi достапен низ целиот хотел.' },
         { icon: 'customicon-cocktail', title: 'Бар и Ресторан', description: 'Уживајте во извонредна храна во нашиот ресторан и опуштете се во нашиот бар.' },
         { icon: 'customicon-swimming-pool', title: 'Базен', description: 'Релаксирајте и освежете се во нашиот затворен базен.' },
-    ]
+    ],
+    sr: [
+        { icon: 'customicon-private-parking', title: 'Privatni Parking', description: 'Besplatan privatni parking je dostupan svim gostima hotela, obezbeđujući udoban i bezbedan boravak.' },
+        { icon: 'customicon-wifi', title: 'Brz WiFi', description: 'Ostanite povezani sa besplatnim brzim WiFi-jem dostupnim u celom hotelu i u svim sobama.' },
+        { icon: 'customicon-cocktail', title: 'Bar i Restoran', description: 'Uživajte u izvrsnoj hrani u našem restoranu i opustite se u našem baru uz izbor finih vina i koktela.' },
+        { icon: 'customicon-swimming-pool', title: 'Bazen', description: 'Opustite se i osvežite u našem zatvorenom bazenu, savršenom za okrepljujuće plivanje u bilo koje doba godine.' },
+    ],
+    tr: [
+        { icon: 'customicon-private-parking', title: 'Özel Otopark', description: 'Tüm otel misafirlerimiz için ücretsiz özel otopark hizmeti sunulmaktadır, konforlu ve güvenli bir konaklama sağlar.' },
+        { icon: 'customicon-wifi', title: 'Yüksek Hızlı Wifi', description: 'Otelin her yerinde ve tüm odalarda ücretsiz yüksek hızlı WiFi ile bağlantıda kalın.' },
+        { icon: 'customicon-cocktail', title: 'Bar ve Restoran', description: 'Restoranımızda enfes yemeklerin tadını çıkarın ve barımızda seçkin şarap ve kokteyllerle rahatlayın.' },
+        { icon: 'customicon-swimming-pool', title: 'Yüzme Havuzu', description: 'Kapalı yüzme havuzumuzda dinlenin ve tazelenin, yılın her döneminde canlandırıcı bir yüzme için idealdir.' },
+    ],
+    sq: [
+        { icon: 'customicon-private-parking', title: 'Parking Privat', description: 'Parkingu privat falas është i disponueshëm për të gjithë mysafirët e hotelit, duke siguruar një qëndrim të rehatshëm dhe të sigurt.' },
+        { icon: 'customicon-wifi', title: 'Wifi me Shpejtësi të Lartë', description: 'Qëndroni të lidhur me Wifi falas me shpejtësi të lartë të disponueshëm në të gjithë hotelin dhe në të gjitha dhomat.' },
+        { icon: 'customicon-cocktail', title: 'Bar dhe Restorant', description: 'Shijoni ushqime të shkëlqyera në restorantin tonë dhe relaksohuni në barin tonë me një përzgjedhje verërash dhe koktejesh të shkëlqyera.' },
+        { icon: 'customicon-swimming-pool', title: 'Pishinë', description: 'Relaksohuni dhe freskohuni në pishinën tonë të mbyllur, ideale për një not rigjenerues në çdo kohë të vitit.' },
+    ],
 };
 const facilitiesList = computed(() => facilities?.data?.items || facilitiesData[locale.value] || facilitiesData.en);
 
@@ -77,7 +186,25 @@ const faqData = {
         { question: 'Начини на Плаќање', answer: 'Прифаќаме сите главни кредитни картички (Visa, MasterCard, American Express), банкарски трансфери и готовински плаќања. Валидна кредитна картичка е потребна при пријавување.' },
         { question: 'Време на Пријавување / Одјавување', answer: 'Времето за пријавување е од 14:00 часот. Времето за одјавување е до 11:00 часот. Рано пријавување и доцно одјавување може да бидат достапни на барање.' },
         { question: 'Пристапност', answer: 'Нашиот хотел е целосно пристапен за гости со попреченост. Нудиме пристапни соби, рампи, лифтови и пристапни паркинг места. Контактирајте нè однапред за посебни барања.' },
-    ]
+    ],
+    sr: [
+        { question: 'Politika Otkazivanja', answer: 'Besplatno otkazivanje je moguće do 48 sati pre prijave. Otkazivanja izvršena u roku od 48 sati pre dolaska mogu biti naplaćena u iznosu jedne noćenja. Nedolazak bez otkazivanja naplaćuje se u punom iznosu rezervacije.' },
+        { question: 'Načini Plaćanja', answer: 'Prihvatamo sve glavne kreditne kartice (Visa, MasterCard, American Express), bankovne transfere i gotovinska plaćanja. Važeća kreditna kartica je potrebna prilikom prijave za dodatne troškove. Puno plaćanje se može izvršiti po dolasku ili odlasku.' },
+        { question: 'Vreme Prijave / Odjave', answer: 'Prijava je moguća od 14:00 časova. Odjava je do 11:00 časova. Ranija prijava i kasnija odjava mogu biti dostupne na zahtev, u zavisnosti od raspoloživosti i uz dodatnu naplatu.' },
+        { question: 'Pristupačnost', answer: 'Naš hotel je u potpunosti pristupačan gostima sa invaliditetom. Nudimo pristupačne sobe, rampe, liftove i pristupačna parking mesta. Kontaktirajte nas unapred kako biste dogovorili posebne zahteve.' },
+    ],
+    tr: [
+        { question: 'İptal Politikası', answer: 'Giriş yapmadan 48 saat öncesine kadar ücretsiz iptal mümkündür. Varıştan 48 saat içinde yapılan iptallerde bir gecelik konaklama ücreti tahsil edilebilir. Gelmeyen misafirlerden rezervasyonun tam tutarı tahsil edilir.' },
+        { question: 'Ödeme Yöntemleri', answer: 'Tüm büyük kredi kartlarını (Visa, MasterCard, American Express), banka havalelerini ve nakit ödemeleri kabul ediyoruz. Giriş sırasında ek masraflar için geçerli bir kredi kartı gereklidir. Tam ödeme varışta veya ayrılışta yapılabilir.' },
+        { question: 'Giriş / Çıkış Saatleri', answer: 'Giriş saati 14:00\'ten itibarendir. Çıkış saati 11:00\'e kadardır. Erken giriş ve geç çıkış, müsaitlik durumuna ve ek ücrete tabi olarak talep üzerine sağlanabilir.' },
+        { question: 'Erişilebilirlik', answer: 'Otelimiz engelli misafirler için tamamen erişilebilirdir. Erişilebilir odalar, rampalar, asansörler ve erişilebilir otopark alanları sunuyoruz. Özel gereksinimlerinizi düzenlemek için lütfen önceden bizimle iletişime geçin.' },
+    ],
+    sq: [
+        { question: 'Politika e Anulimit', answer: 'Anulimi falas është i mundur deri në 48 orë para check-in. Anulimet e bëra brenda 48 orëve nga mbërritja mund t\'i nënshtrohen një pagese ekuivalente me një natë qëndrimi. Mospërdorimi pa anulim do të faturohet me shumën e plotë të rezervimit.' },
+        { question: 'Mënyrat e Pagesës', answer: 'Pranojmë të gjitha kartat kryesore të kreditit (Visa, MasterCard, American Express), transfertat bankare dhe pagesat në para të gatshme. Një kartë krediti e vlefshme kërkohet gjatë check-in për shpenzime shtesë. Pagesa e plotë mund të bëhet në mbërritje ose nisje.' },
+        { question: 'Orari i Check-in / Check-out', answer: 'Check-in është nga ora 14:00. Check-out është deri në orën 11:00. Check-in i hershëm dhe check-out i vonuar mund të jenë të disponueshëm sipas kërkesës, në varësi të disponueshmërisë dhe pagesave shtesë.' },
+        { question: 'Aksesueshmëria', answer: 'Hoteli ynë është plotësisht i aksesueshëm për mysafirët me aftësi të kufizuara. Ofrojmë dhoma të aksesueshme, rampa, ashensorë dhe vende parkimi të aksesueshme. Ju lutemi na kontaktoni paraprakisht për të organizuar çdo kërkesë të veçantë.' },
+    ],
 };
 const faqList = computed(() => faq?.data?.items || faqData[locale.value] || faqData.en);
 
@@ -107,8 +234,8 @@ const toggleFaq = (index) => {
             <img class="jarallax-img about-hero-img" :src="hero?.image ? asset(hero.image) : asset('img/about-us-modified.webp')" alt="">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
-                    <small class="slide-animated one">{{ hero?.subtitle || 'Luxury Hotel Experience' }}</small>
-                    <h1 class="slide-animated two">{{ hero?.title || 'About Alexandar Palace' }}</h1>
+                    <small class="slide-animated one">{{ hero?.subtitle || ml({ en: 'Luxury Hotel Experience', mk: 'Луксузно Хотелско Искуство', sr: 'Luksuzno Hotelsko Iskustvo', tr: 'Lüks Otel Deneyimi', sq: 'Përvojë Hoteliere Luksoze' }) }}</small>
+                    <h1 class="slide-animated two">{{ hero?.title || ml({ en: 'About Alexandar Palace', mk: 'За Александар Палас', sr: 'O Alexandar Palace', tr: 'Alexandar Palace Hakkında', sq: 'Rreth Alexandar Palace' }) }}</h1>
                 </div>
             </div>
         </div>
@@ -129,12 +256,16 @@ const toggleFaq = (index) => {
                 <div class="col-lg-5">
                     <div class="intro">
                         <div class="title">
-                            <small>{{ history?.subtitle || 'Alexandar Palace Hotel' }}</small>
-                            <h2>{{ history?.title || 'Our History' }}</h2>
+                            <small>{{ history?.subtitle || ml({ en: 'Alexandar Palace Hotel', mk: 'Хотел Александар Палас', sr: 'Hotel Alexandar Palace', tr: 'Alexandar Palace Otel', sq: 'Hoteli Alexandar Palace' }) }}</small>
+                            <h2>{{ history?.title || ml({ en: 'Our History', mk: 'Нашата Историја', sr: 'Naša Istorija', tr: 'Tarihimiz', sq: 'Historia Jonë' }) }}</h2>
                         </div>
                         <div v-if="history?.content" v-html="history.content"></div>
                         <template v-else>
-                            <p class="lead">The hotel Aleksandar Palace, leading hotel in Macedonia, is located on the right bank of the river Vardar next to the city park, only 3 km away from the town center and just next to the most important administrative, cultural and historical buildings.</p>
+                            <p v-if="locale === 'mk'" class="lead">Хотелот Александар Палас, водечки хотел во Македонија, се наоѓа на десниот брег на реката Вардар веднаш до градскиот парк, само 3 км од центарот на градот и во непосредна близина на најважните административни, културни и историски објекти.</p>
+                            <p v-else-if="locale === 'sr'" class="lead">Hotel Aleksandar Palas, vodeći hotel u Makedoniji, nalazi se na desnoj obali reke Vardar odmah pored gradskog parka, samo 3 km od centra grada i u neposrednoj blizini najvažnijih administrativnih, kulturnih i istorijskih objekata.</p>
+                            <p v-else-if="locale === 'tr'" class="lead">Makedonya'nın önde gelen oteli Aleksandar Palace, Vardar Nehri'nin sağ kıyısında, şehir parkının hemen yanında, şehir merkezine sadece 3 km uzaklıkta ve en önemli idari, kültürel ve tarihi binaların hemen yakınında yer almaktadır.</p>
+                            <p v-else-if="locale === 'sq'" class="lead">Hoteli Aleksandar Palace, hoteli kryesor në Maqedoni, ndodhet në bregun e djathtë të lumit Vardar menjëherë pranë parkut të qytetit, vetëm 3 km larg qendrës së qytetit dhe në afërsi të drejtpërdrejtë të objekteve më të rëndësishme administrative, kulturore dhe historike.</p>
+                            <p v-else class="lead">The hotel Aleksandar Palace, leading hotel in Macedonia, is located on the right bank of the river Vardar next to the city park, only 3 km away from the town center and just next to the most important administrative, cultural and historical buildings.</p>
                            <!-- <p><em>Maria...the Owner</em></p> -->
                         </template>
                     </div>
@@ -148,8 +279,8 @@ const toggleFaq = (index) => {
                 <div class="row justify-content-between">
                     <div class="col-lg-5 fixed_title">
                         <div class="title">
-                            <small>{{ amenities?.subtitle || 'Alexandar Palace Hotel' }}</small>
-                            <h2>{{ amenities?.title || 'Local Amenities' }}</h2>
+                            <small>{{ amenities?.subtitle || ml({ en: 'Alexandar Palace Hotel', mk: 'Хотел Александар Палас', sr: 'Hotel Alexandar Palace', tr: 'Alexandar Palace Otel', sq: 'Hoteli Alexandar Palace' }) }}</small>
+                            <h2>{{ amenities?.title || ml({ en: 'Local Amenities', mk: 'Локални Погодности', sr: 'Lokalne Pogodnosti', tr: 'Yerel Olanaklar', sq: 'Lehtësi Lokale' }) }}</h2>
                             <p v-if="amenities?.content" v-html="amenities.content"></p>
                             <p v-else>{{ t('about.local_amenities_text') }}</p>
                         </div>
@@ -235,8 +366,8 @@ const toggleFaq = (index) => {
         <!-- Main Facilities Section -->
         <div class="container margin_120_95">
             <div class="title text-center mb-5">
-                <small data-cue="slideInUp">{{ facilities?.subtitle || 'Alexandar Palace Hotel' }}</small>
-                <h2 data-cue="slideInUp" data-delay="100">{{ facilities?.title || 'Main Facilities' }}</h2>
+                <small data-cue="slideInUp">{{ facilities?.subtitle || ml({ en: 'Alexandar Palace Hotel', mk: 'Хотел Александар Палас', sr: 'Hotel Alexandar Palace', tr: 'Alexandar Palace Otel', sq: 'Hoteli Alexandar Palace' }) }}</small>
+                <h2 data-cue="slideInUp" data-delay="100">{{ facilities?.title || ml({ en: 'Main Facilities', mk: 'Главни Капацитети', sr: 'Glavni Sadržaji', tr: 'Ana Olanaklar', sq: 'Lehtësitë Kryesore' }) }}</h2>
             </div>
             <div class="row mt-4">
                 <div v-for="(facility, index) in facilitiesList" :key="index" class="col-lg-3 col-md-6">
@@ -254,12 +385,12 @@ const toggleFaq = (index) => {
             <div class="row justify-content-between margin_60_0">
                 <div class="col-lg-4">
                     <div class="title">
-                        <small>{{ faq?.subtitle || (locale === 'mk' ? 'Александар Палас Хотел' : 'Alexandar Palace Hotel FAQ') }}</small>
-                        <h3>{{ faq?.title || (locale === 'mk' ? 'Често Поставувани Прашања' : 'Frequently Asked Questions') }}</h3>
+                        <small>{{ faq?.subtitle || ml({ en: 'Alexandar Palace Hotel FAQ', mk: 'Александар Палас Хотел', sr: 'Alexandar Palace Hotel FAQ', tr: 'Alexandar Palace Otel SSS', sq: 'Pyetjet e Shpeshta të Hotelit Alexandar Palace' }) }}</small>
+                        <h3>{{ faq?.title || ml({ en: 'Frequently Asked Questions', mk: 'Често Поставувани Прашања', sr: 'Često Postavljana Pitanja', tr: 'Sıkça Sorulan Sorular', sq: 'Pyetjet e Bëra Shpesh' }) }}</h3>
                     </div>
                     <p v-if="faq?.content" v-html="faq.content"></p>
-                    <p v-else>{{ locale === 'mk' ? 'Не го најдовте вашето прашање? Контактирајте нè.' : "Can't find your question in the list? Let us know your questions." }}</p>
-                    <p><Link href="/contacts" class="animated_link"><strong>{{ locale === 'mk' ? 'Контактирајте нè' : 'Contact Us' }} <i class="bi bi-arrow-right"></i></strong></Link></p>
+                    <p v-else>{{ ml({ en: "Can't find your question in the list? Let us know your questions.", mk: 'Не го најдовте вашето прашање? Контактирајте нè.', sr: 'Ne pronalazite svoje pitanje na listi? Javite nam vaša pitanja.', tr: 'Sorunuzu listede bulamadınız mı? Sorularınızı bize iletin.', sq: 'Nuk e gjetët pyetjen tuaj në listë? Na tregoni pyetjet tuaja.' }) }}</p>
+                    <p><Link href="/contacts" class="animated_link"><strong>{{ ml({ en: 'Contact Us', mk: 'Контактирајте нè', sr: 'Kontaktirajte Nas', tr: 'Bizimle İletişime Geçin', sq: 'Na Kontaktoni' }) }} <i class="bi bi-arrow-right"></i></strong></Link></p>
                 </div>
                 <div class="col-lg-7">
                     <div class="mb-5 accordion about-faq-accordion">

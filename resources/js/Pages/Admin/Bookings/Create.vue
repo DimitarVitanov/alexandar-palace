@@ -13,6 +13,7 @@ const form = useForm({
     name: '',
     email: '',
     phone: '',
+    passport_id: '',
     check_in: '',
     check_out: '',
     adults: 1,
@@ -159,6 +160,11 @@ const getRoomName = (room) => {
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Phone</label>
                         <input v-model="form.phone" type="tel" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Passport / ID number</label>
+                        <input v-model="form.passport_id" type="text" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                        <p v-if="form.errors.passport_id" class="text-red-500 text-sm mt-1">{{ form.errors.passport_id }}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>

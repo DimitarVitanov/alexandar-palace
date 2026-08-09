@@ -38,12 +38,17 @@ createInertiaApp({
     resolve: resolvePage,
     setup({ el, App, props, plugin }) {
         // Get database translations from page props
+        // Note: the admin CMS only manages 'en'/'mk' database translations; sr/tr/sq
+        // rely solely on the static defaultMessages (no admin UI for those locales).
         const dbTranslations = props.initialPage.props.dbTranslations || { en: {}, mk: {} };
         
         // Merge database translations with defaults (database takes priority)
         const messages = {
             en: deepMerge(defaultMessages.en, dbTranslations.en),
             mk: deepMerge(defaultMessages.mk, dbTranslations.mk),
+            sr: defaultMessages.sr,
+            tr: defaultMessages.tr,
+            sq: defaultMessages.sq,
         };
 
         const i18n = createI18n({

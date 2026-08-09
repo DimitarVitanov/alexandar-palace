@@ -2,8 +2,10 @@
 import { ref } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { useLocale } from '@/composables/useLocale';
 
 const { t } = useI18n();
+const { ml } = useLocale();
 
 const form = useForm({
     email: '',
@@ -63,7 +65,7 @@ const submitNewsletter = () => {
                     <div id="newsletter">
                         <h5>{{ t('footer.newsletter') }}</h5>
                         <div v-if="subscribed" class="alert" style="background: rgba(40,167,69,0.2); border: 1px solid rgba(40,167,69,0.5); color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-                            <i class="bi bi-check-circle me-2"></i>{{ $page.props.locale === 'mk' ? 'Успешно се претплативте!' : 'Successfully subscribed!' }}
+                            <i class="bi bi-check-circle me-2"></i>{{ ml({ en: 'Successfully subscribed!', mk: 'Успешно се претплативте!', sr: 'Uspešno ste se pretplatili!', tr: 'Başarıyla abone oldunuz!', sq: 'U regjistruat me sukses!' }) }}
                         </div>
                         <form v-else @submit.prevent="submitNewsletter">
                             <div class="form-group">

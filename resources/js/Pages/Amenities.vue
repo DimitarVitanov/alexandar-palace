@@ -1,12 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     amenities: Object,
     contact: Object,
     seo: Object,
 });
+
+const { locale, ml } = useLocale();
 
 const isLoaded = ref(false);
 
@@ -54,8 +57,8 @@ const asset = (path) => `/assets/paradise/${path}`;
                     <i class="bi bi-diamond-fill"></i>
                     <span></span>
                 </div>
-                <h1>Welcome to Alexandar Palace</h1>
-                <p class="hero-tagline">Discover Our World-Class Amenities</p>
+                <h1>{{ ml({ en: 'Welcome to Alexandar Palace', mk: 'Добредојдовте во Alexandar Palace', sr: 'Dobrodošli u Alexandar Palace', tr: 'Alexandar Palace\'e Hoş Geldiniz', sq: 'Mirë se vini në Alexandar Palace' }) }}</h1>
+                <p class="hero-tagline">{{ ml({ en: 'Discover Our World-Class Amenities', mk: 'Откријте ги нашите врвни услови и содржини', sr: 'Otkrijte naše vrhunske sadržaje', tr: 'Dünya standartlarındaki olanaklarımızı keşfedin', sq: 'Zbuloni ambientet tona të klasit botëror' }) }}</p>
                 <div class="scroll-indicator">
                     <i class="bi bi-chevron-down"></i>
                 </div>
@@ -66,27 +69,27 @@ const asset = (path) => `/assets/paradise/${path}`;
         <section class="quick-services">
             <div class="service-item">
                 <i class="bi bi-wifi"></i>
-                <span>Free WiFi</span>
+                <span>{{ ml({ en: 'Free WiFi', mk: 'Бесплатен WiFi', sr: 'Besplatan WiFi', tr: 'Ücretsiz WiFi', sq: 'WiFi Falas' }) }}</span>
             </div>
             <div class="service-item">
                 <i class="bi bi-p-circle-fill"></i>
-                <span>Free Parking</span>
+                <span>{{ ml({ en: 'Free Parking', mk: 'Бесплатен Паркинг', sr: 'Besplatan Parking', tr: 'Ücretsiz Otopark', sq: 'Parking Falas' }) }}</span>
             </div>
             <div class="service-item">
                 <i class="bi bi-clock-fill"></i>
-                <span>24/7 Service</span>
+                <span>{{ ml({ en: '24/7 Service', mk: 'Услуга 24/7', sr: 'Usluga 24/7', tr: '7/24 Hizmet', sq: 'Shërbim 24/7' }) }}</span>
             </div>
             <div class="service-item">
                 <i class="bi bi-shield-check"></i>
-                <span>Secure</span>
+                <span>{{ ml({ en: 'Secure', mk: 'Безбедност', sr: 'Bezbednost', tr: 'Güvenlik', sq: 'Siguri' }) }}</span>
             </div>
         </section>
 
         <!-- SPA & Wellness Section -->
         <section class="amenity-section spa-section">
             <div class="section-header">
-                <span class="section-label">Relax & Rejuvenate</span>
-                <h2>SPA & Wellness</h2>
+                <span class="section-label">{{ ml({ en: 'Relax & Rejuvenate', mk: 'Релаксирајте и Подмладете се', sr: 'Opustite se i Podmladite', tr: 'Rahatlayın ve Kendinizi Yenileyin', sq: 'Relaksohuni dhe Rinovohuni' }) }}</span>
+                <h2>{{ ml({ en: 'SPA & Wellness', mk: 'СПА и Велнес', sr: 'SPA i Wellness', tr: 'SPA ve Wellness', sq: 'SPA dhe Wellness' }) }}</h2>
             </div>
             <div class="image-showcase">
                 <div class="main-image">
@@ -100,95 +103,95 @@ const asset = (path) => `/assets/paradise/${path}`;
             <div class="features-grid">
                 <div class="feature">
                     <i class="bi bi-water"></i>
-                    <span>Indoor Pool</span>
+                    <span>{{ ml({ en: 'Indoor Pool', mk: 'Затворен Базен', sr: 'Zatvoreni Bazen', tr: 'Kapalı Havuz', sq: 'Pishinë e Mbyllur' }) }}</span>
                 </div>
                 <div class="feature">
                     <i class="bi bi-thermometer-sun"></i>
-                    <span>Sauna & Hammam</span>
+                    <span>{{ ml({ en: 'Sauna & Hammam', mk: 'Сауна и Хамам', sr: 'Sauna i Hamam', tr: 'Sauna ve Hamam', sq: 'Sauna dhe Hamam' }) }}</span>
                 </div>
                 <div class="feature">
                     <i class="bi bi-hand-index-thumb"></i>
-                    <span>Massages</span>
+                    <span>{{ ml({ en: 'Massages', mk: 'Масажи', sr: 'Masaže', tr: 'Masajlar', sq: 'Masazhe' }) }}</span>
                 </div>
                 <div class="feature">
                     <i class="bi bi-flower1"></i>
-                    <span>Treatments</span>
+                    <span>{{ ml({ en: 'Treatments', mk: 'Третмани', sr: 'Tretmani', tr: 'Bakımlar', sq: 'Trajtime' }) }}</span>
                 </div>
             </div>
             <div class="hours-badge">
                 <i class="bi bi-clock"></i>
-                <span>06:00 - 22:00 Daily</span>
+                <span>{{ ml({ en: '06:00 - 22:00 Daily', mk: '06:00 - 22:00 Секој Ден', sr: '06:00 - 22:00 Svakog Dana', tr: 'Her Gün 06:00 - 22:00', sq: '06:00 - 22:00 Çdo Ditë' }) }}</span>
             </div>
         </section>
 
         <!-- Sport & Recreation Section -->
         <section class="amenity-section sport-section">
             <div class="section-header light">
-                <span class="section-label">Stay Active</span>
-                <h2>Sport & Recreation</h2>
+                <span class="section-label">{{ ml({ en: 'Stay Active', mk: 'Останете Активни', sr: 'Ostanite Aktivni', tr: 'Aktif Kalın', sq: 'Qëndroni Aktivë' }) }}</span>
+                <h2>{{ ml({ en: 'Sport & Recreation', mk: 'Спорт и Рекреација', sr: 'Sport i Rekreacija', tr: 'Spor ve Rekreasyon', sq: 'Sport dhe Argëtim' }) }}</h2>
             </div>
             <div class="image-grid-3">
                 <div class="grid-item large">
                     <img :src="asset('img/activities/teniski-teren-scaled.webp')" alt="Tennis Courts">
-                    <div class="grid-label">Tennis Courts</div>
+                    <div class="grid-label">{{ ml({ en: 'Tennis Courts', mk: 'Тениски Терени', sr: 'Teniski Tereni', tr: 'Tenis Kortları', sq: 'Fusha Tenisi' }) }}</div>
                 </div>
                 <div class="grid-item">
                     <img :src="asset('img/activities/kosarkarski-teren-scaled.webp')" alt="Basketball">
-                    <div class="grid-label">Basketball</div>
+                    <div class="grid-label">{{ ml({ en: 'Basketball', mk: 'Кошарка', sr: 'Košarka', tr: 'Basketbol', sq: 'Basketboll' }) }}</div>
                 </div>
                 <div class="grid-item">
                     <img :src="asset('img/activities/Fitness3-440x550.webp')" alt="Fitness">
-                    <div class="grid-label">Fitness Center</div>
+                    <div class="grid-label">{{ ml({ en: 'Fitness Center', mk: 'Фитнес Центар', sr: 'Fitnes Centar', tr: 'Fitness Merkezi', sq: 'Qendër Fitnesi' }) }}</div>
                 </div>
             </div>
             <div class="features-list">
                 <div class="feature-row">
                     <i class="bi bi-check-circle-fill"></i>
-                    <span>4 Professional Tennis Courts</span>
+                    <span>{{ ml({ en: '4 Professional Tennis Courts', mk: '4 Професионални Тениски Терени', sr: '4 Profesionalna Teniska Terena', tr: '4 Profesyonel Tenis Kortu', sq: '4 Fusha Profesionale Tenisi' }) }}</span>
                 </div>
                 <div class="feature-row">
                     <i class="bi bi-check-circle-fill"></i>
-                    <span>2 Basketball Courts</span>
+                    <span>{{ ml({ en: '2 Basketball Courts', mk: '2 Кошаркарски Терени', sr: '2 Košarkaška Terena', tr: '2 Basketbol Sahası', sq: '2 Fusha Basketbolli' }) }}</span>
                 </div>
                 <div class="feature-row">
                     <i class="bi bi-check-circle-fill"></i>
-                    <span>Football Pitch</span>
+                    <span>{{ ml({ en: 'Football Pitch', mk: 'Фудбалско Игралиште', sr: 'Fudbalsko Igralište', tr: 'Futbol Sahası', sq: 'Fushë Futbolli' }) }}</span>
                 </div>
                 <div class="feature-row">
                     <i class="bi bi-check-circle-fill"></i>
-                    <span>Modern Fitness Center</span>
+                    <span>{{ ml({ en: 'Modern Fitness Center', mk: 'Модерен Фитнес Центар', sr: 'Moderan Fitnes Centar', tr: 'Modern Fitness Merkezi', sq: 'Qendër Moderne Fitnesi' }) }}</span>
                 </div>
                 <div class="feature-row">
                     <i class="bi bi-check-circle-fill"></i>
-                    <span>Personal Trainers Available</span>
+                    <span>{{ ml({ en: 'Personal Trainers Available', mk: 'Достапни Лични Тренери', sr: 'Dostupni Lični Treneri', tr: 'Kişisel Antrenörler Mevcuttur', sq: 'Trajnerë Personalë në Dispozicion' }) }}</span>
                 </div>
             </div>
             <div class="hours-badge dark">
                 <i class="bi bi-clock"></i>
-                <span>08:00 - 22:00 Daily</span>
+                <span>{{ ml({ en: '08:00 - 22:00 Daily', mk: '08:00 - 22:00 Секој Ден', sr: '08:00 - 22:00 Svakog Dana', tr: 'Her Gün 08:00 - 22:00', sq: '08:00 - 22:00 Çdo Ditë' }) }}</span>
             </div>
         </section>
 
         <!-- Restaurant Section -->
         <section class="amenity-section restaurant-section">
             <div class="section-header">
-                <span class="section-label">Culinary Excellence</span>
-                <h2>Dining & Restaurants</h2>
+                <span class="section-label">{{ ml({ en: 'Culinary Excellence', mk: 'Кулинарска Извонредност', sr: 'Kulinarska Izvrsnost', tr: 'Mutfak Mükemmelliği', sq: 'Përsosmëri Kulinare' }) }}</span>
+                <h2>{{ ml({ en: 'Dining & Restaurants', mk: 'Ресторани и Храна', sr: 'Restorani i Hrana', tr: 'Yemek ve Restoranlar', sq: 'Restorante dhe Ushqim' }) }}</h2>
             </div>
             <div class="restaurant-showcase">
                 <div class="restaurant-card">
                     <img :src="asset('img/restaurant/restaurant_hero.webp')" alt="Main Restaurant">
                     <div class="restaurant-info">
-                        <h3>Main Restaurant</h3>
-                        <p>International & Local Cuisine</p>
+                        <h3>{{ ml({ en: 'Main Restaurant', mk: 'Главен Ресторан', sr: 'Glavni Restoran', tr: 'Ana Restoran', sq: 'Restoranti Kryesor' }) }}</h3>
+                        <p>{{ ml({ en: 'International & Local Cuisine', mk: 'Интернационална и Локална Кујна', sr: 'Internacionalna i Lokalna Kuhinja', tr: 'Uluslararası ve Yerel Mutfak', sq: 'Kuzhinë Ndërkombëtare dhe Vendase' }) }}</p>
                         <span class="time">07:00 - 23:00</span>
                     </div>
                 </div>
                 <div class="restaurant-card">
                     <img :src="asset('img/tennis-restaurant/5C8B3760-FC2B-4EAD-B731-9663CD55A9D9-2048x2048.webp')" alt="Tennis Restaurant">
                     <div class="restaurant-info">
-                        <h3>Tennis Restaurant</h3>
-                        <p>Casual Dining & Drinks</p>
+                        <h3>{{ ml({ en: 'Tennis Restaurant', mk: 'Тениски Ресторан', sr: 'Teniski Restoran', tr: 'Tenis Restoranı', sq: 'Restoranti i Tenisit' }) }}</h3>
+                        <p>{{ ml({ en: 'Casual Dining & Drinks', mk: 'Опуштена Кујна и Пијалаци', sr: 'Opušteno Fine Dining i Pića', tr: 'Rahat Yemek ve İçecekler', sq: 'Ushqim Casual dhe Pije' }) }}</p>
                         <span class="time">10:00 - 22:00</span>
                     </div>
                 </div>
@@ -202,19 +205,19 @@ const asset = (path) => `/assets/paradise/${path}`;
             <div class="features-grid">
                 <div class="feature">
                     <i class="bi bi-sunrise"></i>
-                    <span>Breakfast Buffet</span>
+                    <span>{{ ml({ en: 'Breakfast Buffet', mk: 'Шведска Маса за Појадок', sr: 'Švedski Sto za Doručak', tr: 'Açık Büfe Kahvaltı', sq: 'Bufe Mëngjesi' }) }}</span>
                 </div>
                 <div class="feature">
                     <i class="bi bi-cup-straw"></i>
-                    <span>Pool Bar</span>
+                    <span>{{ ml({ en: 'Pool Bar', mk: 'Бар до Базен', sr: 'Bar kod Bazena', tr: 'Havuz Barı', sq: 'Bar pranë Pishinës' }) }}</span>
                 </div>
                 <div class="feature">
                     <i class="bi bi-bell"></i>
-                    <span>Room Service 24h</span>
+                    <span>{{ ml({ en: 'Room Service 24h', mk: 'Рум Сервис 24ч', sr: 'Rum Servis 24h', tr: '24 Saat Oda Servisi', sq: 'Shërbim në Dhomë 24 orë' }) }}</span>
                 </div>
                 <div class="feature">
                     <i class="bi bi-cup-hot"></i>
-                    <span>Lobby Lounge</span>
+                    <span>{{ ml({ en: 'Lobby Lounge', mk: 'Лоби Бар', sr: 'Lobi Bar', tr: 'Lobi Barı', sq: 'Sallon i Lobit' }) }}</span>
                 </div>
             </div>
         </section>
@@ -222,53 +225,53 @@ const asset = (path) => `/assets/paradise/${path}`;
         <!-- Rooms Section -->
         <section class="amenity-section rooms-section">
             <div class="section-header light">
-                <span class="section-label">Luxurious Comfort</span>
-                <h2>Rooms & Suites</h2>
+                <span class="section-label">{{ ml({ en: 'Luxurious Comfort', mk: 'Луксузна Удобност', sr: 'Luksuzna Udobnost', tr: 'Lüks Konfor', sq: 'Rehati Luksoze' }) }}</span>
+                <h2>{{ ml({ en: 'Rooms & Suites', mk: 'Соби и Апартмани', sr: 'Sobe i Apartmani', tr: 'Odalar ve Süitler', sq: 'Dhoma dhe Suita' }) }}</h2>
             </div>
             <div class="rooms-showcase">
                 <div class="room-card">
                     <img :src="asset('img/rooms/single-room.webp')" alt="Single Room">
                     <div class="room-info">
-                        <h3>Single Room</h3>
+                        <h3>{{ ml({ en: 'Single Room', mk: 'Еднокреветна Соба', sr: 'Jednokrevetna Soba', tr: 'Tek Kişilik Oda', sq: 'Dhomë Teke' }) }}</h3>
                     </div>
                 </div>
                 <div class="room-card">
                     <img :src="asset('img/rooms/executive.webp')" alt="Executive Suite">
                     <div class="room-info">
-                        <h3>Executive Suite</h3>
+                        <h3>{{ ml({ en: 'Executive Suite', mk: 'Извршен Апартман', sr: 'Izvršni Apartman', tr: 'Executive Süit', sq: 'Suitë Ekzekutive' }) }}</h3>
                     </div>
                 </div>
                 <div class="room-card">
                     <img :src="asset('img/rooms/presidental.webp')" alt="Presidential Suite">
                     <div class="room-info">
-                        <h3>Presidential Suite</h3>
+                        <h3>{{ ml({ en: 'Presidential Suite', mk: 'Претседателски Апартман', sr: 'Predsednički Apartman', tr: 'Prezidential Süit', sq: 'Suitë Presidenciale' }) }}</h3>
                     </div>
                 </div>
             </div>
             <div class="room-amenities">
                 <div class="amenity-item">
                     <i class="bi bi-wifi"></i>
-                    <span>Free WiFi</span>
+                    <span>{{ ml({ en: 'Free WiFi', mk: 'Бесплатен WiFi', sr: 'Besplatan WiFi', tr: 'Ücretsiz WiFi', sq: 'WiFi Falas' }) }}</span>
                 </div>
                 <div class="amenity-item">
                     <i class="bi bi-tv"></i>
-                    <span>Smart TV</span>
+                    <span>{{ ml({ en: 'Smart TV', mk: 'Паметен Телевизор', sr: 'Smart TV', tr: 'Akıllı TV', sq: 'TV Smart' }) }}</span>
                 </div>
                 <div class="amenity-item">
                     <i class="bi bi-snow"></i>
-                    <span>Air Conditioning</span>
+                    <span>{{ ml({ en: 'Air Conditioning', mk: 'Клима Уред', sr: 'Klima Uređaj', tr: 'Klima', sq: 'Kondicioner' }) }}</span>
                 </div>
                 <div class="amenity-item">
                     <i class="bi bi-safe"></i>
-                    <span>Safe Box</span>
+                    <span>{{ ml({ en: 'Safe Box', mk: 'Сеф', sr: 'Sef', tr: 'Kasa', sq: 'Kasafortë' }) }}</span>
                 </div>
                 <div class="amenity-item">
                     <i class="bi bi-cup-straw"></i>
-                    <span>Mini Bar</span>
+                    <span>{{ ml({ en: 'Mini Bar', mk: 'Мини Бар', sr: 'Mini Bar', tr: 'Mini Bar', sq: 'Mini Bar' }) }}</span>
                 </div>
                 <div class="amenity-item">
                     <i class="bi bi-moon-stars"></i>
-                    <span>Premium Bedding</span>
+                    <span>{{ ml({ en: 'Premium Bedding', mk: 'Премиум Постелнина', sr: 'Premium Posteljina', tr: 'Premium Yatak Takımı', sq: 'Çarçafë Premium' }) }}</span>
                 </div>
             </div>
         </section>
@@ -276,50 +279,50 @@ const asset = (path) => `/assets/paradise/${path}`;
         <!-- Events Section -->
         <section class="amenity-section events-section">
             <div class="section-header">
-                <span class="section-label">Celebrate With Us</span>
-                <h2>Events & Conferences</h2>
+                <span class="section-label">{{ ml({ en: 'Celebrate With Us', mk: 'Прославете со Нас', sr: 'Proslavite sa Nama', tr: 'Bizimle Kutlayın', sq: 'Festojani me Ne' }) }}</span>
+                <h2>{{ ml({ en: 'Events & Conferences', mk: 'Настани и Конференции', sr: 'Događaji i Konferencije', tr: 'Etkinlikler ve Konferanslar', sq: 'Evente dhe Konferenca' }) }}</h2>
             </div>
             <div class="events-info">
                 <div class="event-feature">
                     <div class="event-icon">
                         <i class="bi bi-building"></i>
                     </div>
-                    <h3>Congress Center</h3>
-                    <p>State-of-the-art facilities for conferences, seminars, and business meetings</p>
+                    <h3>{{ ml({ en: 'Congress Center', mk: 'Конгресен Центар', sr: 'Kongresni Centar', tr: 'Kongre Merkezi', sq: 'Qendra e Kongreseve' }) }}</h3>
+                    <p>{{ ml({ en: 'State-of-the-art facilities for conferences, seminars, and business meetings', mk: 'Врвни капацитети за конференции, семинари и деловни состаноци', sr: 'Vrhunski kapaciteti za konferencije, seminare i poslovne sastanke', tr: 'Konferanslar, seminerler ve iş toplantıları için son teknoloji tesisler', sq: 'Ambiente moderne për konferenca, seminare dhe takime biznesi' }) }}</p>
                 </div>
                 <div class="event-feature">
                     <div class="event-icon">
                         <i class="bi bi-heart"></i>
                     </div>
-                    <h3>Celebrations</h3>
-                    <p>Perfect venue for weddings, anniversaries, and special occasions</p>
+                    <h3>{{ ml({ en: 'Celebrations', mk: 'Прослави', sr: 'Proslave', tr: 'Kutlamalar', sq: 'Festime' }) }}</h3>
+                    <p>{{ ml({ en: 'Perfect venue for weddings, anniversaries, and special occasions', mk: 'Совршено место за свадби, годишнини и специјални прилики', sr: 'Savršeno mesto za venčanja, godišnjice i posebne prilike', tr: 'Düğünler, yıldönümleri ve özel günler için mükemmel mekan', sq: 'Vendi perfekt për dasma, përvjetorë dhe raste të veçanta' }) }}</p>
                 </div>
             </div>
             <div class="event-services">
-                <span><i class="bi bi-check"></i> AV Equipment</span>
-                <span><i class="bi bi-check"></i> Catering</span>
-                <span><i class="bi bi-check"></i> Event Planning</span>
-                <span><i class="bi bi-check"></i> Accommodation</span>
+                <span><i class="bi bi-check"></i> {{ ml({ en: 'AV Equipment', mk: 'АВ Опрема', sr: 'AV Oprema', tr: 'Görsel-İşitsel Ekipman', sq: 'Pajisje AV' }) }}</span>
+                <span><i class="bi bi-check"></i> {{ ml({ en: 'Catering', mk: 'Кетеринг', sr: 'Ketering', tr: 'Catering', sq: 'Katering' }) }}</span>
+                <span><i class="bi bi-check"></i> {{ ml({ en: 'Event Planning', mk: 'Организација на Настани', sr: 'Organizacija Događaja', tr: 'Etkinlik Planlama', sq: 'Planifikim Eventesh' }) }}</span>
+                <span><i class="bi bi-check"></i> {{ ml({ en: 'Accommodation', mk: 'Сместување', sr: 'Smeštaj', tr: 'Konaklama', sq: 'Akomodim' }) }}</span>
             </div>
         </section>
 
         <!-- Contact Section -->
         <section class="contact-section">
             <div class="contact-header">
-                <h2>Need Assistance?</h2>
-                <p>Our team is available 24/7 for your needs</p>
+                <h2>{{ ml({ en: 'Need Assistance?', mk: 'Ви Треба Помош?', sr: 'Da li Vam je Potrebna Pomoć?', tr: 'Yardıma mı İhtiyacınız Var?', sq: 'Keni Nevojë për Ndihmë?' }) }}</h2>
+                <p>{{ ml({ en: 'Our team is available 24/7 for your needs', mk: 'Нашиот тим е достапен 24/7 за вашите потреби', sr: 'Naš tim je dostupan 24/7 za vaše potrebe', tr: 'Ekibimiz ihtiyaçlarınız için 7/24 hizmetinizdedir', sq: 'Ekipa jonë është në dispozicion 24/7 për nevojat tuaja' }) }}</p>
             </div>
             <div class="contact-buttons">
                 <a :href="`tel:${contact?.phone || '+389 2 3092 392'}`" class="contact-btn primary">
                     <i class="bi bi-telephone-fill"></i>
                     <div>
-                        <span class="btn-label">Call Reception</span>
+                        <span class="btn-label">{{ ml({ en: 'Call Reception', mk: 'Јавете се на Рецепција', sr: 'Pozovite Recepciju', tr: 'Resepsiyonu Arayın', sq: 'Telefononi Recepsionin' }) }}</span>
                         <span class="btn-value">{{ contact?.phone || '+389 2 3092 392' }}</span>
                     </div>
                 </a>
                 <a :href="`mailto:${contact?.email || 'info@alexandarpalace.com.mk'}`" class="contact-btn secondary">
                     <i class="bi bi-envelope-fill"></i>
-                    <span>Send Email</span>
+                    <span>{{ ml({ en: 'Send Email', mk: 'Испратете Е-пошта', sr: 'Pošaljite Email', tr: 'E-posta Gönderin', sq: 'Dërgoni Email' }) }}</span>
                 </a>
             </div>
             <div class="contact-details">
@@ -341,9 +344,9 @@ const asset = (path) => `/assets/paradise/${path}`;
                 <i class="bi bi-star-fill"></i>
                 <span></span>
             </div>
-            <p>Thank you for choosing</p>
+            <p>{{ ml({ en: 'Thank you for choosing', mk: 'Ви благодариме што го избравте', sr: 'Hvala vam što ste izabrali', tr: 'Seçtiğiniz için teşekkür ederiz', sq: 'Faleminderit që zgjodhët' }) }}</p>
             <h3>Alexandar Palace</h3>
-            <small>We wish you a pleasant stay</small>
+            <small>{{ ml({ en: 'We wish you a pleasant stay', mk: 'Ви посакуваме пријатен престој', sr: 'Želimo vam prijatan boravak', tr: 'Keyifli bir konaklama dileriz', sq: 'Ju dëshirojmë një qëndrim të këndshëm' }) }}</small>
         </footer>
     </div>
 </template>

@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const { t } = useI18n();
 const page = usePage();
+const { locale, ml } = useLocale();
 
 const showSuccess = ref(false);
 const successMessage = ref('');
@@ -23,7 +25,13 @@ const submit = () => {
         onSuccess: () => {
             form.reset();
             showSuccess.value = true;
-            successMessage.value = page.props.flash?.success || 'Thank you for your inquiry! We will get back to you as soon as possible.';
+            successMessage.value = page.props.flash?.success || ml({
+                en: 'Thank you for your inquiry! We will get back to you as soon as possible.',
+                mk: 'Ви благодариме за вашето прашање! Ќе ве контактираме во најкраток можен рок.',
+                sr: 'Hvala vam na upitu! Kontaktiraćemo vas u najkraćem mogućem roku.',
+                tr: 'Talebiniz için teşekkür ederiz! En kısa sürede size geri döneceğiz.',
+                sq: 'Faleminderit për pyetjen tuaj! Do t\'ju kontaktojmë sa më shpejt të jetë e mundur.',
+            });
             setTimeout(() => { showSuccess.value = false; }, 10000);
         },
     });
@@ -56,35 +64,110 @@ const roomSetups = [
     { name: 'Reception', icon: 'reception' },
 ];
 
-const equipment = [
-    { name: 'Infrared simultaneous translation system', icon: 'bi-broadcast' },
-    { name: 'Receivers', icon: 'bi-headphones' },
-    { name: 'Microphones in conference system', icon: 'bi-mic' },
-    { name: 'Wireless microphones', icon: 'bi-mic-fill' },
-    { name: 'Computers', icon: 'bi-pc-display' },
-    { name: 'Computers with internet connection', icon: 'bi-pc-display-horizontal' },
-    { name: 'Analog telephone line/internet', icon: 'bi-telephone' },
-    { name: 'Photocopy machines', icon: 'bi-printer' },
-    { name: 'Wireless internet', icon: 'bi-wifi' },
-    { name: 'LCD projectors', icon: 'bi-projector' },
-    { name: 'Telephone / Fax', icon: 'bi-telephone-forward' },
-    { name: 'Screens', icon: 'bi-display' },
-    { name: 'Audio Recording', icon: 'bi-record-circle' },
-    { name: 'Flip Charts', icon: 'bi-easel' },
-    { name: 'Audio Equipment', icon: 'bi-speaker' },
-    { name: 'Piano', icon: 'bi-music-note-beamed' },
-];
+const equipmentData = {
+    en: [
+        { name: 'Infrared simultaneous translation system', icon: 'bi-broadcast' },
+        { name: 'Receivers', icon: 'bi-headphones' },
+        { name: 'Microphones in conference system', icon: 'bi-mic' },
+        { name: 'Wireless microphones', icon: 'bi-mic-fill' },
+        { name: 'Computers', icon: 'bi-pc-display' },
+        { name: 'Computers with internet connection', icon: 'bi-pc-display-horizontal' },
+        { name: 'Analog telephone line/internet', icon: 'bi-telephone' },
+        { name: 'Photocopy machines', icon: 'bi-printer' },
+        { name: 'Wireless internet', icon: 'bi-wifi' },
+        { name: 'LCD projectors', icon: 'bi-projector' },
+        { name: 'Telephone / Fax', icon: 'bi-telephone-forward' },
+        { name: 'Screens', icon: 'bi-display' },
+        { name: 'Audio Recording', icon: 'bi-record-circle' },
+        { name: 'Flip Charts', icon: 'bi-easel' },
+        { name: 'Audio Equipment', icon: 'bi-speaker' },
+        { name: 'Piano', icon: 'bi-music-note-beamed' },
+    ],
+    mk: [
+        { name: 'Систем за симултан превод со инфрацрвена технологија', icon: 'bi-broadcast' },
+        { name: 'Приемници', icon: 'bi-headphones' },
+        { name: 'Микрофони во конференциски систем', icon: 'bi-mic' },
+        { name: 'Безжични микрофони', icon: 'bi-mic-fill' },
+        { name: 'Компјутери', icon: 'bi-pc-display' },
+        { name: 'Компјутери со интернет конекција', icon: 'bi-pc-display-horizontal' },
+        { name: 'Аналогна телефонска линија/интернет', icon: 'bi-telephone' },
+        { name: 'Фотокопир апарати', icon: 'bi-printer' },
+        { name: 'Безжичен интернет', icon: 'bi-wifi' },
+        { name: 'LCD проектори', icon: 'bi-projector' },
+        { name: 'Телефон / Факс', icon: 'bi-telephone-forward' },
+        { name: 'Екрани', icon: 'bi-display' },
+        { name: 'Аудио снимање', icon: 'bi-record-circle' },
+        { name: 'Флип чарт табли', icon: 'bi-easel' },
+        { name: 'Аудио опрема', icon: 'bi-speaker' },
+        { name: 'Пијано', icon: 'bi-music-note-beamed' },
+    ],
+    sr: [
+        { name: 'Sistem za simultano prevođenje sa infracrvenom tehnologijom', icon: 'bi-broadcast' },
+        { name: 'Prijemnici', icon: 'bi-headphones' },
+        { name: 'Mikrofoni u konferencijskom sistemu', icon: 'bi-mic' },
+        { name: 'Bežični mikrofoni', icon: 'bi-mic-fill' },
+        { name: 'Računari', icon: 'bi-pc-display' },
+        { name: 'Računari sa internet konekcijom', icon: 'bi-pc-display-horizontal' },
+        { name: 'Analogna telefonska linija/internet', icon: 'bi-telephone' },
+        { name: 'Fotokopir aparati', icon: 'bi-printer' },
+        { name: 'Bežični internet', icon: 'bi-wifi' },
+        { name: 'LCD projektori', icon: 'bi-projector' },
+        { name: 'Telefon / Faks', icon: 'bi-telephone-forward' },
+        { name: 'Ekrani', icon: 'bi-display' },
+        { name: 'Audio snimanje', icon: 'bi-record-circle' },
+        { name: 'Flip chart table', icon: 'bi-easel' },
+        { name: 'Audio oprema', icon: 'bi-speaker' },
+        { name: 'Klavir', icon: 'bi-music-note-beamed' },
+    ],
+    tr: [
+        { name: 'Kızılötesi simultane çeviri sistemi', icon: 'bi-broadcast' },
+        { name: 'Alıcılar', icon: 'bi-headphones' },
+        { name: 'Konferans sistemi mikrofonları', icon: 'bi-mic' },
+        { name: 'Kablosuz mikrofonlar', icon: 'bi-mic-fill' },
+        { name: 'Bilgisayarlar', icon: 'bi-pc-display' },
+        { name: 'İnternet bağlantılı bilgisayarlar', icon: 'bi-pc-display-horizontal' },
+        { name: 'Analog telefon hattı/internet', icon: 'bi-telephone' },
+        { name: 'Fotokopi makineleri', icon: 'bi-printer' },
+        { name: 'Kablosuz internet', icon: 'bi-wifi' },
+        { name: 'LCD projektörler', icon: 'bi-projector' },
+        { name: 'Telefon / Faks', icon: 'bi-telephone-forward' },
+        { name: 'Ekranlar', icon: 'bi-display' },
+        { name: 'Ses Kaydı', icon: 'bi-record-circle' },
+        { name: 'Flip Şart Tahtaları', icon: 'bi-easel' },
+        { name: 'Ses Ekipmanı', icon: 'bi-speaker' },
+        { name: 'Piyano', icon: 'bi-music-note-beamed' },
+    ],
+    sq: [
+        { name: 'Sistem përkthimi simultan me teknologji infra të kuqe', icon: 'bi-broadcast' },
+        { name: 'Marrës', icon: 'bi-headphones' },
+        { name: 'Mikrofona në sistemin e konferencës', icon: 'bi-mic' },
+        { name: 'Mikrofona pa tel', icon: 'bi-mic-fill' },
+        { name: 'Kompjuterë', icon: 'bi-pc-display' },
+        { name: 'Kompjuterë me lidhje interneti', icon: 'bi-pc-display-horizontal' },
+        { name: 'Linjë telefonike analoge/internet', icon: 'bi-telephone' },
+        { name: 'Makina fotokopjimi', icon: 'bi-printer' },
+        { name: 'Internet pa tel', icon: 'bi-wifi' },
+        { name: 'Projektorë LCD', icon: 'bi-projector' },
+        { name: 'Telefon / Faks', icon: 'bi-telephone-forward' },
+        { name: 'Ekrane', icon: 'bi-display' },
+        { name: 'Regjistrim Audio', icon: 'bi-record-circle' },
+        { name: 'Tabela Flip Chart', icon: 'bi-easel' },
+        { name: 'Pajisje Audio', icon: 'bi-speaker' },
+        { name: 'Piano', icon: 'bi-music-note-beamed' },
+    ],
+};
+const equipment = computed(() => equipmentData[locale.value] || equipmentData.en);
 </script>
 
 <template>
     <Layout
-        :title="seo?.title || 'Congress Center'"
+        :title="seo?.title || t('congress.hero_title')"
         :description="seo?.description"
         :hideBookingSection="true"
     >
         <!-- Hero Section -->
         <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" :src="asset('img/congress/kongres-sala-banner.webp')" alt="Congress Center">
+            <img class="jarallax-img" :src="asset('img/congress/kongres-sala-banner.webp')" :alt="ml({ en: 'Congress Center', mk: 'Конгресен Центар', sr: 'Kongresni Centar', tr: 'Kongre Merkezi', sq: 'Qendra e Kongreseve' })">
             <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.6)">
                 <div class="container">
                     <small class="slide-animated one">{{ t('congress.hero_subtitle') }}</small>
@@ -259,7 +342,7 @@ const equipment = [
             <div class="row g-4">
                 <div v-for="(img, index) in congressImages" :key="index" class="col-lg-3 col-md-4 col-sm-6">
                     <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s ease;" class="gallery-item">
-                        <img :src="asset('img/' + img)" :alt="'Congress Hall ' + (index + 1)" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+                        <img :src="asset('img/' + img)" :alt="ml({ en: 'Congress Hall ', mk: 'Конгресна Сала ', sr: 'Kongresna Sala ', tr: 'Kongre Salonu ', sq: 'Salla e Kongresit ' }) + (index + 1)" style="width: 100%; height: 220px; object-fit: cover; display: block;">
                     </div>
                 </div>
             </div>
@@ -298,7 +381,7 @@ const equipment = [
                         <div class="row g-3">
                             <div v-for="(img, index) in meetingRoomImages" :key="index" class="col-md-4">
                                 <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                                    <img :src="asset('img/' + img)" :alt="'Meeting Room ' + (index + 1)" style="width: 100%; height: 200px; object-fit: cover; display: block;">
+                                    <img :src="asset('img/' + img)" :alt="ml({ en: 'Meeting Room ', mk: 'Сала за Состаноци ', sr: 'Sala za Sastanke ', tr: 'Toplantı Salonu ', sq: 'Sallë Mbledhjesh ' }) + (index + 1)" style="width: 100%; height: 200px; object-fit: cover; display: block;">
                                 </div>
                             </div>
                         </div>

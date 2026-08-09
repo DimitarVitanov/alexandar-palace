@@ -4,6 +4,7 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
 import BookingSection from '@/Components/Frontend/BookingSection.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     page: Object,
@@ -15,6 +16,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const page = usePage();
+const { ml } = useLocale();
 
 const hero = props.sections?.hero;
 const booking = props.sections?.booking;
@@ -98,12 +100,12 @@ const asset = (path) => `/assets/paradise/${path}`;
                                 <h4>{{ t('contact.phone') }}</h4>
                                 <div>
                                     <a href="tel:+38923092392">+389 (2) 3092 392</a>
-                                    <br><small>{{ $page.props.locale === 'mk' ? 'Понеделник до Недела 24/7' : 'Monday to Sunday 24/7' }}</small>
+                                    <br><small>{{ ml({ en: 'Monday to Sunday 24/7', mk: 'Понеделник до Недела 24/7', sr: 'Ponedeljak do Nedelje 24/7', tr: 'Pazartesi\'den Pazar\'a 24/7', sq: 'E Hënë deri e Diel 24/7' }) }}</small>
                                 </div>
                             </li>
                             <li>
                                 <i class="bi bi-share"></i>
-                                <h4>{{ $page.props.locale === 'mk' ? 'Следете нè' : 'Follow Us' }}</h4>
+                                <h4>{{ ml({ en: 'Follow Us', mk: 'Следете нè', sr: 'Pratite nas', tr: 'Bizi Takip Edin', sq: 'Na Ndiqni' }) }}</h4>
                                 <div class="social mt-2">
                                     <a href="https://www.facebook.com/hotelaleksandarpalace" target="_blank" rel="noopener" class="me-3"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
                                     <a href="https://www.instagram.com/hotelaleksandarpalace/" target="_blank" rel="noopener"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>

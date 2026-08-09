@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import Layout from '@/Components/Frontend/Layout.vue';
+import { useLocale } from '@/composables/useLocale';
 
 const props = defineProps({
     news: Object,
@@ -9,6 +10,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { ml } = useLocale();
 const asset = (path) => `/assets/paradise/${path}`;
 </script>
 
@@ -41,9 +43,12 @@ const asset = (path) => `/assets/paradise/${path}`;
                         <div class="wrapper">
                             <small>{{ post.category }}<span></span></small>
                             <h2>{{ post.title }}</h2>
-                            <em>Read more</em>
+                            <em>{{ t('home.read_more') }}</em>
                         </div>
                     </Link>
+                </div>
+                <div v-if="!news.data || !news.data.length" class="col-12 text-center">
+                    <p>{{ ml({ en: 'No news found.', mk: 'Не се пронајдени новости.', sr: 'Нема пронађених вести.', tr: 'Haber bulunamadı.', sq: 'Nuk u gjetën lajme.' }) }}</p>
                 </div>
             </div>
         </div>

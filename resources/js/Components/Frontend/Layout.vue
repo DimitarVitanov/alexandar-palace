@@ -29,6 +29,8 @@ const page = usePage();
 const siteName = computed(() => page.props.seo?.site_name || 'Alexandar Palace');
 const defaultImage = computed(() => page.props.seo?.default_image || '/assets/paradise/img/hero_home_1.jpg');
 const locale = computed(() => page.props.locale || 'en');
+const ogLocaleMap = { en: 'en_US', mk: 'mk_MK', sr: 'sr_RS', tr: 'tr_TR', sq: 'sq_AL' };
+const alternateLocales = computed(() => ['en', 'mk', 'sr', 'tr', 'sq'].filter((loc) => loc !== locale.value));
 
 let schemaScript = null;
 
@@ -92,9 +94,8 @@ onUnmounted(() => {
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta v-if="canonical" property="og:url" :content="canonical">
-        <meta property="og:locale" :content="locale === 'mk' ? 'mk_MK' : 'en_US'">
-        <meta v-if="locale === 'en'" property="og:locale:alternate" content="mk_MK">
-        <meta v-if="locale === 'mk'" property="og:locale:alternate" content="en_US">
+        <meta property="og:locale" :content="ogLocaleMap[locale] ?? 'en_US'">
+        <meta v-for="loc in alternateLocales" :key="loc" property="og:locale:alternate" :content="ogLocaleMap[loc]">
         
         <!-- Article specific (for news/blog) -->
         <meta v-if="publishedTime" property="article:published_time" :content="publishedTime">

@@ -22,7 +22,7 @@ class SetLocale
             $locale = session('locale', 'en');
         }
 
-        if (in_array($locale, ['en', 'mk'])) {
+        if (in_array($locale, ['en', 'mk', 'sr', 'tr', 'sq'])) {
             app()->setLocale($locale);
         }
 
