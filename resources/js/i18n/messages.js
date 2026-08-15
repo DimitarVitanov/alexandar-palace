@@ -289,7 +289,7 @@ export default {
             rooms: 'Соби и Апартмани',
             about: 'За Нас',
             restaurant: 'À LA CARTE',
-            tennis_restaurant: 'Тенис Ресторан',
+            tennis_restaurant: 'Ресторан на Тениско',
             congress: 'Конгресен Центар',
             celebrations: 'Прослави',
             activities: 'Активности',

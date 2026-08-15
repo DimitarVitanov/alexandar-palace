@@ -1,1 +1,0 @@
-import{_ as e,a as t}from"./app-CWMbdT42.js";function n(){let n=t(),r=e(()=>n.props.locale||`en`);return{locale:r,ml:e=>e?e[r.value]??e.en??Object.values(e)[0]??``:``}}export{n as t};
