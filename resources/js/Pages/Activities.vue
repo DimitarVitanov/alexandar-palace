@@ -214,19 +214,17 @@ const successMessage = computed(() => page.props.flash?.success);
                         </div>
                         <div class="col-lg-7" data-cue="slideInRight">
                             <div class="courts-gallery">
-                                <div class="gallery-main">
+                                <div class="gallery-item">
                                     <img :src="asset('img/activities/teniski-teren-scaled.webp')" alt="Tennis Courts">
                                 </div>
-                                <div class="gallery-side">
-                                    <div class="gallery-item">
-                                        <img :src="asset('img/activities/athlete-holding-racket-ball-scaled-e1638379849163.webp')" alt="Tennis Player">
-                                    </div>
-                                    <div class="gallery-item">
-                                        <img :src="asset('img/activities/kosarkarski-teren-scaled.webp')" alt="Basketball Court">
-                                    </div>
-                                    <div class="gallery-item">
-                                        <img :src="asset('img/activities/edited5-scaled.webp')" alt="Football Pitch">
-                                    </div>
+                                <div class="gallery-item">
+                                    <img :src="asset('img/activities/athlete-holding-racket-ball-scaled-e1638379849163.webp')" alt="Tennis Player">
+                                </div>
+                                <div class="gallery-item">
+                                    <img :src="asset('img/activities/kosarkarski-teren-scaled.webp')" alt="Basketball Court">
+                                </div>
+                                <div class="gallery-item">
+                                    <img :src="asset('img/activities/edited5-scaled.webp')" alt="Football Pitch">
                                 </div>
                             </div>
                         </div>
@@ -875,7 +873,8 @@ const successMessage = computed(() => page.props.flash?.success);
 /* Courts Gallery */
 .courts-gallery {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 15px;
     height: 500px;
 }
@@ -1487,7 +1486,8 @@ const successMessage = computed(() => page.props.flash?.success);
     }
     
     .courts-gallery {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
         height: auto;
     }
     
