@@ -905,6 +905,7 @@ const successMessage = computed(() => page.props.flash?.success);
 
 .gallery-item {
     flex: 1;
+    min-height: 0;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.1);
