@@ -224,6 +224,9 @@ const successMessage = computed(() => page.props.flash?.success);
                                     <div class="gallery-item">
                                         <img :src="asset('img/activities/kosarkarski-teren-scaled.webp')" alt="Basketball Court">
                                     </div>
+                                    <div class="gallery-item">
+                                        <img :src="asset('img/activities/edited5-scaled.webp')" alt="Football Pitch">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -234,12 +237,6 @@ const successMessage = computed(() => page.props.flash?.success);
             <!-- Image Showcase -->
             <section class="image-showcase">
                 <div class="showcase-grid">
-                    <div class="showcase-item" data-cue="fadeIn">
-                        <img :src="asset('img/activities/edited5-scaled.webp')" alt="Sport Facilities">
-                        <!-- <div class="showcase-overlay">
-                            <span>{{ t('activities.tennis_courts') }}</span>
-                        </div> -->
-                    </div>
                     <div class="showcase-item" data-cue="fadeIn" data-delay="100">
                         <img :src="asset('img/activities/slika-9-440x550.webp')" alt="Tennis">
                         <!-- <div class="showcase-overlay">
@@ -932,7 +929,7 @@ const successMessage = computed(() => page.props.flash?.success);
 
 .showcase-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .showcase-item {
