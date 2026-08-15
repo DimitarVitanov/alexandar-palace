@@ -309,7 +309,7 @@ const getRoomImage = (room) => {
                             <small>{{ t('home.facilities_small') }}</small>
                             <h3>{{ t('restaurant.title') }}</h3>
                             <p>{{ t('restaurant.description') }}</p>
-                            <p><Link href="/tennis-restaurant" class="btn_1 mt-1 outline">{{ t('home.read_more') }}</Link></p>
+                            <p><Link href="/restaurant" class="btn_1 mt-1 outline">{{ t('home.read_more') }}</Link></p>
                         </div>
                     </div>
                 </div>

@@ -53,7 +53,6 @@ const includedServices = [
     { icon: 'bi-cake2', key: 'brides_cake' },
     { icon: 'bi-palette', key: 'chair_covers' },
     { icon: 'bi-lamp', key: 'candles' },
-    { icon: 'bi-fire', key: 'fire_torch' },
 ];
 
 const eventTypes = [

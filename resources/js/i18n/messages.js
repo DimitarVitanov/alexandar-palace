@@ -51,7 +51,7 @@ export default {
             activities_spa_desc: 'Step into a sanctuary of serenity where East meets West in perfect harmony. Indulge in our authentic hammam, therapeutic massages, and rejuvenating facial and body treatments.',
         },
         restaurant: {
-            title: 'Restaurant',
+            title: 'Restaurant À La Carte',
             description: 'Experience culinary excellence at our award-winning restaurant. Our talented chefs craft each dish with passion, using locally sourced ingredients and traditional Macedonian recipes.',
         },
         about: {
@@ -109,7 +109,7 @@ export default {
             our_venues: 'Our Venues',
             gallery_title: 'Congress Hall Gallery',
             business_meetings: 'Business Meetings',
-            meeting_rooms: 'Meeting Rooms',
+            meeting_rooms: 'Small Meeting Rooms',
             meeting_rooms_text: 'The hotel also offers four meeting rooms with equipment for business meetings from 10 to 60 people. Each room is equipped with modern technology and can be configured to meet your specific requirements.',
             capacity_10_60: 'Capacity: 10 to 60 people',
             modern_av: 'Modern AV equipment',
@@ -335,7 +335,7 @@ export default {
             activities_spa_desc: 'Влезете во светилиште на спокојство каде Истокот се среќава со Западот во совршена хармонија. Уживајте во нашиот автентичен хамам, терапевтски масажи и третмани за подмладување на лице и тело.',
         },
         restaurant: {
-            title: 'Ресторан',
+            title: 'Ресторан À La Carte',
             description: 'Доживејте кулинарска извонредност во нашиот награден ресторан. Нашите талентирани готвачи го подготвуваат секое јадење со страст, користејќи локално набавени состојки и традиционални македонски рецепти.',
         },
         about: {
@@ -393,7 +393,7 @@ export default {
             our_venues: 'Нашите Простории',
             gallery_title: 'Галерија на Конгресна Сала',
             business_meetings: 'Деловни Состаноци',
-            meeting_rooms: 'Сали за Состаноци',
+            meeting_rooms: 'Мали Сали за Состаноци',
             meeting_rooms_text: 'Хотелот исто така нуди четири сали за состаноци со опрема за деловни состаноци од 10 до 60 лица. Секоја сала е опремена со модерна технологија и може да се конфигурира според вашите специфични барања.',
             capacity_10_60: 'Капацитет: 10 до 60 лица',
             modern_av: 'Модерна АВ опрема',
@@ -458,11 +458,11 @@ export default {
             success_message: 'Ви благодариме за вашето барање! Ќе ви одговориме во најкраток можен рок.',
         },
         tennisRestaurant: {
-            page_title: 'Ресторан Тенис Терен',
+            page_title: 'Ресторан на Тениско',
             hero_subtitle: 'Александар Палас',
-            hero_title: 'Ресторан Тенис Терен',
+            hero_title: 'Ресторан на Тениско',
             welcome_to: 'Добредојдовте во',
-            intro_title: 'Ресторан Тенис Терен',
+            intro_title: 'Ресторан на Тениско',
             intro_text: 'Вкусна храна, одлично кафе и прекрасен персонал. Доживејте совршен спој на релаксација и кулинарски уживања со поглед кон тениските терени.',
             fresh_ingredients: 'Свежи Состојки',
             service_rating: 'Оценка за Услуга',
@@ -619,7 +619,7 @@ export default {
             activities_spa_desc: 'Uđite u utočište spokoja gde se Istok i Zapad susreću u savršenoj harmoniji. Uživajte u našem autentičnom hamamu, terapeutskim masažama i osvežavajućim tretmanima lica i tela.',
         },
         restaurant: {
-            title: 'Restoran',
+            title: 'Restoran À La Carte',
             description: 'Doživite kulinarsku izvrsnost u našem nagrađivanom restoranu. Naši talentovani kuvari pripremaju svako jelo sa strašću, koristeći lokalno nabavljene sastojke i tradicionalne makedonske recepte.',
         },
         about: {
@@ -677,7 +677,7 @@ export default {
             our_venues: 'Naši Prostori',
             gallery_title: 'Galerija Kongresne Sale',
             business_meetings: 'Poslovni Sastanci',
-            meeting_rooms: 'Sale za Sastanke',
+            meeting_rooms: 'Male Sale za Sastanke',
             meeting_rooms_text: 'Hotel takođe nudi četiri sale za sastanke sa opremom za poslovne sastanke od 10 do 60 osoba. Svaka sala je opremljena modernom tehnologijom i može se prilagoditi vašim specifičnim zahtevima.',
             capacity_10_60: 'Kapacitet: od 10 do 60 osoba',
             modern_av: 'Moderna AV oprema',
@@ -903,7 +903,7 @@ export default {
             activities_spa_desc: "Doğu ile Batı'nın mükemmel bir uyum içinde buluştuğu huzur vahasına adım atın. Otantik hamamımızın, terapötik masajlarımızın ve canlandırıcı yüz ve vücut bakımlarımızın tadını çıkarın.",
         },
         restaurant: {
-            title: 'Restoran',
+            title: 'À La Carte Restoran',
             description: 'Ödüllü restoranımızda mutfak mükemmelliğini yaşayın. Yetenekli şeflerimiz, yöresel malzemeler ve geleneksel Makedon tarifleri kullanarak her yemeği tutkuyla hazırlıyor.',
         },
         about: {
@@ -961,7 +961,7 @@ export default {
             our_venues: 'Mekanlarımız',
             gallery_title: 'Kongre Salonu Galerisi',
             business_meetings: 'İş Toplantıları',
-            meeting_rooms: 'Toplantı Salonları',
+            meeting_rooms: 'Küçük Toplantı Salonları',
             meeting_rooms_text: 'Otel ayrıca 10 ila 60 kişilik iş toplantıları için ekipmanlı dört toplantı salonu sunmaktadır. Her salon modern teknolojiyle donatılmış olup özel isteklerinize göre düzenlenebilir.',
             capacity_10_60: 'Kapasite: 10 ila 60 kişi',
             modern_av: 'Modern görsel-işitsel ekipman',
@@ -1187,7 +1187,7 @@ export default {
             activities_spa_desc: 'Hyni në një strehë qetësie ku Lindja takon Perëndimin në harmoni të përsosur. Kënaquni me hamamin tonë autentik, masazhet terapeutike dhe trajtimet rigjeneruese për fytyrën dhe trupin.',
         },
         restaurant: {
-            title: 'Restorant',
+            title: 'Restorant À La Carte',
             description: 'Përjetoni ekselencën kulinare në restorantin tonë të vlerësuar. Kuzhinierët tanë të talentuar përgatisin çdo pjatë me pasion, duke përdorur përbërës vendas dhe receta tradicionale maqedonase.',
         },
         about: {
@@ -1245,7 +1245,7 @@ export default {
             our_venues: 'Ambientet Tona',
             gallery_title: 'Galeria e Sallës së Kongreseve',
             business_meetings: 'Takime Biznesi',
-            meeting_rooms: 'Sallat e Takimeve',
+            meeting_rooms: 'Sallat e Vogla të Takimeve',
             meeting_rooms_text: 'Hoteli gjithashtu ofron katër salla takimesh me pajisje për takime biznesi nga 10 deri në 60 persona. Çdo sallë është e pajisur me teknologji moderne dhe mund të konfigurohet sipas kërkesave tuaja specifike.',
             capacity_10_60: 'Kapaciteti: nga 10 deri në 60 persona',
             modern_av: 'Pajisje moderne audio-vizuale',

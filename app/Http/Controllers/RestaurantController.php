@@ -21,7 +21,7 @@ class RestaurantController extends Controller
         $siteName = $this->getSettingValue($settings, 'site_name', config('app.name'));
         $locale = app()->getLocale();
 
-        $pageTitle = 'Restaurant';
+        $pageTitle = 'À La Carte';
         $pageDescription = 'Experience culinary excellence at Alexandar Palace Hotel restaurant';
 
         if ($page) {
