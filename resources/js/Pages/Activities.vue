@@ -190,6 +190,8 @@ const successMessage = computed(() => page.props.flash?.success);
                                 <span class="section-label">{{ t('activities.tennis_club') }}</span>
                                 <h2 class="section-title">{{ t('activities.courts_title') }}</h2>
                                 <p class="section-text">{{ t('activities.courts_desc') }}</p>
+                                <p class="section-text">{{ t('activities.courts_desc2') }}</p>
+                                <p class="section-text">{{ t('activities.courts_desc3') }}</p>
                                 <div class="courts-list">
                                     <div class="court-item">
                                         <i class="bi bi-circle-fill"></i>
@@ -197,7 +199,15 @@ const successMessage = computed(() => page.props.flash?.success);
                                     </div>
                                     <div class="court-item">
                                         <i class="bi bi-circle-fill"></i>
-                                        <span>2 {{ t('activities.basketball_courts') }}</span>
+                                        <span>1 {{ t('activities.tennis_court_grass') }}</span>
+                                    </div>
+                                    <div class="court-item">
+                                        <i class="bi bi-circle-fill"></i>
+                                        <span>2 {{ t('activities.basket_courts') }}</span>
+                                    </div>
+                                    <div class="court-item">
+                                        <i class="bi bi-circle-fill"></i>
+                                        <span>1 {{ t('activities.basketball_court') }}</span>
                                     </div>
                                     <div class="court-item">
                                         <i class="bi bi-circle-fill"></i>

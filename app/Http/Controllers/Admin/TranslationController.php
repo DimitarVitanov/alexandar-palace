@@ -185,8 +185,8 @@ class TranslationController extends Controller
                     'copyright' => '© Aleksandar Palace. All rights reserved.',
                 ],
                 'home' => [
-                    'hero_small' => 'Welcome to Aleksandar Palace',
-                    'hero_title' => 'A unique Experience where to stay',
+                    'hero_small' => 'Your stay, your comfort',
+                    'hero_title' => 'Enjoy every moment',
                     'check_in_out' => 'Check in / Check out',
                     'adults' => 'Adults',
                     'children' => 'Children',
@@ -266,8 +266,8 @@ class TranslationController extends Controller
                     'copyright' => '© Александар Палас. Сите права задржани.',
                 ],
                 'home' => [
-                    'hero_small' => 'Добредојдовте во Александар Палас',
-                    'hero_title' => 'Уникатно искуство за одмор',
+                    'hero_small' => 'Вашиот престој, вашата удобност',
+                    'hero_title' => 'Уживање во секој момент',
                     'check_in_out' => 'Пријава / Одјава',
                     'adults' => 'Возрасни',
                     'children' => 'Деца',

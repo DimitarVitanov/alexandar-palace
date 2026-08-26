@@ -261,12 +261,36 @@ const toggleFaq = (index) => {
                         </div>
                         <div v-if="history?.content" v-html="history.content"></div>
                         <template v-else>
-                            <p v-if="locale === 'mk'" class="lead">Хотелот Александар Палас, водечки хотел во Македонија, се наоѓа на десниот брег на реката Вардар веднаш до градскиот парк, само 3 км од центарот на градот и во непосредна близина на најважните административни, културни и историски објекти.</p>
-                            <p v-else-if="locale === 'sr'" class="lead">Hotel Aleksandar Palas, vodeći hotel u Makedoniji, nalazi se na desnoj obali reke Vardar odmah pored gradskog parka, samo 3 km od centra grada i u neposrednoj blizini najvažnijih administrativnih, kulturnih i istorijskih objekata.</p>
-                            <p v-else-if="locale === 'tr'" class="lead">Makedonya'nın önde gelen oteli Aleksandar Palace, Vardar Nehri'nin sağ kıyısında, şehir parkının hemen yanında, şehir merkezine sadece 3 km uzaklıkta ve en önemli idari, kültürel ve tarihi binaların hemen yakınında yer almaktadır.</p>
-                            <p v-else-if="locale === 'sq'" class="lead">Hoteli Aleksandar Palace, hoteli kryesor në Maqedoni, ndodhet në bregun e djathtë të lumit Vardar menjëherë pranë parkut të qytetit, vetëm 3 km larg qendrës së qytetit dhe në afërsi të drejtpërdrejtë të objekteve më të rëndësishme administrative, kulturore dhe historike.</p>
-                            <p v-else class="lead">The hotel Aleksandar Palace, leading hotel in Macedonia, is located on the right bank of the river Vardar next to the city park, only 3 km away from the town center and just next to the most important administrative, cultural and historical buildings.</p>
-                           <!-- <p><em>Maria...the Owner</em></p> -->
+                            <template v-if="locale === 'mk'">
+                                <p class="lead">Хотелот Александар Палас е еден од најпрепознатливите хотели во Македонија, сместен на десниот брег на реката Вардар, веднаш до градскиот парк. На само 3 километри од центарот на Скопје, хотелот нуди идеална локација за гостите кои сакаат да бидат во близина на градскиот ритам, а истовремено да уживаат во мирна и пријатна околина.</p>
+                                <p>Со својата препознатлива архитектура, елегантен амбиент и високо ниво на услуга, Александар Палас претставува место каде што традицијата на гостопримството се надополнува со современи стандарди на удобност и луксуз.</p>
+                                <p>Неговата локација овозможува лесен пристап до најзначајните административни, културни и историски знаменитости на Скопје. Хотелот располага со простор и амбиент прилагодени за различни потреби – од удобен престој и гастрономски искуства, до деловни состаноци, конгреси, прослави и свечени настани.</p>
+                                <p>Со внимателно осмислените простори, богатата понуда и посветеноста на секој детал, Хотел Александар Палас продолжува да создава пријатни и незаборавни искуства за своите гости.</p>
+                            </template>
+                            <template v-else-if="locale === 'sr'">
+                                <p class="lead">Hotel Aleksandar Palas je jedan od najprepoznatljivijih hotela u Makedoniji, smešten na desnoj obali reke Vardar, odmah pored gradskog parka. Na samo 3 kilometra od centra Skoplja, hotel nudi idealnu lokaciju za goste koji žele da budu blizu gradskog ritma, a istovremeno da uživaju u mirnom i prijatnom okruženju.</p>
+                                <p>Sa svojom prepoznatljivom arhitekturom, elegantnim ambijentom i visokim nivoom usluge, Aleksandar Palas predstavlja mesto gde se tradicija gostoprimstva dopunjuje savremenim standardima udobnosti i luksuza.</p>
+                                <p>Njegova lokacija omogućava lak pristup najznačajnijim administrativnim, kulturnim i istorijskim znamenitostima Skoplja. Hotel raspolaže prostorom i ambijentom prilagođenim različitim potrebama – od udobnog boravka i gastronomskih doživljaja, do poslovnih sastanaka, kongresa, proslava i svečanih događaja.</p>
+                                <p>Sa pažljivo osmišljenim prostorima, bogatom ponudom i posvećenošću svakom detalju, Hotel Aleksandar Palas nastavlja da stvara prijatna i nezaboravna iskustva za svoje goste.</p>
+                            </template>
+                            <template v-else-if="locale === 'tr'">
+                                <p class="lead">Aleksandar Palace Oteli, Makedonya'nın en tanınmış otellerinden biri olup, Vardar Nehri'nin sağ kıyısında, şehir parkının hemen yanında yer almaktadır. Üsküp'ün merkezine yalnızca 3 kilometre uzaklıktaki otel, şehrin ritmine yakın olmak isteyen, aynı zamanda sakin ve keyifli bir ortamın tadını çıkarmak isteyen misafirler için ideal bir konum sunar.</p>
+                                <p>Kendine özgü mimarisi, zarif atmosferi ve yüksek hizmet seviyesiyle Aleksandar Palace, misafirperverlik geleneğinin modern konfor ve lüks standartlarıyla birleştiği bir yerdir.</p>
+                                <p>Konumu, Üsküp'ün en önemli idari, kültürel ve tarihi simgelerine kolay erişim sağlar. Otel, farklı ihtiyaçlara uygun mekânlar ve atmosfer sunar – konforlu bir konaklama ve gastronomik deneyimlerden iş toplantılarına, kongrelere, kutlamalara ve resmi etkinliklere kadar.</p>
+                                <p>Özenle tasarlanmış mekânları, zengin sunumu ve her ayrıntıya gösterilen özenle Aleksandar Palace Oteli, misafirleri için keyifli ve unutulmaz deneyimler yaratmaya devam ediyor.</p>
+                            </template>
+                            <template v-else-if="locale === 'sq'">
+                                <p class="lead">Hoteli Aleksandar Palace është një nga hotelet më të njohura në Maqedoni, i vendosur në bregun e djathtë të lumit Vardar, pikërisht pranë parkut të qytetit. Vetëm 3 kilometra nga qendra e Shkupit, hoteli ofron një vendndodhje ideale për mysafirët që duan të jenë pranë ritmit të qytetit, ndërkohë që shijojnë një mjedis të qetë dhe të këndshëm.</p>
+                                <p>Me arkitekturën e tij të veçantë, ambientin elegant dhe nivelin e lartë të shërbimit, Aleksandar Palace përfaqëson një vend ku tradita e mikpritjes plotësohet me standardet moderne të komoditetit dhe luksit.</p>
+                                <p>Vendndodhja e tij mundëson qasje të lehtë në pikat më të rëndësishme administrative, kulturore dhe historike të Shkupit. Hoteli disponon hapësira dhe ambient të përshtatura për nevoja të ndryshme – nga një qëndrim komod dhe përvoja gastronomike, deri te takimet e biznesit, kongreset, festat dhe ngjarjet solemne.</p>
+                                <p>Me hapësirat e menduara me kujdes, ofertën e pasur dhe përkushtimin ndaj çdo detaji, Hoteli Aleksandar Palace vazhdon të krijojë përvoja të këndshme dhe të paharrueshme për mysafirët e tij.</p>
+                            </template>
+                            <template v-else>
+                                <p class="lead">Hotel Aleksandar Palace is one of the most recognizable hotels in Macedonia, set on the right bank of the river Vardar, right next to the city park. Just 3 kilometres from the centre of Skopje, the hotel offers an ideal location for guests who want to be close to the rhythm of the city while enjoying calm and pleasant surroundings.</p>
+                                <p>With its distinctive architecture, elegant ambience and high level of service, Aleksandar Palace is a place where the tradition of hospitality is complemented by modern standards of comfort and luxury.</p>
+                                <p>Its location provides easy access to the most important administrative, cultural and historical landmarks of Skopje. The hotel offers spaces and an ambience adapted to different needs – from a comfortable stay and gastronomic experiences to business meetings, congresses, celebrations and formal events.</p>
+                                <p>With carefully designed spaces, a rich offering and dedication to every detail, Hotel Aleksandar Palace continues to create pleasant and unforgettable experiences for its guests.</p>
+                            </template>
                         </template>
                     </div>
                 </div>
