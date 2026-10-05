@@ -36,6 +36,12 @@
                 <span class="details-label">Број на играчи:</span>
                 <span class="details-value">{{ $booking->players }}</span>
             </div>
+            @if($booking->total_price !== null)
+            <div class="details-row">
+                <span class="details-label">Вкупна цена:</span>
+                <span class="details-value">{{ number_format($booking->total_price, 0, ',', '.') }} ден.</span>
+            </div>
+            @endif
         </div>
 
         <div class="divider"></div>
@@ -84,6 +90,12 @@
                 <span class="details-label">Players:</span>
                 <span class="details-value">{{ $booking->players }}</span>
             </div>
+            @if($booking->total_price !== null)
+            <div class="details-row">
+                <span class="details-label">Total price:</span>
+                <span class="details-value">{{ number_format($booking->total_price, 0, ',', '.') }} MKD</span>
+            </div>
+            @endif
         </div>
 
         <div class="divider"></div>

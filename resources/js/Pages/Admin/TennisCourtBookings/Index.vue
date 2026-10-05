@@ -181,6 +181,7 @@ const formatTime = (time) => {
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>Players</th>
+                                    <th>Price</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -196,6 +197,7 @@ const formatTime = (time) => {
                                     <td>{{ formatDate(booking.booking_date) }}</td>
                                     <td>{{ formatTime(booking.start_time) }} - {{ formatTime(booking.end_time) }}</td>
                                     <td>{{ booking.players }}</td>
+                                    <td>{{ booking.total_price !== null ? Number(booking.total_price).toLocaleString('de-DE') + ' MKD' : '—' }}</td>
                                     <td>
                                         <span :class="['badge', getStatusBadge(booking.status)]">
                                             {{ booking.status }}
@@ -233,7 +235,7 @@ const formatTime = (time) => {
                                     </td>
                                 </tr>
                                 <tr v-if="bookings.data.length === 0">
-                                    <td colspan="8" class="text-center py-4 text-muted">
+                                    <td colspan="9" class="text-center py-4 text-muted">
                                         No bookings found.
                                     </td>
                                 </tr>

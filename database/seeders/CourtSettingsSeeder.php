@@ -9,6 +9,8 @@ class CourtSettingsSeeder extends Seeder
 {
     public function run(): void
     {
+        // Prices and pricing options (MKD per hour) are applied by the
+        // 2026_10_05_000000_add_pricing_to_court_settings_and_bookings migration.
         // Default time slots (every hour from 8:00 to 21:00)
         $defaultSlots = [
             '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',

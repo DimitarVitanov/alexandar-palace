@@ -136,6 +136,10 @@ const formatDateTime = (datetime) => {
                                             <th>Players:</th>
                                             <td>{{ booking.players }}</td>
                                         </tr>
+                                        <tr v-if="booking.total_price !== null">
+                                            <th>Total price:</th>
+                                            <td>{{ Number(booking.total_price).toLocaleString('de-DE') }} MKD<span v-if="booking.price_option && booking.price_option !== 'standard'" class="text-muted"> ({{ booking.price_option }})</span></td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
@@ -248,9 +252,13 @@ const formatDateTime = (datetime) => {
                                 <span class="text-muted">Duration</span>
                                 <strong>{{ formatTime(booking.start_time) }} - {{ formatTime(booking.end_time) }}</strong>
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">Players</span>
                                 <strong>{{ booking.players }}</strong>
+                            </div>
+                            <div v-if="booking.total_price !== null" class="d-flex justify-content-between">
+                                <span class="text-muted">Total price</span>
+                                <strong>{{ Number(booking.total_price).toLocaleString('de-DE') }} MKD</strong>
                             </div>
                         </div>
                     </div>

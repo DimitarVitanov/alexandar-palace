@@ -18,6 +18,9 @@ class TennisCourtBooking extends Model
         'end_time',
         'court_type',
         'court_number',
+        'price_option',
+        'units',
+        'total_price',
         'players',
         'message',
         'status',
@@ -33,6 +36,8 @@ class TennisCourtBooking extends Model
         'confirmed_at' => 'datetime',
         'players' => 'integer',
         'court_number' => 'integer',
+        'units' => 'integer',
+        'total_price' => 'decimal:2',
     ];
 
     public function scopePending($query)

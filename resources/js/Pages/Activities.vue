@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useForm, usePage } from '@inertiajs/vue3';
 import Layout from '@/Components/Frontend/Layout.vue';
 import { useLocale } from '@/composables/useLocale';
+import { calculatePrice, getPriceOption, toMinutes, toTime } from '@/utils/courtPricing';
 
 const { t } = useI18n();
 const page = usePage();
@@ -27,13 +28,13 @@ const form = useForm({
     end_time: '',
     court_type: 'tennis',
     court_number: 1,
+    price_option: props.courts?.tennis?.[0]?.price_options?.[0]?.key ?? null,
     players: 2,
     message: '',
 });
 
 const availableSlots = ref([]);
 const loadingSlots = ref(false);
-const selectedCourt = ref(null);
 
 // Get courts for selected type
 const courtsForType = computed(() => {
@@ -41,31 +42,44 @@ const courtsForType = computed(() => {
     return props.courts[form.court_type] || [];
 });
 
-// Watch for changes in court type, court number, or date to fetch available slots
-watch([() => form.court_type, () => form.court_number, () => form.booking_date], async () => {
-    if (form.court_type && form.court_number && form.booking_date) {
-        await fetchAvailableSlots();
-    } else {
-        availableSlots.value = [];
-    }
-    // Reset time selection when changing court/date
-    form.start_time = '';
-    form.end_time = '';
-});
+const selectedCourt = computed(() => courtsForType.value.find(c => c.court_number === form.court_number) || null);
+const priceOptions = computed(() => selectedCourt.value?.price_options || []);
+const selectedOption = computed(() => getPriceOption(selectedCourt.value, form.price_option));
 
-// Update court number when court type changes
+// Update court number when court type changes, and the pricing option when the court changes
 watch(() => form.court_type, () => {
     const courts = courtsForType.value;
     if (courts.length > 0) {
         form.court_number = courts[0].court_number;
-        selectedCourt.value = courts[0];
+    }
+});
+
+watch(selectedCourt, () => {
+    form.price_option = priceOptions.value[0]?.key ?? null;
+});
+
+// Watch for changes in court type, court number, option or date to fetch available slots
+watch([() => form.court_type, () => form.court_number, () => form.price_option, () => form.booking_date], async () => {
+    // Reset time selection when changing court/date
+    form.start_time = '';
+    form.end_time = '';
+    if (form.court_type && form.court_number && form.booking_date) {
+        await fetchAvailableSlots();
+    } else {
+        availableSlots.value = [];
     }
 });
 
 const fetchAvailableSlots = async () => {
     loadingSlots.value = true;
     try {
-        const response = await fetch(`/activities/available-slots?court_type=${form.court_type}&court_number=${form.court_number}&date=${form.booking_date}`);
+        const params = new URLSearchParams({
+            court_type: form.court_type,
+            court_number: form.court_number,
+            date: form.booking_date,
+        });
+        if (form.price_option) params.set('price_option', form.price_option);
+        const response = await fetch(`/activities/available-slots?${params}`);
         const data = await response.json();
         availableSlots.value = data.slots || [];
     } catch (error) {
@@ -75,15 +89,46 @@ const fetchAvailableSlots = async () => {
     loadingSlots.value = false;
 };
 
+const slotDuration = computed(() => selectedCourt.value?.slot_duration || 60);
+
+// End times reachable from the selected start without crossing an unavailable hour
+const endTimeOptions = computed(() => {
+    if (!form.start_time) return [];
+    const options = [];
+    let from = toMinutes(form.start_time);
+    while (availableSlots.value.includes(toTime(from))) {
+        from += slotDuration.value;
+        options.push(toTime(from));
+    }
+    return options;
+});
+
 const selectTimeSlot = (slot) => {
     form.start_time = slot;
-    // Calculate end time based on slot duration
-    const court = selectedCourt.value || courtsForType.value.find(c => c.court_number === form.court_number);
-    const duration = court?.slot_duration || 60;
-    const [hours, minutes] = slot.split(':').map(Number);
-    const endDate = new Date(2000, 0, 1, hours, minutes + duration);
-    form.end_time = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
+    form.end_time = endTimeOptions.value[0] || '';
 };
+
+const price = computed(() => calculatePrice(selectedOption.value, form.start_time, form.end_time));
+
+const formatPrice = (amount) => {
+    const value = Number(amount).toLocaleString('de-DE', { maximumFractionDigits: 2 });
+    return ml({ en: `${value} MKD`, mk: `${value} ден.`, sr: `${value} MKD`, tr: `${value} MKD`, sq: `${value} MKD` });
+};
+
+// Hourly rates of the selected court/option, e.g. "until 15:00 - 400 / until 19:00 - 500 / after 19:00 - 600"
+const rateList = computed(() => {
+    const bands = selectedOption.value?.bands || [];
+    return bands.map((band, index) => {
+        let label = '';
+        if (band.until) {
+            label = ml({ en: `until ${band.until}`, mk: `до ${band.until}`, sr: `do ${band.until}`, tr: `${band.until}'e kadar`, sq: `deri në ${band.until}` });
+        } else if (index > 0) {
+            const after = bands[index - 1].until;
+            label = ml({ en: `after ${after}`, mk: `по ${after}`, sr: `posle ${after}`, tr: `${after}'den sonra`, sq: `pas ${after}` });
+        }
+        return { label, price: formatPrice(band.price) };
+    });
+});
 
 const submitBooking = () => {
     form.post('/activities/book', {
@@ -377,9 +422,26 @@ const successMessage = computed(() => page.props.flash?.success);
                                             <label class="form-label">{{ ml({ en: 'Select Court', mk: 'Изберете Терен', sr: 'Izaberite Teren', tr: 'Kort Seçin', sq: 'Zgjidhni Fushën' }) }} *</label>
                                             <select v-model="form.court_number" class="form-select" required>
                                                 <option v-for="court in courtsForType" :key="court.id" :value="court.court_number">
-                                                    {{ court.name || ml({ en: `Court #${court.court_number}`, mk: `Терен бр. ${court.court_number}`, sr: `Teren br. ${court.court_number}`, tr: `Kort #${court.court_number}`, sq: `Fusha nr. ${court.court_number}` }) }}
+                                                    {{ ml(court.name_translations) || court.name || ml({ en: `Court #${court.court_number}`, mk: `Терен бр. ${court.court_number}`, sr: `Teren br. ${court.court_number}`, tr: `Kort #${court.court_number}`, sq: `Fusha nr. ${court.court_number}` }) }}
                                                 </option>
                                             </select>
+                                        </div>
+                                        <div class="col-md-6" v-if="priceOptions.length > 1">
+                                            <label class="form-label">{{ ml({ en: 'Option', mk: 'Опција', sr: 'Opcija', tr: 'Seçenek', sq: 'Opsioni' }) }} *</label>
+                                            <select v-model="form.price_option" class="form-select" required>
+                                                <option v-for="option in priceOptions" :key="option.key" :value="option.key">
+                                                    {{ ml(option.label) }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12" v-if="rateList.length">
+                                            <div class="rate-list">
+                                                <i class="bi bi-tag me-2"></i>
+                                                <strong>{{ ml({ en: 'Price per hour', mk: 'Цена за 1 час', sr: 'Cena za 1 sat', tr: 'Saatlik ücret', sq: 'Çmimi për 1 orë' }) }}:</strong>
+                                                <span v-for="(rate, index) in rateList" :key="index" class="rate-item">
+                                                    <template v-if="rate.label">{{ rate.label }} — </template>{{ rate.price }}
+                                                </span>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">{{ t('activities.date') }} *</label>
@@ -396,7 +458,7 @@ const successMessage = computed(() => page.props.flash?.success);
                                         
                                         <!-- Time Slot Selection -->
                                         <div class="col-12" v-if="form.booking_date">
-                                            <label class="form-label">{{ ml({ en: 'Select Time Slot', mk: 'Изберете Термин', sr: 'Izaberite Termin', tr: 'Saat Aralığı Seçin', sq: 'Zgjidhni Orarin' }) }} *</label>
+                                            <label class="form-label">{{ ml({ en: 'From', mk: 'Од', sr: 'Od', tr: 'Başlangıç', sq: 'Nga' }) }} *</label>
                                             <div v-if="loadingSlots" class="text-center py-3">
                                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
                                                     <span class="visually-hidden">{{ ml({ en: 'Loading...', mk: 'Се вчитува...', sr: 'Učitavanje...', tr: 'Yükleniyor...', sq: 'Duke u ngarkuar...' }) }}</span>
@@ -420,12 +482,43 @@ const successMessage = computed(() => page.props.flash?.success);
                                             <div v-if="form.errors.start_time" class="text-danger small mt-2">{{ form.errors.start_time }}</div>
                                         </div>
                                         
-                                        <!-- Selected Time Display -->
+                                        <!-- End Time Selection -->
+                                        <div class="col-12" v-if="form.start_time && endTimeOptions.length">
+                                            <label class="form-label">{{ ml({ en: 'Until', mk: 'До', sr: 'Do', tr: 'Bitiş', sq: 'Deri' }) }} *</label>
+                                            <div class="time-slots-grid">
+                                                <button 
+                                                    v-for="slot in endTimeOptions" 
+                                                    :key="slot"
+                                                    type="button"
+                                                    :class="['time-slot-btn', { 'active': form.end_time === slot }]"
+                                                    @click="form.end_time = slot"
+                                                >
+                                                    {{ slot }}
+                                                </button>
+                                            </div>
+                                            <div v-if="form.errors.end_time" class="text-danger small mt-2">{{ form.errors.end_time }}</div>
+                                        </div>
+                                        
+                                        <!-- Selected Time & Price -->
                                         <div class="col-12" v-if="form.start_time && form.end_time">
                                             <div class="selected-time-display">
-                                                <i class="bi bi-clock me-2"></i>
-                                                <strong>{{ ml({ en: 'Selected', mk: 'Избрано', sr: 'Izabrano', tr: 'Seçilen', sq: 'Zgjedhur' }) }}:</strong> 
-                                                {{ form.start_time }} - {{ form.end_time }}
+                                                <div>
+                                                    <i class="bi bi-clock me-2"></i>
+                                                    <strong>{{ ml({ en: 'Selected', mk: 'Избрано', sr: 'Izabrano', tr: 'Seçilen', sq: 'Zgjedhur' }) }}:</strong> 
+                                                    {{ form.start_time }} - {{ form.end_time }}
+                                                </div>
+                                                <template v-if="price">
+                                                    <div v-if="price.lines.length > 1" class="price-lines">
+                                                        <div v-for="line in price.lines" :key="line.from" class="price-line">
+                                                            <span>{{ line.from }} - {{ line.to }} × {{ formatPrice(line.rate) }}</span>
+                                                            <span>{{ formatPrice(line.amount) }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="price-total">
+                                                        <span>{{ ml({ en: 'Total price', mk: 'Вкупна цена', sr: 'Ukupna cena', tr: 'Toplam fiyat', sq: 'Çmimi total' }) }}</span>
+                                                        <span>{{ formatPrice(price.total) }}</span>
+                                                    </div>
+                                                </template>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -1659,6 +1752,40 @@ const successMessage = computed(() => page.props.flash?.success);
     padding: 12px 16px;
     color: #2d6a2d;
     font-size: 0.95rem;
+}
+
+.rate-list {
+    background: #faf8f5;
+    border: 1px solid #eadfc6;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.rate-item {
+    display: inline-block;
+    margin-left: 12px;
+    white-space: nowrap;
+}
+
+.price-lines {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #c3e6c3;
+}
+
+.price-line,
+.price-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.price-total {
+    margin-top: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
 @media (max-width: 576px) {

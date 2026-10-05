@@ -320,7 +320,7 @@ const asset = (path) => `/assets/paradise/${path}`;
                         <span class="btn-value">{{ contact?.phone || '+389 2 3092 392' }}</span>
                     </div>
                 </a>
-                <a :href="`mailto:${contact?.email || 'info@alexandarpalace.com.mk'}`" class="contact-btn secondary">
+                <a :href="`mailto:${contact?.email || 'info@aleksandarpalace.com.mk'}`" class="contact-btn secondary">
                     <i class="bi bi-envelope-fill"></i>
                     <span>{{ ml({ en: 'Send Email', mk: 'Испратете Е-пошта', sr: 'Pošaljite Email', tr: 'E-posta Gönderin', sq: 'Dërgoni Email' }) }}</span>
                 </a>

@@ -85,7 +85,7 @@ class AmenitiesController extends Controller
 
         $contact = [
             'phone' => '+389 2 3092 392',
-            'email' => 'info@alexandarpalace.com.mk',
+            'email' => 'info@aleksandarpalace.com.mk',
             'address' => 'Bul. Ilinden 101, 1000 Skopje, North Macedonia',
             'website' => 'www.alexandarpalace.com.mk',
         ];

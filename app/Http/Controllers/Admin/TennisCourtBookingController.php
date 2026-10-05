@@ -84,7 +84,8 @@ class TennisCourtBookingController extends Controller
                 $booking = $bookings->first(function ($b) use ($court, $slot) {
                     return $b->court_type === $court->court_type 
                         && $b->court_number === $court->court_number
-                        && substr($b->start_time, 0, 5) === $slot;
+                        && substr($b->start_time, 0, 5) <= $slot
+                        && substr($b->end_time, 0, 5) > $slot;
                 });
                 
                 $schedule[$courtKey]['slots'][$slot] = $booking;

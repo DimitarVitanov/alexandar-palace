@@ -201,7 +201,7 @@ const confirmedCount = computed(() => {
                                 <h3 class="text-xl font-bold">{{ data.court.name || data.court.display_name }}</h3>
                                 <p class="text-white/80">
                                     {{ data.court.slot_duration }} min slots • Max {{ data.court.max_players }} players
-                                    <span v-if="data.court.price_per_slot"> • €{{ data.court.price_per_slot }}/slot</span>
+                                    <span v-if="data.court.price_per_slot"> • from {{ Number(data.court.price_per_slot) }} MKD/hour</span>
                                 </p>
                             </div>
                             <div class="text-right">
