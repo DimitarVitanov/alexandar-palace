@@ -3735,7 +3735,7 @@ a.box_contents:hover img {
   position: relative;
   width: 100vw;
   max-width: 100%;
-  height: 100px;
+  height: 1.2em;
   overflow: hidden;
   font-size: 120px;
   font-weight: bold;
